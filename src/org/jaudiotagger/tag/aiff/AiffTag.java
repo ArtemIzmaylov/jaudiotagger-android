@@ -241,7 +241,7 @@ public class AiffTag implements Tag, Id3SupportingTag
     }
 
     @Override
-    public boolean setEncoding(Charset enc) throws FieldDataInvalidException
+    public boolean setEncoding(Charset enc)
     {
         return id3Tag.setEncoding(enc);
     }

@@ -570,7 +570,7 @@ public class MP3AudioHeader implements AudioHeader
         {
             if (mp3XingFrame.isAudioSizeEnabled() && mp3XingFrame.getAudioSize() > 0)
             {
-                bitrate = (long) ((mp3XingFrame.getAudioSize() * BITS_IN_BYTE_MULTIPLIER) / (timePerFrame * getNumberOfFrames() * Utils.KILOBYTE_MULTIPLIER));
+                bitrate = (long) (((long) mp3XingFrame.getAudioSize() * BITS_IN_BYTE_MULTIPLIER) / (timePerFrame * getNumberOfFrames() * Utils.KILOBYTE_MULTIPLIER));
             }
             else
             {
@@ -581,7 +581,7 @@ public class MP3AudioHeader implements AudioHeader
         {
             if (mp3VbriFrame.getAudioSize() > 0)
             {
-                bitrate = (long) ((mp3VbriFrame.getAudioSize() * BITS_IN_BYTE_MULTIPLIER) / (timePerFrame * getNumberOfFrames() * Utils.KILOBYTE_MULTIPLIER));
+                bitrate = (long) (((long) mp3VbriFrame.getAudioSize() * BITS_IN_BYTE_MULTIPLIER) / (timePerFrame * getNumberOfFrames() * Utils.KILOBYTE_MULTIPLIER));
             }
             else
             {

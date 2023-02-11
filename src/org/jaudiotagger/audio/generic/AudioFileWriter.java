@@ -74,7 +74,7 @@ public abstract class AudioFileWriter {
      * @throws CannotWriteException                                  if anything went wrong
      * @throws org.jaudiotagger.audio.exceptions.CannotReadException
      */
-    public void delete(AudioFile af) throws CannotReadException, CannotWriteException {
+    public void delete(AudioFile af) throws CannotWriteException {
         File file = af.getFile();
         if (TagOptionSingleton.getInstance().isCheckIsWritable() && !file.canWrite()) {
             throw new CannotWriteException(ErrorMessage.GENERAL_DELETE_FAILED.getMsg(file.getPath()));
@@ -220,13 +220,9 @@ public abstract class AudioFileWriter {
      */
     private void precheckWrite(AudioFile af) throws CannotWriteException {
         // Preliminary checks
-        try {
-            if (af.getTag().isEmpty()) {
-                delete(af);
-                return;
-            }
-        } catch (CannotReadException re) {
-            throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED.getMsg(af.getFile().getPath()));
+        if (af.getTag().isEmpty()) {
+            delete(af);
+            return;
         }
 
         File file = af.getFile();

@@ -76,7 +76,7 @@ abstract class ChunkContainerReader<ChunkType extends ChunkContainer> implements
      */
     protected void checkStream(InputStream stream) throws IllegalArgumentException
     {
-        if (this.hasFailingReaders && !stream.markSupported())
+        if (hasFailingReaders && !stream.markSupported())
         {
             throw new IllegalArgumentException("Stream has to support mark/reset.");
         }

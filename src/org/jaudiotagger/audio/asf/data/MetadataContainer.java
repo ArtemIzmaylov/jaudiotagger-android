@@ -79,7 +79,7 @@ public class MetadataContainer extends Chunk implements WriteableChunk
          * @param descriptor the descriptor to identify.
          * @return this instance.
          */
-        protected DescriptorPointer setDescriptor(MetadataDescriptor descriptor)
+        private DescriptorPointer setDescriptor(MetadataDescriptor descriptor)
         {
             assert descriptor != null;
             this.desc = descriptor;

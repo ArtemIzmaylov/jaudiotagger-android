@@ -131,13 +131,13 @@ public final class ID3v23Frames extends ID3Frames
     /**
      * Maps from Generic key to ID3 key
      */
-    protected final EnumMap<FieldKey, ID3v23FieldKey> tagFieldToId3 = new EnumMap<>(FieldKey.class);
+    private final EnumMap<FieldKey, ID3v23FieldKey> tagFieldToId3 = new EnumMap<>(FieldKey.class);
 
 
     /**
      * Maps from ID3 key to Generic key
      */
-    protected final EnumMap<ID3v23FieldKey, FieldKey> id3ToTagField = new EnumMap<>(ID3v23FieldKey.class);
+    private final EnumMap<ID3v23FieldKey, FieldKey> id3ToTagField = new EnumMap<>(ID3v23FieldKey.class);
     
     public static ID3v23Frames getInstanceOf()
     {
@@ -367,7 +367,6 @@ public final class ID3v23Frames extends ID3Frames
         multipleFrames.add(FRAME_ID_V3_GENERAL_ENCAPS_OBJECT);
         multipleFrames.add(FRAME_ID_V3_URL_ARTIST_WEB);
 
-        discardIfFileAlteredFrames.add(FRAME_ID_V3_EVENT_TIMING_CODES);
         discardIfFileAlteredFrames.add(FRAME_ID_V3_EQUALISATION);
         discardIfFileAlteredFrames.add(FRAME_ID_V3_MPEG_LOCATION_LOOKUP_TABLE);
         discardIfFileAlteredFrames.add(FRAME_ID_V3_POSITION_SYNC);

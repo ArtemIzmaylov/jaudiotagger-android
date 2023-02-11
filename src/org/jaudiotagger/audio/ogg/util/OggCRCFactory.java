@@ -42,7 +42,7 @@ public class OggCRCFactory
     {
         for (int i = 0; i < 256; i++)
         {
-            long r = i << 24;
+            long r = (long) i << 24;
 
             for (int j = 0; j < 8; j++)
             {

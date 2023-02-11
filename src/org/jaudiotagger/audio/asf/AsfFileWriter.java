@@ -24,7 +24,6 @@ import org.jaudiotagger.audio.asf.data.ChunkContainer;
 import org.jaudiotagger.audio.asf.data.MetadataContainer;
 import org.jaudiotagger.audio.asf.io.*;
 import org.jaudiotagger.audio.asf.util.TagConverter;
-import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.generic.AudioFileWriter;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.asf.AsfTag;
@@ -47,7 +46,7 @@ public class AsfFileWriter extends AudioFileWriter
      * {@inheritDoc}
      */
     @Override
-    protected void deleteTag(Tag tag, RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotWriteException, IOException
+    protected void deleteTag(Tag tag, RandomAccessFile raf, RandomAccessFile tempRaf) throws IOException
     {
         writeTag(null, new AsfTag(true), raf, tempRaf);
     }

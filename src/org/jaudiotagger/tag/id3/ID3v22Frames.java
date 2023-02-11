@@ -114,12 +114,12 @@ public final class ID3v22Frames extends ID3Frames
     /**
      * Maps from Generic key to ID3 key
      */
-    protected final EnumMap<FieldKey, ID3v22FieldKey> tagFieldToId3 = new EnumMap<>(FieldKey.class);
+    private final EnumMap<FieldKey, ID3v22FieldKey> tagFieldToId3 = new EnumMap<>(FieldKey.class);
 
     /**
      * Maps from ID3 key to Generic key
      */
-    protected final EnumMap<ID3v22FieldKey, FieldKey> id3ToTagField = new EnumMap<>(ID3v22FieldKey.class);
+    private final EnumMap<ID3v22FieldKey, FieldKey> id3ToTagField = new EnumMap<>(ID3v22FieldKey.class);
 
 
     public static ID3v22Frames getInstanceOf()

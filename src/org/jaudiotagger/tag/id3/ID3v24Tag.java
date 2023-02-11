@@ -1151,9 +1151,9 @@ public class ID3v24Tag extends AbstractID3v2Tag
         MP3File.getStructureFormatter().addElement(TYPE_CRCDATA, this.crcData);
         MP3File.getStructureFormatter().addElement(TYPE_EXPERIMENTAL, this.experimental);
         MP3File.getStructureFormatter().addElement(TYPE_EXTENDED, this.extended);
-        MP3File.getStructureFormatter().addElement(TYPE_PADDINGSIZE, this.paddingSize);
+        MP3File.getStructureFormatter().addElement(TYPE_PADDINGSIZE, paddingSize);
         MP3File.getStructureFormatter().addElement(TYPE_FOOTER, this.footer);
-        MP3File.getStructureFormatter().addElement(TYPE_IMAGEENCODINGRESTRICTION, this.paddingSize);
+        MP3File.getStructureFormatter().addElement(TYPE_IMAGEENCODINGRESTRICTION, paddingSize);
         MP3File.getStructureFormatter().addElement(TYPE_IMAGESIZERESTRICTION, this.imageSizeRestriction);
         MP3File.getStructureFormatter().addElement(TYPE_TAGRESTRICTION, this.tagRestriction);
         MP3File.getStructureFormatter().addElement(TYPE_TAGSIZERESTRICTION, this.tagSizeRestriction);

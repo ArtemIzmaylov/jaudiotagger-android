@@ -126,7 +126,7 @@ public class ID3v22Tag extends AbstractID3v2Tag
         else if (copyObj instanceof ID3v23Tag)
         {
             ID3v23Tag copyObject = (ID3v23Tag) copyObj;
-            this.compression = copyObject.compression;
+            this.compression = ID3v23Tag.compression;
             this.unsynchronization = copyObject.unsynchronization;
         }
         else if (copyObj instanceof ID3v24Tag)

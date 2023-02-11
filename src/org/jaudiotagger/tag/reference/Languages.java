@@ -377,7 +377,6 @@ public final class Languages extends AbstractStringStringValuePair
         idToValue.put("pau", "Palauan");
         idToValue.put("peo", "Persian, Old (ca.600-400 B.C.)");
         idToValue.put("per", "Persian");
-        idToValue.put("per", "Persian");
         idToValue.put("phi", "Philippine");
         idToValue.put("phn", "Phoenician");
         idToValue.put("pli", "Pali");

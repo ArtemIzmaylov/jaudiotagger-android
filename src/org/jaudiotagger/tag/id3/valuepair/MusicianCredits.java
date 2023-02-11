@@ -315,7 +315,6 @@ public class MusicianCredits
         musicianCredits.add("guitalele");
         musicianCredits.add("guitar");
         musicianCredits.add("guitaret");
-        musicianCredits.add("guitaret");
         musicianCredits.add("guitarrón chileno");
         musicianCredits.add("guitarrón mexicano");
         musicianCredits.add("guitars");

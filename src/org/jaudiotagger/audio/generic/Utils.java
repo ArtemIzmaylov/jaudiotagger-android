@@ -94,7 +94,7 @@ public class Utils
         long number = 0;
         for (int i = 0; i < (end - start + 1); i++)
         {
-            number += ((b.get(start + i) & 0xFF) << i * 8);
+            number += ((long) (b.get(start + i) & 0xFF) << i * 8);
         }
 
         return number;

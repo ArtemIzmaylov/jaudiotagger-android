@@ -1,7 +1,6 @@
 package org.jaudiotagger.audio.generic;
 
 import org.jaudiotagger.audio.AudioFile;
-import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.Tag;
@@ -22,10 +21,9 @@ public abstract class AudioFileWriter2 extends AudioFileWriter
      * @param af The file to process
      *
      * @throws CannotWriteException if anything went wrong
-     * @throws org.jaudiotagger.audio.exceptions.CannotReadException
      */
     @Override
-    public void delete(AudioFile af) throws CannotReadException, CannotWriteException
+    public void delete(AudioFile af) throws CannotWriteException
     {
         File file = af.getFile();
 

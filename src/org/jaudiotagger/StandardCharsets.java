@@ -34,6 +34,7 @@ import java.nio.charset.Charset;
  * @see <a href="Charset#standard">Standard Charsets</a>
  * @since 1.7
  */
+@SuppressWarnings("CharsetObjectCanBeUsed")
 public final class StandardCharsets {
 
     private StandardCharsets() {

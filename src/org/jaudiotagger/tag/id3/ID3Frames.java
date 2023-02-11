@@ -186,7 +186,6 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_AUDIO_ENCRYPTION, ID3v23Frames.FRAME_ID_V3_AUDIO_ENCRYPTION);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_BPM, ID3v23Frames.FRAME_ID_V3_BPM);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_COMMENT, ID3v23Frames.FRAME_ID_V3_COMMENT);
-        convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_COMMENT, ID3v23Frames.FRAME_ID_V3_COMMENT);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_COMPOSER, ID3v23Frames.FRAME_ID_V3_COMPOSER);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_CONDUCTOR, ID3v23Frames.FRAME_ID_V3_CONDUCTOR);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_CONTENT_GROUP_DESC, ID3v23Frames.FRAME_ID_V3_CONTENT_GROUP_DESC);
@@ -217,10 +216,8 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_ORIG_TITLE, ID3v23Frames.FRAME_ID_V3_ORIG_TITLE);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_PLAYLIST_DELAY, ID3v23Frames.FRAME_ID_V3_PLAYLIST_DELAY);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_PLAY_COUNTER, ID3v23Frames.FRAME_ID_V3_PLAY_COUNTER);
-        convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_PLAY_COUNTER, ID3v23Frames.FRAME_ID_V3_PLAY_COUNTER);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_POPULARIMETER, ID3v23Frames.FRAME_ID_V3_POPULARIMETER);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_PUBLISHER, ID3v23Frames.FRAME_ID_V3_PUBLISHER);
-        convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_RECOMMENDED_BUFFER_SIZE, ID3v23Frames.FRAME_ID_V3_RECOMMENDED_BUFFER_SIZE);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_RECOMMENDED_BUFFER_SIZE, ID3v23Frames.FRAME_ID_V3_RECOMMENDED_BUFFER_SIZE);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_RELATIVE_VOLUME_ADJUSTMENT, ID3v23Frames.FRAME_ID_V3_RELATIVE_VOLUME_ADJUSTMENT);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_REMIXED, ID3v23Frames.FRAME_ID_V3_REMIXED);
@@ -237,7 +234,6 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_TRDA, ID3v23Frames.FRAME_ID_V3_TRDA);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_TSIZ, ID3v23Frames.FRAME_ID_V3_TSIZ);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_TYER, ID3v23Frames.FRAME_ID_V3_TYER);
-        convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_UNIQUE_FILE_ID, ID3v23Frames.FRAME_ID_V3_UNIQUE_FILE_ID);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_UNIQUE_FILE_ID, ID3v23Frames.FRAME_ID_V3_UNIQUE_FILE_ID);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_UNSYNC_LYRICS, ID3v23Frames.FRAME_ID_V3_UNSYNC_LYRICS);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_URL_ARTIST_WEB, ID3v23Frames.FRAME_ID_V3_URL_ARTIST_WEB);

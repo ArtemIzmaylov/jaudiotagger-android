@@ -123,11 +123,11 @@ public final class ContentDescription extends MetadataContainer
         long result = 44; // GUID + UINT64 for size + 5 times string length
         // (each
         // 2 bytes) + 5 times zero term char (2 bytes each).
-        result += getAuthor().length() * 2; // UTF-16LE
-        result += getComment().length() * 2;
-        result += getRating().length() * 2;
-        result += getTitle().length() * 2;
-        result += getCopyRight().length() * 2;
+        result += getAuthor().length() * 2L; // UTF-16LE
+        result += getComment().length() * 2L;
+        result += getRating().length() * 2L;
+        result += getTitle().length() * 2L;
+        result += getCopyRight().length() * 2L;
         return result;
     }
 

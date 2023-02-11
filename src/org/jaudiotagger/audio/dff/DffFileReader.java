@@ -172,7 +172,7 @@ public class DffFileReader extends AudioFileReader2
                 if (dst != null)
                 {
 
-                    sampleCount = frte.getNumFrames() / frte.getRate()
+                    sampleCount = (long) frte.getNumFrames() / frte.getRate()
                             * samplingFreqency;
 
                 }

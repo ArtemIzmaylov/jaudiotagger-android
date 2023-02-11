@@ -44,12 +44,12 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
     /**
      * key to value map
      */
-    private Map<Integer, String> keyToValue;
+    private final Map<Integer, String> keyToValue;
 
     /**
      * value to key map
      */
-    private Map<String, Integer> valueToKey;
+    private final Map<String, Integer> valueToKey;
 
     /**
      *

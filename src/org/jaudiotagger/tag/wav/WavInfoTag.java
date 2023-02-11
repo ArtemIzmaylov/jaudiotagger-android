@@ -90,7 +90,7 @@ public class WavInfoTag extends GenericTag
         return output.toString();
     }
 
-    public TagField createCompilationField(boolean value) throws KeyNotFoundException, FieldDataInvalidException
+    public TagField createCompilationField(boolean value) throws KeyNotFoundException
     {
         return createField(FieldKey.IS_COMPILATION,String.valueOf(value));
     }

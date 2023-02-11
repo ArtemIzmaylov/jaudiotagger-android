@@ -456,9 +456,9 @@ public class Mp4TagWriter
             positionOfTopLevelFreeAtom = 0;
             sizeOfExistingTopLevelFreeAtom = 0;
             topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata = true;
-            for (DefaultMutableTreeNode freeNode : atomTree.getFreeNodes())
+            for (DefaultMutableTreeNode<?> freeNode : atomTree.getFreeNodes())
             {
-                DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) freeNode.getParent();
+                DefaultMutableTreeNode<?> parentNode = (DefaultMutableTreeNode<?>) freeNode.getParent();
                 if (parentNode.isRoot())
                 {
                     topLevelFreeHeader = ((Mp4BoxHeader) freeNode.getUserObject());
@@ -619,10 +619,10 @@ public class Mp4TagWriter
         int oldMetaLevelFreeAtomSize;//Level 4 - Free
         oldMetaLevelFreeAtomSize = 0;
 
-        for (DefaultMutableTreeNode freeNode : atomTree.getFreeNodes())
+        for (DefaultMutableTreeNode<?> freeNode : atomTree.getFreeNodes())
         {
-            DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) freeNode.getParent();
-            DefaultMutableTreeNode brotherNode = freeNode.getPreviousSibling();
+            DefaultMutableTreeNode<?> parentNode = (DefaultMutableTreeNode<?>) freeNode.getParent();
+            DefaultMutableTreeNode<?> brotherNode = freeNode.getPreviousSibling();
             if (!parentNode.isRoot())
             {
                 Mp4BoxHeader parentHeader = ((Mp4BoxHeader) parentNode.getUserObject());

@@ -131,12 +131,12 @@ public final class ID3v24Frames extends ID3Frames
     public static final String FRAME_ID_PERFORMER_SORT_OWNER = FRAME_ID_ARTIST_SORT_ORDER;
     public static final String FRAME_ID_TITLE_SORT_OWNER = FRAME_ID_TITLE_SORT_ORDER;
 
-    protected final EnumMap<FieldKey, ID3v24FieldKey> tagFieldToId3 = new EnumMap<>(FieldKey.class);
+    private final EnumMap<FieldKey, ID3v24FieldKey> tagFieldToId3 = new EnumMap<>(FieldKey.class);
 
     /**
      * Maps from ID3 key to Generic key
      */
-    protected final EnumMap<ID3v24FieldKey, FieldKey> id3ToTagField = new EnumMap<>(ID3v24FieldKey.class);
+    private final EnumMap<ID3v24FieldKey, FieldKey> id3ToTagField = new EnumMap<>(ID3v24FieldKey.class);
 
 
     private static ID3v24Frames id3v24Frames;
@@ -377,7 +377,6 @@ public final class ID3v24Frames extends ID3Frames
         discardIfFileAlteredFrames.add(FRAME_ID_POSITION_SYNC);
         discardIfFileAlteredFrames.add(FRAME_ID_SYNC_LYRIC);
         discardIfFileAlteredFrames.add(FRAME_ID_SYNC_TEMPO);
-        discardIfFileAlteredFrames.add(FRAME_ID_EVENT_TIMING_CODES);
         discardIfFileAlteredFrames.add(FRAME_ID_ENCODEDBY);
         discardIfFileAlteredFrames.add(FRAME_ID_LENGTH);
 

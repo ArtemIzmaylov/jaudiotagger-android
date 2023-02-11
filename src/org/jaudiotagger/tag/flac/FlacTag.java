@@ -69,8 +69,7 @@ public class FlacTag implements Tag
     {
         if (id.equals(FieldKey.COVER_ART.name()))
         {
-            List<TagField> castImages = new ArrayList<>();
-            castImages.addAll(images);
+            List<TagField> castImages = new ArrayList<>(images);
             return castImages;
         }
         else
@@ -248,9 +247,8 @@ public class FlacTag implements Tag
      * @param vorbisCommentKey
      * @param value
      * @throws KeyNotFoundException
-     * @throws FieldDataInvalidException
      */
-    public void setField(String vorbisCommentKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    public void setField(String vorbisCommentKey, String value) throws KeyNotFoundException
     {
         TagField tagfield = createField(vorbisCommentKey,value);
         setField(tagfield);
@@ -261,9 +259,8 @@ public class FlacTag implements Tag
      * @param vorbisCommentKey
      * @param value
      * @throws KeyNotFoundException
-     * @throws FieldDataInvalidException
      */
-    public void addField(String vorbisCommentKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    public void addField(String vorbisCommentKey, String value) throws KeyNotFoundException
     {
         TagField tagfield = createField(vorbisCommentKey,value);
         addField(tagfield);
@@ -310,9 +307,8 @@ public class FlacTag implements Tag
      * @param value
      * @return
      * @throws org.jaudiotagger.tag.KeyNotFoundException
-     * @throws org.jaudiotagger.tag.FieldDataInvalidException
      */
-    public TagField createField(VorbisCommentFieldKey vorbisCommentFieldKey, String value) throws KeyNotFoundException,FieldDataInvalidException
+    public TagField createField(VorbisCommentFieldKey vorbisCommentFieldKey, String value) throws KeyNotFoundException
     {
         if (vorbisCommentFieldKey == VorbisCommentFieldKey.COVERART)
         {
@@ -461,8 +457,7 @@ public class FlacTag implements Tag
     {
         if (id == FieldKey.COVER_ART)
         {
-            List<TagField> castImages = new ArrayList<>();
-            castImages.addAll(images);
+            List<TagField> castImages = new ArrayList<>(images);
             return castImages;
         }
         else

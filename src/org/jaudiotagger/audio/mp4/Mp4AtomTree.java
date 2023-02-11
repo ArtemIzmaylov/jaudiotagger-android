@@ -9,6 +9,7 @@ import org.jaudiotagger.audio.mp4.atom.NullPadding;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.utils.tree.DefaultMutableTreeNode;
 import org.jaudiotagger.utils.tree.DefaultTreeModel;
+import org.jaudiotagger.utils.tree.TreeNode;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -36,20 +37,20 @@ import java.util.logging.Logger;
  */
 public class Mp4AtomTree
 {
-    private DefaultMutableTreeNode rootNode;
-    private DefaultTreeModel dataTree;
-    private DefaultMutableTreeNode moovNode;
-    private DefaultMutableTreeNode mdatNode;
-    private DefaultMutableTreeNode ilstNode;
-    private DefaultMutableTreeNode metaNode;
-    private DefaultMutableTreeNode tagsNode;
-    private DefaultMutableTreeNode udtaNode;
-    private DefaultMutableTreeNode hdlrWithinMdiaNode;
-    private DefaultMutableTreeNode hdlrWithinMetaNode;
-    private final List<DefaultMutableTreeNode> stcoNodes = new ArrayList<>();
-    private final List<DefaultMutableTreeNode> freeNodes = new ArrayList<>();
-    private final List<DefaultMutableTreeNode> mdatNodes = new ArrayList<>();
-    private final List<DefaultMutableTreeNode> trakNodes = new ArrayList<>();
+    private DefaultMutableTreeNode<Object> rootNode;
+    private DefaultTreeModel<Object> dataTree;
+    private DefaultMutableTreeNode<Object> moovNode;
+    private DefaultMutableTreeNode<Object> mdatNode;
+    private DefaultMutableTreeNode<Object> ilstNode;
+    private DefaultMutableTreeNode<Object> metaNode;
+    private DefaultMutableTreeNode<Object> tagsNode;
+    private DefaultMutableTreeNode<Object> udtaNode;
+    private DefaultMutableTreeNode<Object> hdlrWithinMdiaNode;
+    private DefaultMutableTreeNode<Object> hdlrWithinMetaNode;
+    private final List<DefaultMutableTreeNode<Object>> stcoNodes = new ArrayList<>();
+    private final List<DefaultMutableTreeNode<Object>> freeNodes = new ArrayList<>();
+//    private final List<DefaultMutableTreeNode<Object>> mdatNodes = new ArrayList<>();
+    private final List<DefaultMutableTreeNode<Object>> trakNodes = new ArrayList<>();
 
     private final List<Mp4StcoBox> stcos = new ArrayList<>();
     private ByteBuffer moovBuffer; //Contains all the data under moov
@@ -94,11 +95,9 @@ public class Mp4AtomTree
      */
     public void buildTree(RandomAccessFile raf, boolean closeExit) throws IOException, CannotReadException
     {
-        FileChannel fc = null;
+        FileChannel fc = raf.getChannel();
         try
         {
-            fc = raf.getChannel();
-
             //make sure at start of file
             fc.position(0);
 
@@ -127,7 +126,7 @@ public class Mp4AtomTree
                     if(moovNode!=null&mdatNode!=null)
                     {
                         NullPadding np = new NullPadding(fc.position() - Mp4BoxHeader.HEADER_LENGTH,fc.size());
-                        DefaultMutableTreeNode trailingPaddingNode = new DefaultMutableTreeNode(np);
+                        DefaultMutableTreeNode<Object> trailingPaddingNode = new DefaultMutableTreeNode<>(np);
                         rootNode.add(trailingPaddingNode);
                         logger.warning(ErrorMessage.NULL_PADDING_FOUND_AT_END_OF_MP4.getMsg(np.getFilePos()));
                         break;
@@ -140,7 +139,7 @@ public class Mp4AtomTree
                 }
                                    
                 boxHeader.setFilePos(fc.position() - Mp4BoxHeader.HEADER_LENGTH);
-                DefaultMutableTreeNode newAtom = new DefaultMutableTreeNode(boxHeader);
+                DefaultMutableTreeNode<Object> newAtom = new DefaultMutableTreeNode<>(boxHeader);
 
                 //Go down moov
                 if (boxHeader.getId().equals(Mp4AtomIdentifier.MOOV.getFieldName()))
@@ -184,7 +183,7 @@ public class Mp4AtomTree
                     //    throw new CannotReadException(ErrorMessage.MP4_FILE_CONTAINS_MULTIPLE_DATA_ATOMS.getMsg());
                     //}
                     mdatNode = newAtom;
-                    mdatNodes.add(newAtom);
+//                    mdatNodes.add(newAtom);
                 }
                 rootNode.add(newAtom);
 
@@ -215,15 +214,16 @@ public class Mp4AtomTree
             if (extraDataLength != 0) {
                 logger.warning(ErrorMessage.EXTRA_DATA_AT_END_OF_MP4.getMsg(extraDataLength));
             }
-        }
-        finally
-        {
+
             //If we cant find the audio then we cannot modify this file so better to throw exception
             //now rather than later when try and write to it.
             if(mdatNode==null)
             {
                 throw new CannotReadException(ErrorMessage.MP4_CANNOT_FIND_AUDIO.getMsg());
             }
+        }
+        finally
+        {
 
             if (closeExit)
             {
@@ -235,14 +235,13 @@ public class Mp4AtomTree
     /**
      * Display atom tree
      */
-    @SuppressWarnings("unchecked")
     public void printAtomTree()
     {
-        Enumeration<DefaultMutableTreeNode> e = rootNode.preorderEnumeration();
-        DefaultMutableTreeNode nextNode;
+        Enumeration<TreeNode<Object>> e = rootNode.preorderEnumeration();
+        DefaultMutableTreeNode<Object> nextNode;
         while (e.hasMoreElements())
         {
-            nextNode = e.nextElement();
+            nextNode = (DefaultMutableTreeNode<Object>)e.nextElement();
             Mp4BoxHeader header = (Mp4BoxHeader) nextNode.getUserObject();
             if (header != null)
             {
@@ -282,10 +281,9 @@ public class Mp4AtomTree
      *
      * @param moovBuffer
      * @param parentNode
-     * @throws IOException
      * @throws CannotReadException
      */
-    public void buildChildrenOfNode(ByteBuffer moovBuffer, DefaultMutableTreeNode parentNode) throws IOException, CannotReadException
+    public void buildChildrenOfNode(ByteBuffer moovBuffer, DefaultMutableTreeNode<Object> parentNode) throws CannotReadException
     {
         Mp4BoxHeader boxHeader;
 
@@ -303,7 +301,7 @@ public class Mp4AtomTree
 
             try
             {
-                boxHeader = new Mp4BoxHeader(moovBuffer);
+                /*boxHeader = */new Mp4BoxHeader(moovBuffer);
             }
             catch(NullBoxIdException nbe)
             {
@@ -323,12 +321,11 @@ public class Mp4AtomTree
         while (moovBuffer.position() < ((startPos + parentBoxHeader.getDataLength()) - Mp4BoxHeader.HEADER_LENGTH))
         {
             boxHeader = new Mp4BoxHeader(moovBuffer);
-
-            if (boxHeader != null)
+//            if (boxHeader != null)
             {
                 boxHeader.setFilePos(moovHeader.getFilePos() + moovBuffer.position());
                 logger.finest("Atom " + boxHeader.getId() + " @ " + boxHeader.getFilePos() + " of size:" + boxHeader.getLength() + " ,ends @ " + (boxHeader.getFilePos() + boxHeader.getLength()));
-                DefaultMutableTreeNode newAtom = new DefaultMutableTreeNode(boxHeader);
+                DefaultMutableTreeNode<Object> newAtom = new DefaultMutableTreeNode<>(boxHeader);
                 parentNode.add(newAtom);
 
                 if (boxHeader.getId().equals(Mp4AtomIdentifier.UDTA.getFieldName()))
@@ -359,7 +356,7 @@ public class Mp4AtomTree
                 }
                 else if (boxHeader.getId().equals(Mp4AtomIdentifier.ILST.getFieldName()))
                 {
-                    DefaultMutableTreeNode parent = (DefaultMutableTreeNode)parentNode.getParent();
+                    DefaultMutableTreeNode<Object> parent = (DefaultMutableTreeNode<Object>)parentNode.getParent();
                     if(parent!=null)
                     {
                         Mp4BoxHeader parentsParent = (Mp4BoxHeader)(parent).getUserObject();
@@ -407,7 +404,7 @@ public class Mp4AtomTree
      *
      * @return
      */
-    public DefaultTreeModel getDataTree()
+    public DefaultTreeModel<Object> getDataTree()
     {
         return dataTree;
     }
@@ -417,7 +414,7 @@ public class Mp4AtomTree
      *
      * @return
      */
-    public DefaultMutableTreeNode getMoovNode()
+    public DefaultMutableTreeNode<Object> getMoovNode()
     {
         return moovNode;
     }
@@ -426,7 +423,7 @@ public class Mp4AtomTree
      *
      * @return
      */
-    public List<DefaultMutableTreeNode> getStcoNodes()
+    public List<DefaultMutableTreeNode<Object>> getStcoNodes()
     {
         return stcoNodes;
     }
@@ -435,7 +432,7 @@ public class Mp4AtomTree
      *
      * @return
      */
-    public DefaultMutableTreeNode getIlstNode()
+    public DefaultMutableTreeNode<Object> getIlstNode()
     {
         return ilstNode;
     }
@@ -445,7 +442,7 @@ public class Mp4AtomTree
      * @param node
      * @return
      */
-    public Mp4BoxHeader getBoxHeader(DefaultMutableTreeNode node)
+    public Mp4BoxHeader getBoxHeader(DefaultMutableTreeNode<Object> node)
     {
         if (node == null)
         {
@@ -458,7 +455,7 @@ public class Mp4AtomTree
      *
      * @return
      */
-    public DefaultMutableTreeNode getMdatNode()
+    public DefaultMutableTreeNode<Object> getMdatNode()
     {
         return mdatNode;
     }
@@ -467,7 +464,7 @@ public class Mp4AtomTree
      *
      * @return
      */
-    public DefaultMutableTreeNode getUdtaNode()
+    public DefaultMutableTreeNode<Object> getUdtaNode()
     {
         return udtaNode;
     }
@@ -476,7 +473,7 @@ public class Mp4AtomTree
      *
      * @return
      */
-    public DefaultMutableTreeNode getMetaNode()
+    public DefaultMutableTreeNode<Object> getMetaNode()
     {
         return metaNode;
     }
@@ -485,7 +482,7 @@ public class Mp4AtomTree
      *
      * @return
      */
-    public DefaultMutableTreeNode getHdlrWithinMetaNode()
+    public DefaultMutableTreeNode<Object> getHdlrWithinMetaNode()
     {
         return hdlrWithinMetaNode;
     }
@@ -494,7 +491,7 @@ public class Mp4AtomTree
      *
      * @return
      */
-    public DefaultMutableTreeNode getHdlrWithinMdiaNode()
+    public DefaultMutableTreeNode<Object> getHdlrWithinMdiaNode()
     {
         return hdlrWithinMdiaNode;
     }
@@ -503,7 +500,7 @@ public class Mp4AtomTree
      *
      * @return
      */
-    public DefaultMutableTreeNode getTagsNode()
+    public DefaultMutableTreeNode<Object> getTagsNode()
     {
         return tagsNode;
     }
@@ -512,7 +509,7 @@ public class Mp4AtomTree
      *
      * @return
      */
-    public List<DefaultMutableTreeNode> getFreeNodes()
+    public List<DefaultMutableTreeNode<Object>> getFreeNodes()
     {
         return freeNodes;
     }
@@ -521,7 +518,7 @@ public class Mp4AtomTree
      *
      * @return
      */
-    public List<DefaultMutableTreeNode> getTrakNodes()
+    public List<DefaultMutableTreeNode<Object>> getTrakNodes()
     {
         return trakNodes;
     }

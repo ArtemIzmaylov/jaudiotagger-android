@@ -38,7 +38,7 @@ public interface TreeModelListener extends EventListener {
      * <code>e.getChildIndices()</code>
      * returns the index(es) of the changed node(s).
      */
-    void treeNodesChanged(TreeModelEvent e);
+    void treeNodesChanged(TreeModelEvent<?> e);
 
     /**
      * <p>Invoked after nodes have been inserted into the tree.
@@ -49,7 +49,7 @@ public interface TreeModelListener extends EventListener {
      * returns the index(es) of the new node(s)
      * in ascending order.
      */
-    void treeNodesInserted(TreeModelEvent e);
+    void treeNodesInserted(TreeModelEvent<?> e);
 
     /**
      * <p>Invoked after nodes have been removed from the tree.  Note that
@@ -63,7 +63,7 @@ public interface TreeModelListener extends EventListener {
      * returns, in ascending order, the index(es) 
      * the node(s) had before being deleted.
      */
-    void treeNodesRemoved(TreeModelEvent e);
+    void treeNodesRemoved(TreeModelEvent<?> e);
 
     /**
      * <p>Invoked after the tree has drastically changed structure from a
@@ -76,6 +76,6 @@ public interface TreeModelListener extends EventListener {
      * <code>e.getChildIndices()</code>
      * returns null.
      */
-    void treeStructureChanged(TreeModelEvent e);
+    void treeStructureChanged(TreeModelEvent<?> e);
 
 }
