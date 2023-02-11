@@ -9,7 +9,7 @@ The compiled JAR library works on Android platform, has been tested on API level
 
 <h2>Source</h2>
 
-The source code is based on Jaudiotagger library version 2.2.6.
+The source code is based on Jaudiotagger library version 3.0.2.
 
 Jaudiotagger library version 2.2.6 is build on JDK 1.8 and uses lots of nio features, which are not compatible with Android version lower than API level 26.
 
