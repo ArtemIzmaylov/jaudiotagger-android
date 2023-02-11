@@ -25,13 +25,13 @@ public class MultipleTextEncodedStringNullTerminated extends AbstractDataType
     public MultipleTextEncodedStringNullTerminated(String identifier, AbstractTagFrameBody frameBody)
     {
         super(identifier, frameBody);
-        value = new Values();
+        value = new MultipleTextEncodedStringNullTerminated.Values();
     }
 
     public MultipleTextEncodedStringNullTerminated(TextEncodedStringSizeTerminated object)
     {
         super(object);
-        value = new Values();
+        value = new MultipleTextEncodedStringNullTerminated.Values();
     }
 
     public MultipleTextEncodedStringNullTerminated(MultipleTextEncodedStringNullTerminated object)

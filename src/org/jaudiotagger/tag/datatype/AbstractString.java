@@ -185,7 +185,6 @@ public abstract class AbstractString extends AbstractDataType
     {
         final byte textEncoding = this.getBody().getTextEncoding();
         final Charset charSetName = TextEncoding.getInstanceOf().getCharsetForId(textEncoding);
-        logger.finest("text encoding:" + textEncoding + " charset:" + charSetName.name());
         return charSetName;
     }
 }

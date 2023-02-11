@@ -11,17 +11,17 @@ import java.io.IOException;
 /**
  * Reads Audio and Metadata information contained in Aiff file.
  */
-public class AiffFileReader extends AudioFileReader2 {
-    private AiffInfoReader ir = new AiffInfoReader();
-    private AiffTagReader im = new AiffTagReader();
-
+public class AiffFileReader extends AudioFileReader2
+{
     @Override
-    protected GenericAudioHeader getEncodingInfo(File file) throws CannotReadException, IOException {
-        return ir.read(file);
+    protected GenericAudioHeader getEncodingInfo(File file) throws CannotReadException, IOException
+    {
+        return new AiffInfoReader(file.getName()).read(file);
     }
 
     @Override
-    protected Tag getTag(File file) throws CannotReadException, IOException {
-        return im.read(file);
+    protected Tag getTag(File file) throws CannotReadException, IOException
+    {
+        return new AiffTagReader(file.getName()).read(file);
     }
 }

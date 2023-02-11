@@ -22,6 +22,7 @@ import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.generic.AudioFileWriter;
 import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.mp4.Mp4Tag;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -33,17 +34,15 @@ import java.io.RandomAccessFile;
  */
 public class Mp4FileWriter extends AudioFileWriter
 {
+    private Mp4TagWriter tw = new Mp4TagWriter("??");
 
-    private Mp4TagWriter tw = new Mp4TagWriter();
-
-
-    protected void writeTag(AudioFile audioFile, Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotWriteException, IOException
+    protected void writeTag(AudioFile audioFile, Tag tag, RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotWriteException, IOException
     {
-        tw.write(tag, raf, rafTemp);
+        tw.write(tag, raf);
     }
 
-    protected void deleteTag(Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws IOException
+    protected void deleteTag(Tag tag, RandomAccessFile raf, RandomAccessFile tempRaf) throws IOException, CannotWriteException
     {
-        tw.delete(raf, rafTemp);
+        tw.write(new Mp4Tag(), raf);
     }
 }

@@ -21,13 +21,13 @@ public class PairedTextEncodedStringNullTerminated extends AbstractDataType
     public PairedTextEncodedStringNullTerminated(String identifier, AbstractTagFrameBody frameBody)
     {
         super(identifier, frameBody);
-        value = new ValuePairs();
+        value = new PairedTextEncodedStringNullTerminated.ValuePairs();
     }
 
     public PairedTextEncodedStringNullTerminated(TextEncodedStringSizeTerminated object)
     {
         super(object);
-        value = new ValuePairs();
+        value = new PairedTextEncodedStringNullTerminated.ValuePairs();
     }
 
     public PairedTextEncodedStringNullTerminated(PairedTextEncodedStringNullTerminated object)

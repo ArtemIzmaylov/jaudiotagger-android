@@ -29,7 +29,7 @@ public class Mp4TagRawBinaryField extends Mp4TagField
      *
      * @param header
      * @param raw
-     * @throws UnsupportedEncodingException
+     * @throws java.io.UnsupportedEncodingException
      *
      */
     public Mp4TagRawBinaryField(Mp4BoxHeader header, ByteBuffer raw) throws UnsupportedEncodingException
@@ -48,7 +48,7 @@ public class Mp4TagRawBinaryField extends Mp4TagField
      * Used when creating raw content
      *
      * @return
-     * @throws UnsupportedEncodingException
+     * @throws java.io.UnsupportedEncodingException
      *
      */
     protected byte[] getDataBytes() throws UnsupportedEncodingException

@@ -54,7 +54,7 @@ public class TextEncoding extends AbstractIntStringValuePair
 
     private static TextEncoding textEncodings;
 
-    private final Map<Integer, Charset> idToCharset = new HashMap<Integer, Charset>();
+    private final Map<Integer, Charset> idToCharset = new HashMap<>();
 
     /**
      * Get singleton for this class.

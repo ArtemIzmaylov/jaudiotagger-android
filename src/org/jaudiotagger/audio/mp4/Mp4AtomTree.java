@@ -13,6 +13,7 @@ import org.jaudiotagger.utils.tree.DefaultTreeModel;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -108,7 +109,9 @@ public class Mp4AtomTree
 
             //Iterate though all the top level Nodes
             ByteBuffer headerBuffer = ByteBuffer.allocate(Mp4BoxHeader.HEADER_LENGTH);
-            while (fc.position() < fc.size())
+            // we need to have at least enough data in the file left
+            // to read a box header
+            while (fc.position() < fc.size() - Mp4BoxHeader.HEADER_LENGTH)
             {
                 Mp4BoxHeader boxHeader = new Mp4BoxHeader();
                 headerBuffer.clear();          
@@ -185,7 +188,33 @@ public class Mp4AtomTree
                     mdatNodes.add(newAtom);
                 }
                 rootNode.add(newAtom);
-                fc.position(fc.position() + boxHeader.getDataLength());
+
+                //64bit data length
+                if(boxHeader.getLength() == 1)
+                {
+                    ByteBuffer data64bitLengthBuffer = ByteBuffer.allocate(Mp4BoxHeader.DATA_64BITLENGTH);
+                    data64bitLengthBuffer.order(ByteOrder.BIG_ENDIAN);
+                    int  bytesRead = fc.read(data64bitLengthBuffer);
+                    if (bytesRead != Mp4BoxHeader.DATA_64BITLENGTH)
+                    {
+                        return null;
+                    }
+                    data64bitLengthBuffer.rewind();
+                    long length = data64bitLengthBuffer.getLong();
+                    if (length < Mp4BoxHeader.HEADER_LENGTH){
+                        return null;
+                    }
+
+                    fc.position(fc.position() + length - Mp4BoxHeader.REALDATA_64BITLENGTH);
+                }
+                else
+                {
+                    fc.position(fc.position() + boxHeader.getDataLength());
+                }
+            }
+            final long extraDataLength = fc.size() - fc.position();
+            if (extraDataLength != 0) {
+                logger.warning(ErrorMessage.EXTRA_DATA_AT_END_OF_MP4.getMsg(extraDataLength));
             }
             return dataTree;
         }
@@ -227,11 +256,25 @@ public class Mp4AtomTree
 
                 if(header instanceof NullPadding)
                 {
-                    System.out.println(tabbing + "Null pad " + " @ " + header.getFilePos() + " of size:" + header.getLength() + " ,ends @ " + (header.getFilePos() + header.getLength()));                                        
+                    if(header.getLength()==1)
+                    {
+                        System.out.println(tabbing + "Null pad " + " @ " + header.getFilePos() + " 64bitDataSize" + " ,ends @ " + (header.getFilePos() + header.getLength()));
+                    }
+                    else
+                    {
+                        System.out.println(tabbing + "Null pad " + " @ " + header.getFilePos() + " of size:" + header.getLength() + " ,ends @ " + (header.getFilePos() + header.getLength()));
+                    }
                 }
                 else
                 {
-                    System.out.println(tabbing + "Atom " + header.getId() + " @ " + header.getFilePos() + " of size:" + header.getLength() + " ,ends @ " + (header.getFilePos() + header.getLength()));
+                    if(header.getLength()==1)
+                    {
+                        System.out.println(tabbing + "Atom " + header.getId() + " @ " + header.getFilePos() + " 64BitDataSize"  + " ,ends @ " + (header.getFilePos() + header.getLength()));
+                    }
+                    else
+                    {
+                        System.out.println(tabbing + "Atom " + header.getId() + " @ " + header.getFilePos() + " of size:" + header.getLength() + " ,ends @ " + (header.getFilePos() + header.getLength()));
+                    }
                 }
             }
         }
@@ -268,7 +311,7 @@ public class Mp4AtomTree
             {
                 //It might be that the meta box didn't actually have any additional data after it so we adjust the buffer
                 //to be immediately after metabox and code can retry
-                moovBuffer.position(moovBuffer.position()-Mp4MetaBox.FLAGS_LENGTH);
+                moovBuffer.position(moovBuffer.position() - Mp4MetaBox.FLAGS_LENGTH);
             }
             finally
             {
@@ -282,11 +325,11 @@ public class Mp4AtomTree
         while (moovBuffer.position() < ((startPos + parentBoxHeader.getDataLength()) - Mp4BoxHeader.HEADER_LENGTH))
         {
             boxHeader = new Mp4BoxHeader(moovBuffer);
+
             if (boxHeader != null)
             {
                 boxHeader.setFilePos(moovHeader.getFilePos() + moovBuffer.position());
                 logger.finest("Atom " + boxHeader.getId() + " @ " + boxHeader.getFilePos() + " of size:" + boxHeader.getLength() + " ,ends @ " + (boxHeader.getFilePos() + boxHeader.getLength()));
-
                 DefaultMutableTreeNode newAtom = new DefaultMutableTreeNode(boxHeader);
                 parentNode.add(newAtom);
 
