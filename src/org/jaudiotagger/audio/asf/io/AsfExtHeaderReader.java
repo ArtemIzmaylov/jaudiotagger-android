@@ -33,7 +33,7 @@ public class AsfExtHeaderReader extends ChunkContainerReader<AsfExtendedHeader>
      *                      GUID) will handled only once, if a reader is available, other
      *                      chunks will be discarded.
      */
-    public AsfExtHeaderReader(final List<Class<? extends ChunkReader>> toRegister, final boolean readChunkOnce)
+    public AsfExtHeaderReader(List<Class<? extends ChunkReader>> toRegister, boolean readChunkOnce)
     {
         super(toRegister, readChunkOnce);
     }
@@ -50,12 +50,12 @@ public class AsfExtHeaderReader extends ChunkContainerReader<AsfExtendedHeader>
      * {@inheritDoc}
      */
     @Override
-    protected AsfExtendedHeader createContainer(final long streamPosition, final BigInteger chunkLength, final InputStream stream) throws IOException
+    protected AsfExtendedHeader createContainer(long streamPosition, BigInteger chunkLength, InputStream stream) throws IOException
     {
         Utils.readGUID(stream); // First reserved field (should be a specific
         // GUID.
         Utils.readUINT16(stream); // Second reserved field (should always be 6)
-        final long extensionSize = Utils.readUINT32(stream);
+        long extensionSize = Utils.readUINT32(stream);
         assert extensionSize == 0 || extensionSize >= 24;
         assert chunkLength.subtract(BigInteger.valueOf(46)).longValue() == extensionSize;
         return new AsfExtendedHeader(streamPosition, chunkLength);

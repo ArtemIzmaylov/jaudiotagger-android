@@ -68,7 +68,7 @@ public final class ContentDescription extends MetadataContainer
 
     static
     {
-        ALLOWED = new HashSet<String>(Arrays.asList(KEY_AUTHOR, KEY_COPYRIGHT, KEY_DESCRIPTION, KEY_RATING, KEY_TITLE));
+        ALLOWED = new HashSet<>(Arrays.asList(KEY_AUTHOR, KEY_COPYRIGHT, KEY_DESCRIPTION, KEY_RATING, KEY_TITLE));
     }
 
     /**
@@ -85,7 +85,7 @@ public final class ContentDescription extends MetadataContainer
      * @param pos      Position of content description within file or stream
      * @param chunkLen Length of content description.
      */
-    public ContentDescription(final long pos, final BigInteger chunkLen)
+    public ContentDescription(long pos, BigInteger chunkLen)
     {
         super(ContainerType.CONTENT_DESCRIPTION, pos, chunkLen);
     }
@@ -151,7 +151,7 @@ public final class ContentDescription extends MetadataContainer
      * {@inheritDoc}
      */
     @Override
-    public boolean isAddSupported(final MetadataDescriptor descriptor)
+    public boolean isAddSupported(MetadataDescriptor descriptor)
     {
         return ALLOWED.contains(descriptor.getName()) && super.isAddSupported(descriptor);
     }
@@ -160,15 +160,14 @@ public final class ContentDescription extends MetadataContainer
      * {@inheritDoc}
      */
     @Override
-    public String prettyPrint(final String prefix)
+    public String prettyPrint(String prefix)
     {
-        final StringBuilder result = new StringBuilder(super.prettyPrint(prefix));
-        result.append(prefix).append("  |->Title      : ").append(getTitle()).append(Utils.LINE_SEPARATOR);
-        result.append(prefix).append("  |->Author     : ").append(getAuthor()).append(Utils.LINE_SEPARATOR);
-        result.append(prefix).append("  |->Copyright  : ").append(getCopyRight()).append(Utils.LINE_SEPARATOR);
-        result.append(prefix).append("  |->Description: ").append(getComment()).append(Utils.LINE_SEPARATOR);
-        result.append(prefix).append("  |->Rating     :").append(getRating()).append(Utils.LINE_SEPARATOR);
-        return result.toString();
+        String result = super.prettyPrint(prefix) + prefix + "  |->Title      : " + getTitle() + Utils.LINE_SEPARATOR +
+                prefix + "  |->Author     : " + getAuthor() + Utils.LINE_SEPARATOR +
+                prefix + "  |->Copyright  : " + getCopyRight() + Utils.LINE_SEPARATOR +
+                prefix + "  |->Description: " + getComment() + Utils.LINE_SEPARATOR +
+                prefix + "  |->Rating     :" + getRating() + Utils.LINE_SEPARATOR;
+        return result;
     }
 
     /**
@@ -176,7 +175,7 @@ public final class ContentDescription extends MetadataContainer
      * @throws IllegalArgumentException If "UTF-16LE"-byte-representation would take more than 65535
      *                                  bytes.
      */
-    public void setAuthor(final String fileAuthor) throws IllegalArgumentException
+    public void setAuthor(String fileAuthor) throws IllegalArgumentException
     {
         setStringValue(KEY_AUTHOR, fileAuthor);
     }
@@ -186,7 +185,7 @@ public final class ContentDescription extends MetadataContainer
      * @throws IllegalArgumentException If "UTF-16LE"-byte-representation would take more than 65535
      *                                  bytes.
      */
-    public void setComment(final String tagComment) throws IllegalArgumentException
+    public void setComment(String tagComment) throws IllegalArgumentException
     {
         setStringValue(KEY_DESCRIPTION, tagComment);
     }
@@ -196,7 +195,7 @@ public final class ContentDescription extends MetadataContainer
      * @throws IllegalArgumentException If "UTF-16LE"-byte-representation would take more than 65535
      *                                  bytes.
      */
-    public void setCopyright(final String cpright) throws IllegalArgumentException
+    public void setCopyright(String cpright) throws IllegalArgumentException
     {
         setStringValue(KEY_COPYRIGHT, cpright);
     }
@@ -206,7 +205,7 @@ public final class ContentDescription extends MetadataContainer
      * @throws IllegalArgumentException If "UTF-16LE"-byte-representation would take more than 65535
      *                                  bytes.
      */
-    public void setRating(final String ratingText) throws IllegalArgumentException
+    public void setRating(String ratingText) throws IllegalArgumentException
     {
         setStringValue(KEY_RATING, ratingText);
     }
@@ -216,7 +215,7 @@ public final class ContentDescription extends MetadataContainer
      * @throws IllegalArgumentException If "UTF-16LE"-byte-representation would take more than 65535
      *                                  bytes.
      */
-    public void setTitle(final String songTitle) throws IllegalArgumentException
+    public void setTitle(String songTitle) throws IllegalArgumentException
     {
         setStringValue(KEY_TITLE, songTitle);
     }
@@ -225,9 +224,9 @@ public final class ContentDescription extends MetadataContainer
      * {@inheritDoc}
      */
     @Override
-    public long writeInto(final OutputStream out) throws IOException
+    public long writeInto(OutputStream out) throws IOException
     {
-        final long chunkSize = getCurrentAsfChunkSize();
+        long chunkSize = getCurrentAsfChunkSize();
 
         out.write(this.getGuid().getBytes());
         Utils.writeUINT64(getCurrentAsfChunkSize(), out);

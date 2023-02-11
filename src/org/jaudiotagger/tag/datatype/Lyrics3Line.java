@@ -24,7 +24,6 @@
 package org.jaudiotagger.tag.datatype;
 
 import org.jaudiotagger.StandardCharsets;
-import org.jaudiotagger.tag.InvalidDataTypeException;
 import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 
 import java.util.Iterator;
@@ -36,7 +35,7 @@ public class Lyrics3Line extends AbstractDataType
     /**
      *
      */
-    private List<Lyrics3TimeStamp> timeStamp = new LinkedList<Lyrics3TimeStamp>();
+    private List<Lyrics3TimeStamp> timeStamp = new LinkedList<>();
 
     /**
      *
@@ -176,7 +175,7 @@ public class Lyrics3Line extends AbstractDataType
         }
         int delim;
         Lyrics3TimeStamp time;
-        timeStamp = new LinkedList<Lyrics3TimeStamp>();
+        timeStamp = new LinkedList<>();
         delim = lineString.indexOf("[", offset);
         while (delim >= 0)
         {
@@ -194,10 +193,10 @@ public class Lyrics3Line extends AbstractDataType
      */
     public String toString()
     {
-        String str = "";
+        StringBuilder str = new StringBuilder();
         for (Object aTimeStamp : timeStamp)
         {
-            str += aTimeStamp.toString();
+            str.append(aTimeStamp.toString());
         }
         return "timeStamp = " + str + ", lyric = " + lyric + "\n";
     }
@@ -207,17 +206,17 @@ public class Lyrics3Line extends AbstractDataType
      */
     public String writeString()
     {
-        String str = "";
+        StringBuilder str = new StringBuilder();
         Lyrics3TimeStamp time;
         for (Object aTimeStamp : timeStamp)
         {
             time = (Lyrics3TimeStamp) aTimeStamp;
-            str += time.writeString();
+            str.append(time.writeString());
         }
         return str + lyric;
     }
 
-    public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
+    public void readByteArray(byte[] arr, int offset)
     {
         readString(arr.toString(), offset);
     }

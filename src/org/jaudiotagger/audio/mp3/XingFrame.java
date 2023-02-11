@@ -1,7 +1,5 @@
 package org.jaudiotagger.audio.mp3;
 
-import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
-
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
@@ -23,7 +21,7 @@ import java.util.Arrays;
  *
  * It my then contain a Lame Frame ( a Lame frame is in essence an extended Xing Frame
  */
-public class XingFrame
+public final class XingFrame
 {
 
     //The offset into first frame varies based on the MPEG frame properties
@@ -57,7 +55,7 @@ public class XingFrame
     private static final byte[] XING_CBR_ID = {'I', 'n', 'f', 'o'};
 
 
-    private ByteBuffer header;
+    private final ByteBuffer header;
 
     private boolean vbr = false;
     private boolean isFrameCountEnabled = false;
@@ -80,7 +78,7 @@ public class XingFrame
         setVbr();
 
         //Read Flags, only the fourth byte of interest to us
-        byte flagBuffer[] = new byte[XING_FLAG_BUFFER_SIZE];
+        byte[] flagBuffer = new byte[XING_FLAG_BUFFER_SIZE];
         header.get(flagBuffer);
 
         //Read FrameCount if flag set
@@ -131,7 +129,7 @@ public class XingFrame
      */
     private void setFrameCount()
     {
-        byte frameCountBuffer[] = new byte[XING_FRAMECOUNT_BUFFER_SIZE];
+        byte[] frameCountBuffer = new byte[XING_FRAMECOUNT_BUFFER_SIZE];
         header.get(frameCountBuffer);
         isFrameCountEnabled = true;
         frameCount = (frameCountBuffer[BYTE_1] << 24) & 0xFF000000 | (frameCountBuffer[BYTE_2] << 16) & 0x00FF0000 | (frameCountBuffer[BYTE_3] << 8) & 0x0000FF00 | frameCountBuffer[BYTE_4] & 0x000000FF;
@@ -140,7 +138,7 @@ public class XingFrame
     /**
      * @return true if frameCount has been specified in header
      */
-    public final boolean isFrameCountEnabled()
+    public boolean isFrameCountEnabled()
     {
         return isFrameCountEnabled;
     }
@@ -148,7 +146,7 @@ public class XingFrame
     /**
      * @return count of frames
      */
-    public final int getFrameCount()
+    public int getFrameCount()
     {
         return frameCount;
     }
@@ -158,7 +156,7 @@ public class XingFrame
      */
     private void setAudioSize()
     {
-        byte frameSizeBuffer[] = new byte[XING_AUDIOSIZE_BUFFER_SIZE];
+        byte[] frameSizeBuffer = new byte[XING_AUDIOSIZE_BUFFER_SIZE];
         header.get(frameSizeBuffer);
         isAudioSizeEnabled = true;
         audioSize = (frameSizeBuffer[BYTE_1] << 24) & 0xFF000000 | (frameSizeBuffer[BYTE_2] << 16) & 0x00FF0000 | (frameSizeBuffer[BYTE_3] << 8) & 0x0000FF00 | frameSizeBuffer[BYTE_4] & 0x000000FF;
@@ -167,7 +165,7 @@ public class XingFrame
     /**
      * @return true if audioSize has been specified in header
      */
-    public final boolean isAudioSizeEnabled()
+    public boolean isAudioSizeEnabled()
     {
         return isAudioSizeEnabled;
     }
@@ -175,7 +173,7 @@ public class XingFrame
     /**
      * @return size of audio data in bytes
      */
-    public final int getAudioSize()
+    public int getAudioSize()
     {
         return audioSize;
     }
@@ -185,9 +183,8 @@ public class XingFrame
      * this is a XingFrame
      *
      * @return
-     * @throws InvalidAudioFrameException
      */
-    public static XingFrame parseXingFrame(ByteBuffer header) throws InvalidAudioFrameException
+    public static XingFrame parseXingFrame(ByteBuffer header)
     {
         XingFrame xingFrame = new XingFrame(header);
         return xingFrame;
@@ -252,7 +249,7 @@ public class XingFrame
      *
      * @return
      */
-    public final boolean isVbr()
+    public boolean isVbr()
     {
         return vbr;
     }

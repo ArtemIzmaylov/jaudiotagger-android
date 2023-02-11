@@ -20,7 +20,7 @@ public class AnnotationChunk extends TextChunk
      * @param chunkData  The buffer from which the AIFF data are being read
      * @param aiffAudioHeader The AiffAudioHeader into which information is stored
      */
-    public AnnotationChunk(final ChunkHeader chunkHeader, final ByteBuffer chunkData, final AiffAudioHeader aiffAudioHeader)
+    public AnnotationChunk(ChunkHeader chunkHeader, ByteBuffer chunkData, AiffAudioHeader aiffAudioHeader)
     {
         super(chunkHeader, chunkData, aiffAudioHeader);
     }

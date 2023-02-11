@@ -26,10 +26,10 @@ public class EncryptionChunk extends Chunk
      *
      * @param chunkLen Length of current chunk.
      */
-    public EncryptionChunk(final BigInteger chunkLen)
+    public EncryptionChunk(BigInteger chunkLen)
     {
         super(GUID.GUID_CONTENT_ENCRYPTION, chunkLen);
-        this.strings = new ArrayList<String>();
+        this.strings = new ArrayList<>();
         this.secretData = "";
         this.protectionType = "";
         this.keyID = "";
@@ -41,7 +41,7 @@ public class EncryptionChunk extends Chunk
      *
      * @param toAdd String to add.
      */
-    public void addString(final String toAdd)
+    public void addString(String toAdd)
     {
         this.strings.add(toAdd);
     }
@@ -94,23 +94,23 @@ public class EncryptionChunk extends Chunk
      */
     public Collection<String> getStrings()
     {
-        return new ArrayList<String>(this.strings);
+        return new ArrayList<>(this.strings);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String prettyPrint(final String prefix)
+    public String prettyPrint(String prefix)
     {
-        final StringBuilder result = new StringBuilder(super.prettyPrint(prefix));
+        StringBuilder result = new StringBuilder(super.prettyPrint(prefix));
         result.insert(0, Utils.LINE_SEPARATOR + prefix + " Encryption:" + Utils.LINE_SEPARATOR);
         result.append(prefix).append("	|->keyID ").append(this.keyID).append(Utils.LINE_SEPARATOR);
         result.append(prefix).append("	|->secretData ").append(this.secretData).append(Utils.LINE_SEPARATOR);
         result.append(prefix).append("	|->protectionType ").append(this.protectionType).append(Utils.LINE_SEPARATOR);
         result.append(prefix).append("	|->licenseURL ").append(this.licenseURL).append(Utils.LINE_SEPARATOR);
         this.strings.iterator();
-        for (final String string : this.strings)
+        for (String string : this.strings)
         {
             result.append(prefix).append("   |->").append(string).append(Utils.LINE_SEPARATOR);
         }
@@ -122,7 +122,7 @@ public class EncryptionChunk extends Chunk
      *
      * @param toAdd String to add.
      */
-    public void setKeyID(final String toAdd)
+    public void setKeyID(String toAdd)
     {
         this.keyID = toAdd;
     }
@@ -132,7 +132,7 @@ public class EncryptionChunk extends Chunk
      *
      * @param toAdd String to add.
      */
-    public void setLicenseURL(final String toAdd)
+    public void setLicenseURL(String toAdd)
     {
         this.licenseURL = toAdd;
     }
@@ -142,7 +142,7 @@ public class EncryptionChunk extends Chunk
      *
      * @param toAdd String to add.
      */
-    public void setProtectionType(final String toAdd)
+    public void setProtectionType(String toAdd)
     {
         this.protectionType = toAdd;
     }
@@ -152,7 +152,7 @@ public class EncryptionChunk extends Chunk
      *
      * @param toAdd String to add.
      */
-    public void setSecretData(final String toAdd)
+    public void setSecretData(String toAdd)
     {
         this.secretData = toAdd;
     }

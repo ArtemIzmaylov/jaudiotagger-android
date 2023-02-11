@@ -44,9 +44,9 @@ import java.util.logging.Logger;
 public class OggVorbisTagReader
 {
     // Logger Object
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.ogg");
+    public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.ogg");
 
-    private VorbisCommentReader vorbisCommentReader;
+    private final VorbisCommentReader vorbisCommentReader;
 
     public OggVorbisTagReader()
     {
@@ -406,7 +406,7 @@ public class OggVorbisTagReader
         long filepointer = raf.getFilePointer();
 
         //Extra Packets on same page as setup header
-        List<OggPageHeader.PacketStartAndLength> extraPackets = new ArrayList<OggPageHeader.PacketStartAndLength>();
+        List<OggPageHeader.PacketStartAndLength> extraPackets = new ArrayList<>();
 
         long commentHeaderStartPosition;
         long setupHeaderStartPosition;
@@ -587,11 +587,11 @@ public class OggVorbisTagReader
      */
     public static class OggVorbisHeaderSizes
     {
-        private long commentHeaderStartPosition;
-        private long setupHeaderStartPosition;
-        private int commentHeaderSize;
-        private int setupHeaderSize;
-        private List<OggPageHeader.PacketStartAndLength> packetList;
+        private final long commentHeaderStartPosition;
+        private final long setupHeaderStartPosition;
+        private final int commentHeaderSize;
+        private final int setupHeaderSize;
+        private final List<OggPageHeader.PacketStartAndLength> packetList;
 
         OggVorbisHeaderSizes(long commentHeaderStartPosition, long setupHeaderStartPosition, int commentHeaderSize, int setupHeaderSize, List<OggPageHeader.PacketStartAndLength> packetList)
         {

@@ -31,10 +31,10 @@ public class AsfExtHeaderModifier implements ChunkModifier
      *
      * @param modifiers modifiers to apply.
      */
-    public AsfExtHeaderModifier(final List<ChunkModifier> modifiers)
+    public AsfExtHeaderModifier(List<ChunkModifier> modifiers)
     {
         assert modifiers != null;
-        this.modifierList = new ArrayList<ChunkModifier>(modifiers);
+        this.modifierList = new ArrayList<>(modifiers);
     }
 
     /**
@@ -51,9 +51,9 @@ public class AsfExtHeaderModifier implements ChunkModifier
      * @param destination the destination to copy the chunk to.
      * @throws IOException on I/O errors.
      */
-    private void copyChunk(final GUID guid, final InputStream source, final OutputStream destination) throws IOException
+    private void copyChunk(GUID guid, InputStream source, OutputStream destination) throws IOException
     {
-        final long chunkSize = Utils.readUINT64(source);
+        long chunkSize = Utils.readUINT64(source);
         destination.write(guid.getBytes());
         Utils.writeUINT64(chunkSize, destination);
         Utils.copy(source, destination, chunkSize - 24);
@@ -62,7 +62,7 @@ public class AsfExtHeaderModifier implements ChunkModifier
     /**
      * {@inheritDoc}
      */
-    public boolean isApplicable(final GUID guid)
+    public boolean isApplicable(GUID guid)
     {
         return GUID.GUID_HEADER_EXTENSION.equals(guid);
     }
@@ -70,19 +70,19 @@ public class AsfExtHeaderModifier implements ChunkModifier
     /**
      * {@inheritDoc}
      */
-    public ModificationResult modify(final GUID guid, final InputStream source, final OutputStream destination) throws IOException
+    public ModificationResult modify(GUID guid, InputStream source, OutputStream destination) throws IOException
     {
         assert GUID.GUID_HEADER_EXTENSION.equals(guid);
 
         long difference = 0;
-        final List<ChunkModifier> modders = new ArrayList<ChunkModifier>(this.modifierList);
-        final Set<GUID> occuredGuids = new HashSet<GUID>();
+        List<ChunkModifier> modders = new ArrayList<>(this.modifierList);
+        Set<GUID> occuredGuids = new HashSet<>();
         occuredGuids.add(guid);
 
-        final BigInteger chunkLen = Utils.readBig64(source);
-        final GUID reserved1 = Utils.readGUID(source);
-        final int reserved2 = Utils.readUINT16(source);
-        final long dataSize = Utils.readUINT32(source);
+        BigInteger chunkLen = Utils.readBig64(source);
+        GUID reserved1 = Utils.readGUID(source);
+        int reserved2 = Utils.readUINT16(source);
+        long dataSize = Utils.readUINT32(source);
 
         assert dataSize == 0 || dataSize >= 24;
         assert chunkLen.subtract(BigInteger.valueOf(46)).longValue() == dataSize;
@@ -90,23 +90,23 @@ public class AsfExtHeaderModifier implements ChunkModifier
         /*
          * Stream buffer for the chunk list
          */
-        final ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
         /*
          * Stream which counts read bytes. Dirty but quick way of implementing
          * this.
          */
-        final CountingInputStream cis = new CountingInputStream(source);
+        CountingInputStream cis = new CountingInputStream(source);
 
         while (cis.getReadCount() < dataSize)
         {
             // read GUID
-            final GUID curr = Utils.readGUID(cis);
+            GUID curr = Utils.readGUID(cis);
             boolean handled = false;
             for (int i = 0; i < modders.size() && !handled; i++)
             {
                 if (modders.get(i).isApplicable(curr))
                 {
-                    final ModificationResult modRes = modders.get(i).modify(curr, cis, bos);
+                    ModificationResult modRes = modders.get(i).modify(curr, cis, bos);
                     difference += modRes.getByteDifference();
                     occuredGuids.addAll(modRes.getOccuredGUIDs());
                     modders.remove(i);
@@ -120,11 +120,11 @@ public class AsfExtHeaderModifier implements ChunkModifier
             }
         }
         // Now apply the left modifiers.
-        for (final ChunkModifier curr : modders)
+        for (ChunkModifier curr : modders)
         {
             // chunks, which were not in the source file, will be added to the
             // destination
-            final ModificationResult result = curr.modify(null, null, bos);
+            ModificationResult result = curr.modify(null, null, bos);
             difference += result.getByteDifference();
             occuredGuids.addAll(result.getOccuredGUIDs());
         }

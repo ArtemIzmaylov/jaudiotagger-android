@@ -28,9 +28,9 @@ import org.jaudiotagger.tag.reference.PictureTypes;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
+import org.jaudiotagger.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -264,14 +264,14 @@ public class ID3v22Tag extends AbstractID3v2Tag
         {
             FrameBodyTDRC tmpBody = (FrameBodyTDRC) frame.getBody();
             ID3v22Frame newFrame;
-            if (tmpBody.getYear().length() != 0)
+            if (!tmpBody.getYear().isEmpty())
             {
                 //Create Year frame (v2.2 id,but uses v2.3 body)
                 newFrame = new ID3v22Frame(ID3v22Frames.FRAME_ID_V2_TYER);
                 ((AbstractFrameBodyTextInfo) newFrame.getBody()).setText(tmpBody.getYear());
                 frames.add(newFrame);
             }
-            if (tmpBody.getTime().length() != 0)
+            if (!tmpBody.getTime().isEmpty())
             {
                 //Create Time frame (v2.2 id,but uses v2.3 body)
                 newFrame = new ID3v22Frame(ID3v22Frames.FRAME_ID_V2_TIME);
@@ -314,9 +314,8 @@ public class ID3v22Tag extends AbstractID3v2Tag
      * Read tag Header Flags
      *
      * @param byteBuffer
-     * @throws TagException
      */
-    private void readHeaderFlags(ByteBuffer byteBuffer) throws TagException
+    private void readHeaderFlags(ByteBuffer byteBuffer)
     {
         //Flags
         byte flags = byteBuffer.get();
@@ -454,7 +453,6 @@ public class ID3v22Tag extends AbstractID3v2Tag
             {
                 logger.warning(getLoggingFilename() + ":Corrupt Frame:" + idete.getMessage());
                 this.invalidFrames++;
-                continue;
             }
         }
     }
@@ -469,14 +467,14 @@ public class ID3v22Tag extends AbstractID3v2Tag
     {
         FrameBodyTDRC tmpBody = (FrameBodyTDRC) frame.getBody();
         ID3v22Frame newFrame;
-        if (tmpBody.getYear().length() != 0)
+        if (!tmpBody.getYear().isEmpty())
         {
             //Create Year frame (v2.2 id,but uses v2.3 body)
             newFrame = new ID3v22Frame(ID3v22Frames.FRAME_ID_V2_TYER);
             ((AbstractFrameBodyTextInfo) newFrame.getBody()).setText(tmpBody.getYear());
             setFrame(newFrame);
         }
-        if (tmpBody.getTime().length() != 0)
+        if (!tmpBody.getTime().isEmpty())
         {
             //Create Time frame (v2.2 id,but uses v2.3 body)
             newFrame = new ID3v22Frame(ID3v22Frames.FRAME_ID_V2_TIME);
@@ -736,7 +734,7 @@ public class ID3v22Tag extends AbstractID3v2Tag
      */
     public void deleteField(String id)
     {
-        super.doDeleteTagField(new FrameAndSubId(null, id,null));
+        super.doDeleteTagField(new FrameAndSubId(null, id, null));
     }
 
     protected FrameAndSubId getFrameAndSubIdFromGenericKey(FieldKey genericKey)
@@ -774,7 +772,7 @@ public class ID3v22Tag extends AbstractID3v2Tag
     public List<Artwork> getArtworkList()
     {
         List<TagField> coverartList = getFields(FieldKey.COVER_ART);
-        List<Artwork> artworkList   = new ArrayList<Artwork>(coverartList.size());
+        List<Artwork> artworkList   = new ArrayList<>(coverartList.size());
 
         for (TagField next : coverartList)
         {
@@ -800,7 +798,7 @@ public class ID3v22Tag extends AbstractID3v2Tag
      /**
      * {@inheritDoc}
      */
-    public TagField createField(Artwork artwork) throws FieldDataInvalidException
+    public TagField createField(Artwork artwork)
     {
         AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(FieldKey.COVER_ART).getFrameId());
         FrameBodyPIC body = (FrameBodyPIC) frame.getBody();
@@ -814,14 +812,7 @@ public class ID3v22Tag extends AbstractID3v2Tag
         }
         else
         {
-            try
-            {
-                body.setObjectValue(DataTypes.OBJ_PICTURE_DATA,artwork.getImageUrl().getBytes("ISO-8859-1"));
-            }
-            catch(UnsupportedEncodingException uoe)
-            {
-                throw new RuntimeException(uoe.getMessage());
-            }
+            body.setObjectValue(DataTypes.OBJ_PICTURE_DATA,artwork.getImageUrl().getBytes(StandardCharsets.ISO_8859_1));
             body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, artwork.getPictureType());
             body.setObjectValue(DataTypes.OBJ_IMAGE_FORMAT, FrameBodyAPIC.IMAGE_IS_URL);
             body.setObjectValue(DataTypes.OBJ_DESCRIPTION, artwork.getDescription());
@@ -852,8 +843,8 @@ public class ID3v22Tag extends AbstractID3v2Tag
         if(genericKey == FieldKey.GENRE)
         {
             List<TagField> fields = getFields(genericKey);
-            List<String> convertedGenres = new ArrayList<String>();
-            if (fields != null && fields.size() > 0)
+            List<String> convertedGenres = new ArrayList<>();
+            if (fields != null && !fields.isEmpty())
             {
                 AbstractID3v2Frame frame = (AbstractID3v2Frame) fields.get(0);
                 FrameBodyTCON body = (FrameBodyTCON)frame.getBody();
@@ -882,7 +873,7 @@ public class ID3v22Tag extends AbstractID3v2Tag
         if(genericKey == FieldKey.GENRE)
         {
             List<TagField> fields = getFields(genericKey);
-            if (fields != null && fields.size() > 0)
+            if (fields != null && !fields.isEmpty())
             {
                 AbstractID3v2Frame frame = (AbstractID3v2Frame) fields.get(0);
                 FrameBodyTCON body = (FrameBodyTCON)frame.getBody();

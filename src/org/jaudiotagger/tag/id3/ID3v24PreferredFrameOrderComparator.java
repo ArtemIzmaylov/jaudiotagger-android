@@ -9,10 +9,10 @@ import static org.jaudiotagger.tag.id3.ID3v24Frames.*;
 /**
  * Orders frame Ids so that the most important frames are writtne first
  */
-public class ID3v24PreferredFrameOrderComparator implements Comparator<String>
+public final class ID3v24PreferredFrameOrderComparator implements Comparator<String>
 {
     private static ID3v24PreferredFrameOrderComparator comparator;
-    private static List<String> frameIdsInPreferredOrder = new ArrayList<>();
+    private static final List<String> frameIdsInPreferredOrder = new ArrayList<>();
 
     static
     {

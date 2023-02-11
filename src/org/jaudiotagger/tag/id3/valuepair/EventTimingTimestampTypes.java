@@ -23,7 +23,7 @@ package org.jaudiotagger.tag.id3.valuepair;
 
 import org.jaudiotagger.tag.datatype.AbstractIntStringValuePair;
 
-public class EventTimingTimestampTypes extends AbstractIntStringValuePair
+public final class EventTimingTimestampTypes extends AbstractIntStringValuePair
 {
 
     private static EventTimingTimestampTypes eventTimingTimestampTypes;

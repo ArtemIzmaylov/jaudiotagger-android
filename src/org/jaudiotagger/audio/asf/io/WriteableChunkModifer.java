@@ -26,7 +26,7 @@ public class WriteableChunkModifer implements ChunkModifier
      *
      * @param chunk chunk to write
      */
-    public WriteableChunkModifer(final WriteableChunk chunk)
+    public WriteableChunkModifer(WriteableChunk chunk)
     {
         this.writableChunk = chunk;
     }
@@ -34,7 +34,7 @@ public class WriteableChunkModifer implements ChunkModifier
     /**
      * {@inheritDoc}
      */
-    public boolean isApplicable(final GUID guid)
+    public boolean isApplicable(GUID guid)
     {
         return guid.equals(this.writableChunk.getGuid());
     }
@@ -42,7 +42,7 @@ public class WriteableChunkModifer implements ChunkModifier
     /**
      * {@inheritDoc}
      */
-    public ModificationResult modify(final GUID guid, final InputStream chunk, OutputStream destination) throws IOException
+    public ModificationResult modify(GUID guid, InputStream chunk, OutputStream destination) throws IOException
     { // NOPMD by Christian Laireiter on 5/9/09 5:03 PM
         int chunkDiff = 0;
         long newSize = 0;

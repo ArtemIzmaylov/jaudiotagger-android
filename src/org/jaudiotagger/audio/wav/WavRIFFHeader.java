@@ -31,7 +31,7 @@ import static org.jaudiotagger.audio.iff.IffHeaderChunk.logger;
 /**
  * Processes the Wav Header
  *
- * This is simply the first 12 bytes of the file http://www-mmsp.ece.mcgill.ca/Documents/AudioFormats/WAVE/WAVE.html
+ * This is simply the first 12 bytes of the file <a href="http://www-mmsp.ece.mcgill.ca/Documents/AudioFormats/WAVE/WAVE.html">...</a>
  */
 public class WavRIFFHeader
 {
@@ -48,10 +48,7 @@ public class WavRIFFHeader
         if(Utils.readFourBytesAsChars(headerBuffer).equals(RIFF_SIGNATURE))
         {
             logger.finer(loggingName+":Header:File:Size:"+headerBuffer.getInt()); //Size
-            if(Utils.readFourBytesAsChars(headerBuffer).equals(WAVE_SIGNATURE))
-            {
-                return true;
-            }
+            return Utils.readFourBytesAsChars(headerBuffer).equals(WAVE_SIGNATURE);
         }
         return false;
     }

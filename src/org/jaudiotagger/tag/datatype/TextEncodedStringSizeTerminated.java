@@ -1,6 +1,5 @@
 package org.jaudiotagger.tag.datatype;
 
-import org.jaudiotagger.tag.InvalidDataTypeException;
 import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 
@@ -74,10 +73,8 @@ public class TextEncodedStringSizeTerminated extends AbstractString
      *
      * @param arr    this is the buffer for the frame
      * @param offset this is where to start reading in the buffer for this field
-     * @throws NullPointerException
-     * @throws IndexOutOfBoundsException
      */
-    public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
+    public void readByteArray(byte[] arr, int offset)
     {
         //Decode sliced inBuffer
         ByteBuffer inBuffer;
@@ -101,7 +98,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString
         CoderResult coderResult = decoder.decode(inBuffer, outBuffer, true);
         if (coderResult.isError())
         {
-            logger.warning("Decoding error:" + coderResult.toString());
+            logger.warning("Decoding error:" + coderResult);
         }
         decoder.flush(outBuffer);
         outBuffer.flip();
@@ -171,10 +168,10 @@ public class TextEncodedStringSizeTerminated extends AbstractString
      * @return
      * @throws CharacterCodingException
      */
-    protected ByteBuffer writeStringUTF16LEBOM(final String next, final int i, final int noOfValues)
+    protected ByteBuffer writeStringUTF16LEBOM(String next, int i, int noOfValues)
             throws CharacterCodingException
     {
-        final CharsetEncoder encoder = StandardCharsets.UTF_16LE.newEncoder();
+        CharsetEncoder encoder = StandardCharsets.UTF_16LE.newEncoder();
         encoder.onMalformedInput(CodingErrorAction.IGNORE);
         encoder.onUnmappableCharacter(CodingErrorAction.IGNORE);
 
@@ -203,10 +200,10 @@ public class TextEncodedStringSizeTerminated extends AbstractString
      * @return
      * @throws CharacterCodingException
      */
-    protected ByteBuffer writeStringUTF16BEBOM(final String next, final int i, final int noOfValues)
+    protected ByteBuffer writeStringUTF16BEBOM(String next, int i, int noOfValues)
             throws CharacterCodingException
     {
-        final CharsetEncoder encoder = StandardCharsets.UTF_16BE.newEncoder();
+        CharsetEncoder encoder = StandardCharsets.UTF_16BE.newEncoder();
         encoder.onMalformedInput(CodingErrorAction.IGNORE);
         encoder.onUnmappableCharacter(CodingErrorAction.IGNORE);
 
@@ -233,7 +230,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString
         if (TagOptionSingleton.getInstance().isRemoveTrailingTerminatorOnWrite())
         {
             String stringValue = (String) value;
-            if (stringValue.length() > 0)
+            if (!stringValue.isEmpty())
             {
                 if (stringValue.charAt(stringValue.length() - 1) == '\0')
                 {
@@ -254,7 +251,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString
     {
         if(!TagOptionSingleton.getInstance().isRemoveTrailingTerminatorOnWrite())
         {
-            if (stringValue.length() > 0 && stringValue.charAt(stringValue.length() - 1) == '\0')
+            if (!stringValue.isEmpty() && stringValue.charAt(stringValue.length() - 1) == '\0')
             {
                 String lastVal = values.get(values.size() - 1);
                 String newLastVal = lastVal + '\0';
@@ -275,7 +272,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString
     {
         byte[] data;
         //Try and write to buffer using the CharSet defined by getTextEncodingCharSet()
-        final Charset charset = getTextEncodingCharSet();
+        Charset charset = getTextEncodingCharSet();
         try
         {
             
@@ -318,7 +315,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString
                 }
                 else
                 {
-                    final CharsetEncoder charsetEncoder = charset.newEncoder();
+                    CharsetEncoder charsetEncoder = charset.newEncoder();
                     charsetEncoder.onMalformedInput(CodingErrorAction.IGNORE);
                     charsetEncoder.onUnmappableCharacter(CodingErrorAction.IGNORE);
                     outputBuffer.put(writeString(charsetEncoder, next, i, values.size()));
@@ -352,9 +349,9 @@ public class TextEncodedStringSizeTerminated extends AbstractString
         String[] valuesarray = value.split("\\u0000");
         List<String> values = Arrays.asList(valuesarray);
         //Read only list so if empty have to create new list
-        if (values.size() == 0)
+        if (values.isEmpty())
         {
-            values = new ArrayList<String>(1);
+            values = new ArrayList<>(1);
             values.add("");
         }
         return values;
@@ -412,7 +409,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString
     public String getValueWithoutTrailingNull()
     {
         List<String> values = splitByNullSeperator((String) value);
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for(int i=0;i<values.size();i++)
         {
             if(i!=0)

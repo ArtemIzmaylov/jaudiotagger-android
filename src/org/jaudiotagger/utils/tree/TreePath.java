@@ -39,7 +39,7 @@ import java.util.Vector;
  * @author Scott Violet
  * @author Philip Milne
  */
-public class TreePath<T> extends Object implements Serializable {
+public class TreePath<T> implements Serializable {
     /**
 	 * 
 	 */
@@ -285,7 +285,7 @@ public class TreePath<T> extends Object implements Serializable {
      * @return a String representation of this object
      */
     public String toString() {
-        StringBuffer tempSpot = new StringBuffer("[");
+        StringBuilder tempSpot = new StringBuilder("[");
 
         for(int counter = 0, maxCounter = getPathCount();counter < maxCounter;
 	    counter++) {

@@ -24,7 +24,7 @@ public class Mp4StcoBox extends AbstractMp4Box
     public static final int OTHER_FLAG_LENGTH = 3;
     public static final int NO_OF_OFFSETS_LENGTH = 4;
     public static final int OFFSET_LENGTH = 4;
-    private int noOfOffSets = 0;
+    private final int noOfOffSets;
     private int firstOffSet;
 
     /**

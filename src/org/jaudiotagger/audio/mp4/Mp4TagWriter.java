@@ -24,20 +24,14 @@ import org.jaudiotagger.audio.mp4.atom.*;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagOptionSingleton;
-import org.jaudiotagger.tag.mp4.Mp4Tag;
 import org.jaudiotagger.tag.mp4.Mp4TagCreator;
 import org.jaudiotagger.utils.ShiftData;
 import org.jaudiotagger.utils.tree.DefaultMutableTreeNode;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.nio.channels.FileChannel;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -110,12 +104,12 @@ import java.util.logging.Logger;
 public class Mp4TagWriter
 {
     // Logger Object
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.tag.mp4");
+    public static final Logger logger = Logger.getLogger("org.jaudiotagger.tag.mp4");
 
-    private Mp4TagCreator tc = new Mp4TagCreator();
+    private final Mp4TagCreator tc = new Mp4TagCreator();
 
     //For logging
-    private String loggingName;
+    private final String loggingName;
     public Mp4TagWriter(String loggingName)
     {
         this.loggingName = loggingName;
@@ -250,7 +244,7 @@ public class Mp4TagWriter
                 //unless mdat is at start of file
                 if (mdatHeader.getFilePos() > moovHeader.getFilePos())
                 {
-                    for (final Mp4StcoBox stoc : stcos) {
+                    for (Mp4StcoBox stoc : stcos) {
                         stoc.adjustOffsets(-sizeReducedBy);
                     }
                 }
@@ -289,23 +283,23 @@ public class Mp4TagWriter
      * @param deleteSize
      * @throws IOException
      */
-    private void shiftData(final FileChannel fc, long startDeleteFrom, final int deleteSize) throws IOException
+    private void shiftData(FileChannel fc, long startDeleteFrom, int deleteSize) throws IOException
     {
         //Position for reading after the tag
         fc.position(startDeleteFrom);
 
-        final ByteBuffer buffer = ByteBuffer.allocate((int) TagOptionSingleton.getInstance().getWriteChunkSize());
+        ByteBuffer buffer = ByteBuffer.allocate((int) TagOptionSingleton.getInstance().getWriteChunkSize());
         while (fc.read(buffer) >= 0 || buffer.position() != 0)
         {
             buffer.flip();
-            final long readPosition = fc.position();
+            long readPosition = fc.position();
             fc.position(readPosition - deleteSize - buffer.limit());
             fc.write(buffer);
             fc.position(readPosition);
             buffer.compact();
         }
         //Truncate the file after the last chunk
-        final long newLength = fc.size() - deleteSize;
+        long newLength = fc.size() - deleteSize;
         logger.config(loggingName + "-------------Setting new length to:" + newLength);
         fc.truncate(newLength);
     }
@@ -318,9 +312,8 @@ public class Mp4TagWriter
      * @param newIlstData
      * @param additionalSpaceRequiredForMetadata
      * @throws IOException
-     * @throws CannotWriteException
      */
-    private void writeNewMetadataLargerButCanUseFreeAtom(FileChannel fc, Mp4BoxHeader ilstHeader, int sizeOfExistingMetaLevelFreeAtom, ByteBuffer newIlstData, int additionalSpaceRequiredForMetadata) throws IOException, CannotWriteException
+    private void writeNewMetadataLargerButCanUseFreeAtom(FileChannel fc, Mp4BoxHeader ilstHeader, int sizeOfExistingMetaLevelFreeAtom, ByteBuffer newIlstData, int additionalSpaceRequiredForMetadata) throws IOException
     {
         //Shrink existing free atom size
         int newFreeSize = sizeOfExistingMetaLevelFreeAtom - additionalSpaceRequiredForMetadata;
@@ -697,7 +690,7 @@ public class Mp4TagWriter
             }
 
             // Check that we at the very least have the same number of chunk offsets
-            final List<Mp4StcoBox> newStcos = newAtomTree.getStcos();
+            List<Mp4StcoBox> newStcos = newAtomTree.getStcos();
             if (newStcos.size() != stcos.size())
             {
                 // at the very least, we have to have the same number of 'stco' atoms
@@ -712,8 +705,8 @@ public class Mp4TagWriter
             int shift = 0;
             for (int i=0; i<newStcos.size(); i++)
             {
-                final Mp4StcoBox newStco = newStcos.get(i);
-                final Mp4StcoBox stco = stcos.get(i);
+                Mp4StcoBox newStco = newStcos.get(i);
+                Mp4StcoBox stco = stcos.get(i);
                 logger.finer("stco:Original First Offset" + stco.getFirstOffSet());
                 logger.finer("stco:Original Diff" + (int) (stco.getFirstOffSet() - mdatHeader.getFilePos()));
                 logger.finer("stco:Original Mdat Pos" + mdatHeader.getFilePos());
@@ -723,7 +716,7 @@ public class Mp4TagWriter
 
                 if (i == 0)
                 {
-                    final int diff = (int) (stco.getFirstOffSet() - mdatHeader.getFilePos());
+                    int diff = (int) (stco.getFirstOffSet() - mdatHeader.getFilePos());
                     if ((newStco.getFirstOffSet() - newMdatHeader.getFilePos()) != diff)
                     {
                         int discrepancy = (int) ((newStco.getFirstOffSet() - newMdatHeader.getFilePos()) - diff);
@@ -750,11 +743,6 @@ public class Mp4TagWriter
                 e.printStackTrace();
                 throw new CannotWriteException(ErrorMessage.MP4_CHANGES_TO_FILE_FAILED.getMsg() + ":" + e.getMessage());
             }
-        }
-        finally
-        {
-            //Close references to new file
-            //fc.close();
         }
         logger.config("File has been written correctly");
     }
@@ -1205,7 +1193,7 @@ public class Mp4TagWriter
                     )
             )
             {
-                for (final Mp4StcoBox stoc : stcos)
+                for (Mp4StcoBox stoc : stcos)
                 {
                     stoc.adjustOffsets(additionalSizeRequired);
                 }

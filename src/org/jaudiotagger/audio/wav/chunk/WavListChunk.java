@@ -33,12 +33,12 @@ import java.util.logging.Logger;
  */
 public class WavListChunk extends Chunk
 {
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.wav.chunk.WavListChunk");
+    public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.wav.chunk.WavListChunk");
 
-    private boolean isValid = false;
+    private static final boolean isValid = false;
 
-    private WavTag tag;
-    private String loggingName;
+    private final WavTag tag;
+    private final String loggingName;
 
     public WavListChunk(String loggingName, ByteBuffer chunkData, ChunkHeader chunkHeader, WavTag tag) throws IOException
     {
@@ -55,7 +55,7 @@ public class WavListChunk extends Chunk
      */
     public boolean readChunk() throws IOException
     {
-        boolean result = false;
+        boolean result;
         String subIdentifier = Utils.readFourBytesAsChars(chunkData);
         if(subIdentifier.equals(WavChunkType.INFO.getCode()))
         {

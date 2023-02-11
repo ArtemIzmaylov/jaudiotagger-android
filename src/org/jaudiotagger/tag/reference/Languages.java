@@ -24,7 +24,7 @@ package org.jaudiotagger.tag.reference;
 
 import org.jaudiotagger.tag.datatype.AbstractStringStringValuePair;
 
-public class Languages extends AbstractStringStringValuePair
+public final class Languages extends AbstractStringStringValuePair
 {
     public static final String DEFAULT_ID = "eng";
     public static final String MEDIA_MONKEY_ID = "XXX";

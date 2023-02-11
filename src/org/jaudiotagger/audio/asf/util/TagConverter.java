@@ -167,10 +167,10 @@ public final class TagConverter
      * @param tag the tag with the fields to distribute.
      * @return distribution
      */
-    public static MetadataContainer[] distributeMetadata(final AsfTag tag)
+    public static MetadataContainer[] distributeMetadata(AsfTag tag)
     {
-        final Iterator<AsfTagField> asfFields = tag.getAsfFields();
-        final MetadataContainer[] createContainers = MetadataContainerFactory.getInstance().createContainers(ContainerType.getOrdered());
+        Iterator<AsfTagField> asfFields = tag.getAsfFields();
+        MetadataContainer[] createContainers = MetadataContainerFactory.getInstance().createContainers(ContainerType.getOrdered());
         boolean assigned;
         AsfTagField current;
         while (asfFields.hasNext())

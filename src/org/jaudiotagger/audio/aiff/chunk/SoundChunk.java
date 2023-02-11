@@ -17,7 +17,7 @@ public class SoundChunk extends Chunk
      * @param chunkHeader  The header for this chunk
      * @param chunkData  The file from which the AIFF data are being read
      */
-    public SoundChunk(final ChunkHeader chunkHeader, final ByteBuffer chunkData)
+    public SoundChunk(ChunkHeader chunkHeader, ByteBuffer chunkData)
     {
         super(chunkData, chunkHeader);
     }

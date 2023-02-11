@@ -23,7 +23,6 @@
  */
 package org.jaudiotagger.tag.datatype;
 
-import org.jaudiotagger.tag.InvalidDataTypeException;
 import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 
 import java.util.logging.Level;
@@ -70,10 +69,8 @@ public class ByteArraySizeTerminated extends AbstractDataType
     /**
      * @param arr
      * @param offset
-     * @throws NullPointerException
-     * @throws IndexOutOfBoundsException
      */
-    public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
+    public void readByteArray(byte[] arr, int offset)
     {
         if (arr == null)
         {

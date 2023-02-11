@@ -39,9 +39,9 @@ public class TreeModelEvent<T> extends EventObject {
 	 */
 	private static final long serialVersionUID = 1135112176859241636L;
 	/** Path to the parent of the nodes that have changed. */
-    protected TreePath<T>	path;
+    protected final TreePath<T>	path;
     /** Indices identifying the position of where the children were. */
-    protected int[]	childIndices;
+    protected final int[]	childIndices;
     /** Children that have been removed. */
     protected TreeNode<T>[]  children;
 
@@ -279,22 +279,19 @@ public class TreeModelEvent<T> extends EventObject {
      * @return a String representation of this object
      */
     public String toString() {
-	StringBuffer   retBuffer = new StringBuffer();
+	StringBuilder retBuffer = new StringBuilder();
 
-	retBuffer.append(getClass().getName() + " " +
-			 Integer.toString(hashCode()));
+	retBuffer.append(getClass().getName()).append(" ").append(hashCode());
 	if(path != null)
-	    retBuffer.append(" path " + path);
+	    retBuffer.append(" path ").append(path);
 	if(childIndices != null) {
 	    retBuffer.append(" indices [ ");
-	    for(int counter = 0; counter < childIndices.length; counter++)
-		retBuffer.append(Integer.toString(childIndices[counter])+ " ");
+        for (int childIndex : childIndices) retBuffer.append(childIndex).append(" ");
 	    retBuffer.append("]");
 	}
 	if(children != null) {
 	    retBuffer.append(" children [ ");
-	    for(int counter = 0; counter < children.length; counter++)
-		retBuffer.append(children[counter] + " ");
+        for (TreeNode<T> child : children) retBuffer.append(child).append(" ");
 	    retBuffer.append("]");
 	}
 	return retBuffer.toString();

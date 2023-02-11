@@ -1,7 +1,6 @@
 
 package org.jaudiotagger.audio.aiff;
 
-import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.aiff.chunk.AiffChunkReader;
 import org.jaudiotagger.audio.aiff.chunk.AiffChunkType;
 import org.jaudiotagger.audio.aiff.chunk.ID3Chunk;
@@ -26,8 +25,8 @@ import java.util.logging.Logger;
  */
 public class AiffTagReader extends AiffChunkReader
 {
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.aiff");
-    private String loggingName;
+    public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.aiff");
+    private final String loggingName;
 
     public AiffTagReader(String loggingName)
     {
@@ -51,7 +50,7 @@ public class AiffTagReader extends AiffChunkReader
             AiffAudioHeader aiffAudioHeader = new AiffAudioHeader();
             AiffTag aiffTag = new AiffTag();
 
-            final AiffFileHeader fileHeader = new AiffFileHeader(file.toString());
+            AiffFileHeader fileHeader = new AiffFileHeader(file.toString());
             long  overallChunkSize = fileHeader.readHeader(fc, aiffAudioHeader);
             aiffTag.setFormSize( overallChunkSize);
             aiffTag.setFileSize(fc.size());

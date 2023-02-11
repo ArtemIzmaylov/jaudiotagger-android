@@ -28,12 +28,9 @@ import org.jaudiotagger.audio.asf.io.*;
 import org.jaudiotagger.audio.asf.util.TagConverter;
 import org.jaudiotagger.audio.asf.util.Utils;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
-import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
-import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.audio.generic.AudioFileReader;
 import org.jaudiotagger.audio.generic.GenericAudioHeader;
 import org.jaudiotagger.logging.ErrorMessage;
-import org.jaudiotagger.tag.TagException;
 import org.jaudiotagger.tag.asf.AsfTag;
 
 import java.io.*;
@@ -61,7 +58,7 @@ public class AsfFileReader extends AudioFileReader
 
     static
     {
-        final List<Class<? extends ChunkReader>> readers = new ArrayList<Class<? extends ChunkReader>>();
+        List<Class<? extends ChunkReader>> readers = new ArrayList<>();
         readers.add(ContentDescriptionReader.class);
         readers.add(ContentBrandingReader.class);
         readers.add(MetadataReader.class);
@@ -70,7 +67,7 @@ public class AsfFileReader extends AudioFileReader
         // Create the header extension object reader with just content
         // description reader as well
         // as extended content description reader.
-        final AsfExtHeaderReader extReader = new AsfExtHeaderReader(readers, true);
+        AsfExtHeaderReader extReader = new AsfExtHeaderReader(readers, true);
         readers.add(FileHeaderReader.class);
         readers.add(StreamChunkReader.class);
         HEADER_READER = new AsfHeaderReader(readers, true);
@@ -85,14 +82,14 @@ public class AsfFileReader extends AudioFileReader
      * @return <code>true</code> if &quot;isVbr&quot; is present with a
      * <code>true</code> value.
      */
-    private boolean determineVariableBitrate(final AsfHeader header)
+    private boolean determineVariableBitrate(AsfHeader header)
     {
         assert header != null;
         boolean result = false;
-        final MetadataContainer extDesc = header.findExtendedContentDescription();
+        MetadataContainer extDesc = header.findExtendedContentDescription();
         if (extDesc != null)
         {
-            final List<MetadataDescriptor> descriptors = extDesc.getDescriptorsByName("IsVBR");
+            List<MetadataDescriptor> descriptors = extDesc.getDescriptorsByName("IsVBR");
             if (descriptors != null && !descriptors.isEmpty())
             {
                 result = Boolean.TRUE.toString().equals(descriptors.get(0).getString());
@@ -109,9 +106,9 @@ public class AsfFileReader extends AudioFileReader
      * @throws CannotReadException If header does not contain mandatory information. (Audio
      *                             stream chunk and file header chunk)
      */
-    private GenericAudioHeader getAudioHeader(final AsfHeader header) throws CannotReadException
+    private GenericAudioHeader getAudioHeader(AsfHeader header) throws CannotReadException
     {
-        final GenericAudioHeader info = new GenericAudioHeader();
+        GenericAudioHeader info = new GenericAudioHeader();
         if (header.getFileHeader() == null)
         {
             throw new CannotReadException("Invalid ASF/WMA file. File header object not available.");
@@ -138,20 +135,20 @@ public class AsfFileReader extends AudioFileReader
      * @see org.jaudiotagger.audio.generic.AudioFileReader#getEncodingInfo(java.io.RandomAccessFile)
      */
     @Override
-    protected GenericAudioHeader getEncodingInfo(final RandomAccessFile raf) throws CannotReadException, IOException
+    protected GenericAudioHeader getEncodingInfo(RandomAccessFile raf) throws CannotReadException, IOException
     {
         raf.seek(0);
         GenericAudioHeader info;
         try
         {
-            final AsfHeader header = AsfHeaderReader.readInfoHeader(raf);
+            AsfHeader header = AsfHeaderReader.readInfoHeader(raf);
             if (header == null)
             {
                 throw new CannotReadException("Some values must have been " + "incorrect for interpretation as asf with wma content.");
             }
             info = getAudioHeader(header);
         }
-        catch (final Exception e)
+        catch (Exception e)
         {
             if (e instanceof IOException)
             {
@@ -175,7 +172,7 @@ public class AsfFileReader extends AudioFileReader
      * @param header ASF header which contains the information.
      * @return generic audio header representation.
      */
-    private AsfTag getTag(final AsfHeader header)
+    private AsfTag getTag(AsfHeader header)
     {
         return TagConverter.createTagOf(header);
     }
@@ -186,13 +183,13 @@ public class AsfFileReader extends AudioFileReader
      * @see org.jaudiotagger.audio.generic.AudioFileReader#getTag(java.io.RandomAccessFile)
      */
     @Override
-    protected AsfTag getTag(final RandomAccessFile raf) throws CannotReadException, IOException
+    protected AsfTag getTag(RandomAccessFile raf) throws CannotReadException, IOException
     {
         raf.seek(0);
         AsfTag tag;
         try
         {
-            final AsfHeader header = AsfHeaderReader.readTagHeader(raf);
+            AsfHeader header = AsfHeaderReader.readTagHeader(raf);
             if (header == null)
             {
                 throw new CannotReadException("Some values must have been " + "incorrect for interpretation as asf with wma content.");
@@ -201,7 +198,7 @@ public class AsfFileReader extends AudioFileReader
             tag = TagConverter.createTagOf(header);
 
         }
-        catch (final Exception e)
+        catch (Exception e)
         {
             logger.severe(e.getMessage());
             if (e instanceof IOException)
@@ -224,7 +221,7 @@ public class AsfFileReader extends AudioFileReader
      * {@inheritDoc}
      */
     @Override
-    public AudioFile read(final File f) throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException
+    public AudioFile read(File f) throws CannotReadException, IOException
     {
         if (!f.canRead())
         {
@@ -242,7 +239,7 @@ public class AsfFileReader extends AudioFileReader
         try
         {
             stream = new FullRequestInputStream(new BufferedInputStream(new FileInputStream(f)));
-            final AsfHeader header = HEADER_READER.read(Utils.readGUID(stream), stream, 0);
+            AsfHeader header = HEADER_READER.read(Utils.readGUID(stream), stream, 0);
             if (header == null)
             {
                 throw new CannotReadException(ErrorMessage.ASF_HEADER_MISSING.getMsg(f.getAbsolutePath()));
@@ -261,11 +258,11 @@ public class AsfFileReader extends AudioFileReader
             return new AudioFile(f, getAudioHeader(header), getTag(header));
 
         }
-        catch (final CannotReadException e)
+        catch (CannotReadException e)
         {
             throw e;
         }
-        catch (final Exception e)
+        catch (Exception e)
         {
             throw new CannotReadException("\"" + f + "\" :" + e, e);
         }
@@ -278,7 +275,7 @@ public class AsfFileReader extends AudioFileReader
                     stream.close();
                 }
             }
-            catch (final Exception ex)
+            catch (Exception ex)
             {
                 LOGGER.severe("\"" + f + "\" :" + ex);
             }

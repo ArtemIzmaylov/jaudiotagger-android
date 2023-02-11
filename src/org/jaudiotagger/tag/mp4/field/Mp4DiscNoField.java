@@ -34,10 +34,10 @@ public class Mp4DiscNoField extends Mp4TagTextNumberField
     {
         super(Mp4FieldKey.DISCNUMBER.getFieldName(), discValue);
 
-        numbers = new ArrayList<Short>();
-        numbers.add(new Short("0"));
+        numbers = new ArrayList<>();
+        numbers.add(Short.valueOf("0"));
 
-        String values[] = discValue.split("/");
+        String[] values = discValue.split("/");
         switch (values.length)
         {
             case 1:
@@ -50,7 +50,7 @@ public class Mp4DiscNoField extends Mp4TagTextNumberField
                 {
                     throw new FieldDataInvalidException("Value of:" + values[0] + " is invalid for field:" + id);
                 }
-                numbers.add(new Short("0"));
+                numbers.add(Short.valueOf("0"));
                 break;
 
             case 2:
@@ -86,10 +86,10 @@ public class Mp4DiscNoField extends Mp4TagTextNumberField
     public Mp4DiscNoField(int discNo)
     {
         super(Mp4FieldKey.DISCNUMBER.getFieldName(), String.valueOf(discNo));
-        numbers = new ArrayList<Short>();
-        numbers.add(new Short("0"));
+        numbers = new ArrayList<>();
+        numbers.add(Short.valueOf("0"));
         numbers.add((short) discNo);
-        numbers.add(new Short("0"));
+        numbers.add(Short.valueOf("0"));
     }
 
     /**
@@ -101,8 +101,8 @@ public class Mp4DiscNoField extends Mp4TagTextNumberField
     public Mp4DiscNoField(int discNo, int total)
     {
         super(Mp4FieldKey.DISCNUMBER.getFieldName(), String.valueOf(discNo));
-        numbers = new ArrayList<Short>();
-        numbers.add(new Short("0"));
+        numbers = new ArrayList<>();
+        numbers.add(Short.valueOf("0"));
         numbers.add((short) discNo);
         numbers.add((short) total);
     }
@@ -122,7 +122,7 @@ public class Mp4DiscNoField extends Mp4TagTextNumberField
 
         //Disc number always hold four values, we can discard the first one and last one, the second one is the disc no
         //and the third is the total no of discs so only use if not zero
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         if ((numbers.size() > DISC_NO_INDEX) && (numbers.get(DISC_NO_INDEX) > 0))
         {
             sb.append(numbers.get(DISC_NO_INDEX));

@@ -40,16 +40,16 @@ public class MetadataReader implements ChunkReader
     /**
      * {@inheritDoc}
      */
-    public Chunk read(final GUID guid, final InputStream stream, final long streamPosition) throws IOException
+    public Chunk read(GUID guid, InputStream stream, long streamPosition) throws IOException
     {
-        final BigInteger chunkLen = Utils.readBig64(stream);
+        BigInteger chunkLen = Utils.readBig64(stream);
 
-        final MetadataContainer result = new MetadataContainer(guid, streamPosition, chunkLen);
+        MetadataContainer result = new MetadataContainer(guid, streamPosition, chunkLen);
         // isExtDesc will be set to true, if a extended content description
         // chunk is read
         // otherwise it is a metadata object, there are only slight differences
-        final boolean isExtDesc = result.getContainerType() == ContainerType.EXTENDED_CONTENT;
-        final int recordCount = Utils.readUINT16(stream);
+        boolean isExtDesc = result.getContainerType() == ContainerType.EXTENDED_CONTENT;
+        int recordCount = Utils.readUINT16(stream);
         for (int i = 0; i < recordCount; i++)
         {
             int languageIndex = 0;
@@ -65,22 +65,22 @@ public class MetadataReader implements ChunkReader
                 streamNumber = Utils.readUINT16(stream);
                 assert streamNumber >= 0 && streamNumber <= MetadataDescriptor.MAX_STREAM_NUMBER;
             }
-            final int nameLen = Utils.readUINT16(stream);
+            int nameLen = Utils.readUINT16(stream);
             String recordName = null;
             if (isExtDesc)
             {
                 recordName = Utils.readFixedSizeUTF16Str(stream, nameLen);
             }
-            final int dataType = Utils.readUINT16(stream);
+            int dataType = Utils.readUINT16(stream);
             assert dataType >= 0 && dataType <= 6;
-            final long dataLen = isExtDesc ? Utils.readUINT16(stream) : Utils.readUINT32(stream);
+            long dataLen = isExtDesc ? Utils.readUINT16(stream) : Utils.readUINT32(stream);
             assert dataLen >= 0;
             assert result.getContainerType() == ContainerType.METADATA_LIBRARY_OBJECT || dataLen <= MetadataDescriptor.DWORD_MAXVALUE;
             if (!isExtDesc)
             {
                 recordName = Utils.readFixedSizeUTF16Str(stream, nameLen);
             }
-            final MetadataDescriptor descriptor = new MetadataDescriptor(result.getContainerType(), recordName, dataType, streamNumber, languageIndex
+            MetadataDescriptor descriptor = new MetadataDescriptor(result.getContainerType(), recordName, dataType, streamNumber, languageIndex
             );
             switch (dataType)
             {
@@ -130,9 +130,9 @@ public class MetadataReader implements ChunkReader
      * @return <code>true</code> or <code>false</code>.
      * @throws IOException on I/O Errors
      */
-    private boolean readBoolean(final InputStream stream, final int length) throws IOException
+    private boolean readBoolean(InputStream stream, int length) throws IOException
     {
-        final byte[] tmp = new byte[length];
+        byte[] tmp = new byte[length];
         stream.read(tmp);
         return tmp[length - 1] == 1;
     }

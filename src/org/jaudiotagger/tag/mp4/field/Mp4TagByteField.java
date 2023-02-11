@@ -16,8 +16,8 @@ import java.nio.ByteBuffer;
  */
 public class Mp4TagByteField extends Mp4TagTextField
 {
-    public static String TRUE_VALUE="1";  //when using this field to hold a boolean
-    public static String FALSE_VALUE="0";
+    public static final String TRUE_VALUE="1";  //when using this field to hold a boolean
+    public static final String FALSE_VALUE="0";
     //Holds the actual size of the data content as held in the databoxitem, this is required when creating new
     //items because we cant accurately work out the size by looking at the content because sometimes field must be longer
     //than is actually required to hold the value
@@ -106,23 +106,23 @@ public class Mp4TagByteField extends Mp4TagTextField
             case 2:
             {
                 //Save as two bytes
-                Short shortValue = new Short(content);
-                byte rawData[] = Utils.getSizeBEInt16(shortValue);
+                short shortValue = Short.parseShort(content);
+                byte[] rawData = Utils.getSizeBEInt16(shortValue);
                 return rawData;
             }
             case 1:
             {
                 //Save as 1 bytes
-                Short shortValue = new Short(content);
-                byte rawData[] = new byte[1];
-                rawData[0] = shortValue.byteValue();
+                short shortValue = Short.parseShort(content);
+                byte[] rawData = new byte[1];
+                rawData[0] = (byte) shortValue;
                 return rawData;
             }
             case 4:
             {
                 //Assume could be int
-                Integer intValue = new Integer(content);
-                byte rawData[] = Utils.getSizeBEInt32(intValue);
+                int intValue = Integer.parseInt(content);
+                byte[] rawData = Utils.getSizeBEInt32(intValue);
                 return rawData;
             }
             default:

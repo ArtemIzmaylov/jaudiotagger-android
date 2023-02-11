@@ -10,7 +10,7 @@ package org.jaudiotagger.tag.id3.reference;
  * Rating=4 → POPM=80
  * Rating=5 → POPM=100
  */
-public class ITunesRating extends ID3Rating
+public final class ITunesRating extends ID3Rating
 {
     private static ID3Rating rating=null;
     private ITunesRating()
@@ -56,7 +56,7 @@ public class ITunesRating extends ID3Rating
     
     public int convertRatingToFiveStarScale(int value)
     {
-        int newValue=0;
+        int newValue;
         if (value<=0)
         {
              newValue = 0;

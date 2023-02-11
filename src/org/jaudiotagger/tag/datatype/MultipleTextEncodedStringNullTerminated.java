@@ -60,9 +60,9 @@ public class MultipleTextEncodedStringNullTerminated extends AbstractDataType
      */
     public boolean canBeEncoded()
     {
-        for (ListIterator<String> li = ((Values) value).getList().listIterator(); li.hasNext();)
+        for (String s : ((Values) value).getList())
         {
-            TextEncodedStringNullTerminated next = new TextEncodedStringNullTerminated(identifier, frameBody, li.next());
+            TextEncodedStringNullTerminated next = new TextEncodedStringNullTerminated(identifier, frameBody, s);
             if (!next.canBeEncoded())
             {
                 return false;
@@ -135,9 +135,9 @@ public class MultipleTextEncodedStringNullTerminated extends AbstractDataType
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         try
         {
-            for (ListIterator<String> li = ((Values) value).getList().listIterator(); li.hasNext();)
+            for (String s : ((Values) value).getList())
             {
-                TextEncodedStringNullTerminated next = new TextEncodedStringNullTerminated(identifier, frameBody, li.next());
+                TextEncodedStringNullTerminated next = new TextEncodedStringNullTerminated(identifier, frameBody, s);
                 buffer.write(next.writeByteArray());
                 localSize += next.getSize();
             }
@@ -161,7 +161,7 @@ public class MultipleTextEncodedStringNullTerminated extends AbstractDataType
      */
     public static class Values
     {
-        private List<String> valueList = new ArrayList<String>();
+        private final List<String> valueList = new ArrayList<>();
 
         public Values()
         {
@@ -205,7 +205,7 @@ public class MultipleTextEncodedStringNullTerminated extends AbstractDataType
          */
         public String toString()
         {
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             for (ListIterator<String> li = valueList.listIterator(); li.hasNext();)
             {
                 String next = li.next();

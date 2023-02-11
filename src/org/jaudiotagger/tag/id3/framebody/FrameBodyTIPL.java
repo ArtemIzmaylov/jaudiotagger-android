@@ -40,7 +40,7 @@ import java.util.List;
  * function and every even is an name or a comma delimited list of names.
  *
  */
-public class FrameBodyTIPL extends AbstractFrameBodyPairs implements ID3v24FrameBody
+public class FrameBodyTIPL extends AbstractFrameBodyPairs
 {
     //Standard function names, code now uses StandardIPLSKey but kept for backwards compatability
     public static final String ENGINEER = StandardIPLSKey.ENGINEER.getKey();

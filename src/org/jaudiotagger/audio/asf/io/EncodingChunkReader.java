@@ -68,10 +68,10 @@ class EncodingChunkReader implements ChunkReader
     /**
      * {@inheritDoc}
      */
-    public Chunk read(final GUID guid, final InputStream stream, final long chunkStart) throws IOException
+    public Chunk read(GUID guid, InputStream stream, long chunkStart) throws IOException
     {
-        final BigInteger chunkLen = Utils.readBig64(stream);
-        final EncodingChunk result = new EncodingChunk(chunkLen);
+        BigInteger chunkLen = Utils.readBig64(stream);
+        EncodingChunk result = new EncodingChunk(chunkLen);
         int readBytes = 24;
         // Can't be interpreted
         /*
@@ -85,7 +85,7 @@ class EncodingChunkReader implements ChunkReader
         /*
          * Read the number of strings which will follow
          */
-        final int stringCount = Utils.readUINT16(stream);
+        int stringCount = Utils.readUINT16(stream);
         readBytes += 2;
 
         /*
@@ -93,7 +93,7 @@ class EncodingChunkReader implements ChunkReader
          */
         for (int i = 0; i < stringCount; i++)
         {
-            final String curr = Utils.readCharacterSizedString(stream);
+            String curr = Utils.readCharacterSizedString(stream);
             result.addString(curr);
             readBytes += 4 + 2 * curr.length();
         }

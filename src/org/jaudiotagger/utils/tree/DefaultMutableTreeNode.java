@@ -84,7 +84,7 @@ public class DefaultMutableTreeNode<T> implements Cloneable,
      * of a leaf node's children is requested.
      */
 	
-	public static final <X> Enumeration<X> emptyEnumeration() {
+	public static <X> Enumeration<X> emptyEnumeration() {
 		return new Enumeration<X>() {
 		    public boolean hasMoreElements() { return false; }
 		    public X nextElement() {
@@ -182,7 +182,7 @@ public class DefaultMutableTreeNode<T> implements Cloneable,
 	    }
 	    newChild.setParent(this);
 	    if (children == null) {
-		children = new Vector<TreeNode<T>>();
+		children = new Vector<>();
 	    }
 	    children.insertElementAt(newChild, childIndex);
     }
@@ -517,7 +517,7 @@ public class DefaultMutableTreeNode<T> implements Cloneable,
 	} while (node1 != null);// only need to check one -- they're at the
 	// same level so if one is null, the other is
 	
-	if (node1 != null || node2 != null) {
+	if (node2 != null) {
 	    throw new Error ("nodes should be null");
 	}
 	
@@ -616,13 +616,15 @@ public class DefaultMutableTreeNode<T> implements Cloneable,
 
 	/* Check for null, in case someone passed in a null node, or
 	   they passed in an element that isn't rooted at root. */
-	if(aNode == null) {
+	if(aNode == null)
+	{
 	    if(depth == 0)
-		return null;
+			return null;
 	    else
-		retNodes = new TreeNode[depth];
+			retNodes = new TreeNode[depth];
 	}
-	else {
+	else
+	{
 	    depth++;
 	    retNodes = getPathToRoot(aNode.getParent(), depth);
 	    retNodes[retNodes.length - depth] = aNode;
@@ -739,9 +741,9 @@ public class DefaultMutableTreeNode<T> implements Cloneable,
 
 	if (previousSibling != null) {
 	    if (previousSibling.getChildCount() == 0)
-		return previousSibling;
+			return previousSibling;
 	    else
-		return previousSibling.getLastLeaf();
+			return previousSibling.getLastLeaf();
 	} else {
 	    return myParent;
 	}
@@ -1251,7 +1253,7 @@ public class DefaultMutableTreeNode<T> implements Cloneable,
      */
     @SuppressWarnings("unchecked")
 	public DefaultMutableTreeNode<T> clone() {
-	DefaultMutableTreeNode<T> newNode = null;
+	DefaultMutableTreeNode<T> newNode;
 
 	try {
 	    newNode = (DefaultMutableTreeNode<T>)super.clone();
@@ -1299,7 +1301,7 @@ public class DefaultMutableTreeNode<T> implements Cloneable,
     }
 
     final class PreorderEnumeration implements Enumeration<TreeNode<T>> {
-	protected Stack<Enumeration<TreeNode<T>>> stack;
+	final Stack<Enumeration<TreeNode<T>>> stack;
 
 	public PreorderEnumeration(TreeNode<T> rootNode) {
 	    super();
@@ -1332,10 +1334,10 @@ public class DefaultMutableTreeNode<T> implements Cloneable,
 
 
 
-    final class PostorderEnumeration<X> implements Enumeration<TreeNode<X>> {
-	protected TreeNode<X> root;
-	protected Enumeration<TreeNode<X>> children;
-	protected Enumeration<TreeNode<X>> subtree;
+    static final class PostorderEnumeration<X> implements Enumeration<TreeNode<X>> {
+	TreeNode<X> root;
+	final Enumeration<TreeNode<X>> children;
+	Enumeration<TreeNode<X>> subtree;
 
 	public PostorderEnumeration(TreeNode<X> rootNode) {
 	    super();
@@ -1368,8 +1370,8 @@ public class DefaultMutableTreeNode<T> implements Cloneable,
 
 
 
-    final class BreadthFirstEnumeration<X> implements Enumeration<TreeNode<X>> {
-	protected Queue<Enumeration<TreeNode<X>>>	queue;
+    static final class BreadthFirstEnumeration<X> implements Enumeration<TreeNode<X>> {
+	final Queue<Enumeration<TreeNode<X>>>	queue;
 
 	public BreadthFirstEnumeration(TreeNode<X> rootNode) {
 	    super();
@@ -1400,12 +1402,12 @@ public class DefaultMutableTreeNode<T> implements Cloneable,
 
 
 	// A simple queue with a linked list data structure.
-	final class Queue<Y> {
+	static final class Queue<Y> {
 	    QNode<Y> head;	// null if empty
 	    QNode<Y> tail;
 
-	    final class QNode<Z> {
-		public Z	object;
+	    static final class QNode<Z> {
+		public final Z	object;
 		public QNode<Z>	next;	// null if end
 		public QNode(Z object, QNode<Z> next) {
 		    this.object = object;
@@ -1422,7 +1424,7 @@ public class DefaultMutableTreeNode<T> implements Cloneable,
 		}
 	    }
 
-	    public Object dequeue() {
+	    public void dequeue() {
 		if (head == null) {
 		    throw new NoSuchElementException("No more elements");
 		}
@@ -1435,8 +1437,7 @@ public class DefaultMutableTreeNode<T> implements Cloneable,
 		} else {
 		    oldHead.next = null;
 		}
-		return retval;
-	    }
+		}
 
 	    public Y firstObject() {
 		if (head == null) {
@@ -1456,8 +1457,8 @@ public class DefaultMutableTreeNode<T> implements Cloneable,
 
 
 
-    final class PathBetweenNodesEnumeration<X> implements Enumeration<TreeNode<X>> {
-	protected Stack<TreeNode<X>> stack;
+    static final class PathBetweenNodesEnumeration<X> implements Enumeration<TreeNode<X>> {
+	Stack<TreeNode<X>> stack;
 
 	public PathBetweenNodesEnumeration(TreeNode<X> ancestor,
 					   TreeNode<X> descendant)
@@ -1470,22 +1471,21 @@ public class DefaultMutableTreeNode<T> implements Cloneable,
 
 	    TreeNode<X> current;
 
-	    stack = new Stack<TreeNode<X>>();
+	    stack = new Stack<>();
 	    stack.push(descendant);
 
 	    current = descendant;
-	    while (current != ancestor) {
-		current = current.getParent();
-		if (current == null && descendant != ancestor) {
-		    throw new IllegalArgumentException("node " + ancestor +
-				" is not an ancestor of " + descendant);
-		}
-		stack.push(current);
+	    while (current != ancestor)
+		{
+			current = current.getParent();
+			if (current == null)
+				throw new IllegalArgumentException("node " + ancestor + " is not an ancestor of " + descendant);
+			stack.push(current);
 	    }
 	}
 
 	public boolean hasMoreElements() {
-	    return stack.size() > 0;
+	    return !stack.isEmpty();
 	}
 
 	public TreeNode<X> nextElement() {

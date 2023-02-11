@@ -44,7 +44,7 @@ import java.util.regex.Pattern;
  */
 public class ID3v24Frame extends AbstractID3v2Frame
 {
-    private static Pattern validFrameIdentifier = Pattern.compile("[A-Z][0-9A-Z]{3}");
+    private static final Pattern validFrameIdentifier = Pattern.compile("[A-Z][\\dA-Z]{3}");
 
     protected static final int FRAME_DATA_LENGTH_SIZE = 4;
 
@@ -198,9 +198,8 @@ public class ID3v24Frame extends AbstractID3v2Frame
      *
      * @param frame
      * @param identifier
-     * @throws InvalidFrameException
      */
-    protected ID3v24Frame(ID3v23Frame frame, String identifier) throws InvalidFrameException
+    protected ID3v24Frame(ID3v23Frame frame, String identifier)
     {
         this.identifier = identifier;
         statusFlags = new StatusFlags((ID3v23Frame.StatusFlags) frame.getStatusFlags());
@@ -428,7 +427,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
 
                 //This will return a larger frame size so need to check against buffer size if too large then we are
                 //buggered , give up
-                if (nonSyncSafeFrameSize > (byteBuffer.remaining() - -getFrameFlagsSize()))
+                if (nonSyncSafeFrameSize > (byteBuffer.remaining() + getFrameFlagsSize()))
                 {
                     logger.warning(getLoggingFilename() + ":" + "Invalid Frame size larger than size before mp3 audio:" + identifier);
                     throw new InvalidFrameException(identifier + " is invalid frame");
@@ -1153,7 +1152,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
      *
      * @param encoding charset.
      */
-    public void setEncoding(final Charset encoding)
+    public void setEncoding(Charset encoding)
     {
         Integer encodingId = TextEncoding.getInstanceOf().getIdForCharset(encoding);
         if (encodingId != null)

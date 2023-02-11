@@ -249,7 +249,7 @@ public enum AsfFieldKey
 
     static
     {
-        FIELD_ID_MAP = new HashMap<String, AsfFieldKey>(AsfFieldKey.values().length);
+        FIELD_ID_MAP = new HashMap<>(AsfFieldKey.values().length);
         for (AsfFieldKey curr : AsfFieldKey.values())
         {
             if (curr != CUSTOM) {
@@ -266,7 +266,7 @@ public enum AsfFieldKey
      * @param fieldName the field name used for this key
      * @return the Enum that represents this field
      */
-    public static AsfFieldKey getAsfFieldKey(final String fieldName)
+    public static AsfFieldKey getAsfFieldKey(String fieldName)
     {
         AsfFieldKey result = FIELD_ID_MAP.get(fieldName);
         if (result == null) {
@@ -281,9 +281,9 @@ public enum AsfFieldKey
      * @param fieldName field id to test.
      * @return <code>true</code> if ASF implementation supports multiple values for the field.
      */
-    public static boolean isMultiValued(final String fieldName)
+    public static boolean isMultiValued(String fieldName)
     {
-        final AsfFieldKey fieldKey = getAsfFieldKey(fieldName);
+        AsfFieldKey fieldKey = getAsfFieldKey(fieldName);
         return fieldKey != null && fieldKey.isMultiValued();
     }
 
@@ -322,7 +322,7 @@ public enum AsfFieldKey
      *            <code>true</code> if the this ASF field can have multiple
      *            values.
      */
-    private AsfFieldKey(final String asfFieldName, final boolean multiValue) {
+    AsfFieldKey(String asfFieldName, boolean multiValue) {
         this(asfFieldName, multiValue, ContainerType.EXTENDED_CONTENT,
                 ContainerType.METADATA_LIBRARY_OBJECT);
     }
@@ -338,8 +338,8 @@ public enum AsfFieldKey
      * @param restrictedTo
      *              fields must be stored in this container.
      */
-    private AsfFieldKey(final String asfFieldName, final boolean multiValue,
-            final ContainerType restrictedTo) {
+    AsfFieldKey(String asfFieldName, boolean multiValue,
+                        ContainerType restrictedTo) {
         this(asfFieldName, multiValue, restrictedTo, restrictedTo);
     }
 
@@ -357,8 +357,8 @@ public enum AsfFieldKey
      *              fields aren't allowed to be stored in better containers than
      *              this.
      */
-    private AsfFieldKey(final String asfFieldName, final boolean multiValue,
-            final ContainerType lowest, final ContainerType highest) {
+    AsfFieldKey(String asfFieldName, boolean multiValue,
+                        ContainerType lowest, ContainerType highest) {
         this.fieldName = asfFieldName;
         assert !multiValue || highest.isMultiValued() : "Definition error";
         this.multiValued = multiValue && highest.isMultiValued();

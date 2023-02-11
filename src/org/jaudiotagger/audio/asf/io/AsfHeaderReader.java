@@ -61,7 +61,7 @@ public class AsfHeaderReader extends ChunkContainerReader<AsfHeader>
 
     static
     {
-        final List<Class<? extends ChunkReader>> readers = new ArrayList<Class<? extends ChunkReader>>();
+        List<Class<? extends ChunkReader>> readers = new ArrayList<>();
         readers.add(FileHeaderReader.class);
         readers.add(StreamChunkReader.class);
         INFO_READER = new AsfHeaderReader(readers, true);
@@ -75,8 +75,8 @@ public class AsfHeaderReader extends ChunkContainerReader<AsfHeader>
          * description reader, extended content description reader, language
          * list reader and both metadata object readers.
          */
-        final AsfExtHeaderReader extReader = new AsfExtHeaderReader(readers, true);
-        final AsfExtHeaderReader extReader2 = new AsfExtHeaderReader(readers, true);
+        AsfExtHeaderReader extReader = new AsfExtHeaderReader(readers, true);
+        AsfExtHeaderReader extReader2 = new AsfExtHeaderReader(readers, true);
         TAG_READER = new AsfHeaderReader(readers, true);
         TAG_READER.setExtendedHeaderReader(extReader);
         readers.add(FileHeaderReader.class);
@@ -95,7 +95,7 @@ public class AsfHeaderReader extends ChunkContainerReader<AsfHeader>
      * @param raf data source to read from.
      * @return a stream which accesses the source.
      */
-    private static InputStream createStream(final RandomAccessFile raf)
+    private static InputStream createStream(RandomAccessFile raf)
     {
         return new FullRequestInputStream(new BufferedInputStream(new RandomAccessFileInputstream(raf)));
     }
@@ -109,10 +109,10 @@ public class AsfHeaderReader extends ChunkContainerReader<AsfHeader>
      * header was found.
      * @throws IOException on I/O Errors.
      */
-    public static AsfHeader readHeader(final File file) throws IOException
+    public static AsfHeader readHeader(File file) throws IOException
     {
-        final InputStream stream = new FileInputStream(file);
-        final AsfHeader result = FULL_READER.read(Utils.readGUID(stream), stream, 0);
+        InputStream stream = new FileInputStream(file);
+        AsfHeader result = FULL_READER.read(Utils.readGUID(stream), stream, 0);
         stream.close();
         return result;
     }
@@ -126,9 +126,9 @@ public class AsfHeaderReader extends ChunkContainerReader<AsfHeader>
      * header was found.
      * @throws IOException Read errors
      */
-    public static AsfHeader readHeader(final RandomAccessFile file) throws IOException
+    public static AsfHeader readHeader(RandomAccessFile file) throws IOException
     {
-        final InputStream stream = createStream(file);
+        InputStream stream = createStream(file);
         return FULL_READER.read(Utils.readGUID(stream), stream, 0);
     }
 
@@ -142,9 +142,9 @@ public class AsfHeaderReader extends ChunkContainerReader<AsfHeader>
      * header was found.
      * @throws IOException Read errors
      */
-    public static AsfHeader readInfoHeader(final RandomAccessFile file) throws IOException
+    public static AsfHeader readInfoHeader(RandomAccessFile file) throws IOException
     {
-        final InputStream stream = createStream(file);
+        InputStream stream = createStream(file);
         return INFO_READER.read(Utils.readGUID(stream), stream, 0);
     }
 
@@ -158,9 +158,9 @@ public class AsfHeaderReader extends ChunkContainerReader<AsfHeader>
      * header was found.
      * @throws IOException Read errors
      */
-    public static AsfHeader readTagHeader(final RandomAccessFile file) throws IOException
+    public static AsfHeader readTagHeader(RandomAccessFile file) throws IOException
     {
-        final InputStream stream = createStream(file);
+        InputStream stream = createStream(file);
         return TAG_READER.read(Utils.readGUID(stream), stream, 0);
     }
 
@@ -172,7 +172,7 @@ public class AsfHeaderReader extends ChunkContainerReader<AsfHeader>
      *                      GUID) will handled only once, if a reader is available, other
      *                      chunks will be discarded.
      */
-    public AsfHeaderReader(final List<Class<? extends ChunkReader>> toRegister, final boolean readChunkOnce)
+    public AsfHeaderReader(List<Class<? extends ChunkReader>> toRegister, boolean readChunkOnce)
     {
         super(toRegister, readChunkOnce);
     }
@@ -189,9 +189,9 @@ public class AsfHeaderReader extends ChunkContainerReader<AsfHeader>
      * {@inheritDoc}
      */
     @Override
-    protected AsfHeader createContainer(final long streamPosition, final BigInteger chunkLength, final InputStream stream) throws IOException
+    protected AsfHeader createContainer(long streamPosition, BigInteger chunkLength, InputStream stream) throws IOException
     {
-        final long chunkCount = Utils.readUINT32(stream);
+        long chunkCount = Utils.readUINT32(stream);
         /*
          * 2 reserved bytes. first should be equal to 0x01 and second 0x02. ASF
          * specification suggests to not read the content if second byte is not
@@ -225,9 +225,9 @@ public class AsfHeaderReader extends ChunkContainerReader<AsfHeader>
      *
      * @param extReader header extension object reader.
      */
-    public void setExtendedHeaderReader(final AsfExtHeaderReader extReader)
+    public void setExtendedHeaderReader(AsfExtHeaderReader extReader)
     {
-        for (final GUID curr : extReader.getApplyingIds())
+        for (GUID curr : extReader.getApplyingIds())
         {
             this.readerMap.put(curr, extReader);
         }

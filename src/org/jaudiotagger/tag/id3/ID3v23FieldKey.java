@@ -197,11 +197,11 @@ public enum ID3v23FieldKey
     VERSION(ID3v23Frames.FRAME_ID_V3_USER_DEFINED_INFO, FrameBodyTXXX.VERSION, Id3FieldType.TEXT),
     YEAR(ID3v23Frames.FRAME_ID_V3_TYER, Id3FieldType.TEXT),
     ;
-    private String fieldName;
+    private final String fieldName;
 
-    private String frameId;
+    private final String frameId;
     private String subId;
-    private Id3FieldType fieldType;
+    private final Id3FieldType fieldType;
 
     /**
      * For usual metadata fields that use a data field

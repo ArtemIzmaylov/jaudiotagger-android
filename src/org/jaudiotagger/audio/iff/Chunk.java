@@ -11,8 +11,8 @@ import java.nio.ByteBuffer;
  */
 public abstract class Chunk
 {
-    protected ByteBuffer chunkData;
-    protected ChunkHeader chunkHeader;
+    protected final ByteBuffer chunkData;
+    protected final ChunkHeader chunkHeader;
 
 
 

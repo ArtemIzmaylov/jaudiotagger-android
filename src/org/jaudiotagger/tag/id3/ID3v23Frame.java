@@ -46,7 +46,7 @@ import java.util.regex.Pattern;
  */
 public class ID3v23Frame extends AbstractID3v2Frame
 {
-    private static Pattern validFrameIdentifier = Pattern.compile("[A-Z][0-9A-Z]{3}");
+    private static final Pattern validFrameIdentifier = Pattern.compile("[A-Z][\\dA-Z]{3}");
 
     protected static final int FRAME_ID_SIZE = 4;
     protected static final int FRAME_FLAGS_SIZE = 2;
@@ -124,9 +124,8 @@ public class ID3v23Frame extends AbstractID3v2Frame
      *
      * @param frame
      * @param identifier
-     * @throws InvalidFrameException
      */
-    protected ID3v23Frame(ID3v24Frame frame, String identifier) throws InvalidFrameException
+    protected ID3v23Frame(ID3v24Frame frame, String identifier)
     {
         this.identifier=identifier;
         statusFlags = new StatusFlags((ID3v24Frame.StatusFlags) frame.getStatusFlags());
@@ -873,7 +872,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
      *
       * @param encoding charset.
       */
-    public void setEncoding(final Charset encoding)
+    public void setEncoding(Charset encoding)
     {
         Integer encodingId = TextEncoding.getInstanceOf().getIdForCharset(encoding);
         if(encodingId!=null)

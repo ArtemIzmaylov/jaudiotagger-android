@@ -10,7 +10,7 @@ public enum EncoderType
     DRM_AAC("Aac (Drm)"),
     APPLE_LOSSLESS("Alac"),;
 
-    private String description;
+    private final String description;
 
     EncoderType(String description)
     {

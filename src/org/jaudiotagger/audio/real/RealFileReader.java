@@ -23,23 +23,23 @@ public class RealFileReader extends AudioFileReader
 	@Override
     protected GenericAudioHeader getEncodingInfo(RandomAccessFile raf) throws CannotReadException, IOException
     {
-        final GenericAudioHeader info = new GenericAudioHeader();
-        final RealChunk prop = findPropChunk(raf);
-        final DataInputStream dis = prop.getDataInputStream();
-        final int objVersion = Utils.readUint16(dis);
+        GenericAudioHeader info = new GenericAudioHeader();
+        RealChunk prop = findPropChunk(raf);
+        DataInputStream dis = prop.getDataInputStream();
+        int objVersion = Utils.readUint16(dis);
         if (objVersion == 0)
         {
-            final long maxBitRate       = Utils.readUint32(dis) / 1000;
-            final long avgBitRate       = Utils.readUint32(dis) / 1000;
-            final long maxPacketSize    = Utils.readUint32(dis);
-            final long avgPacketSize    = Utils.readUint32(dis);
-            final long packetCnt        = Utils.readUint32(dis);
-            final int duration          = (int)Utils.readUint32(dis) / 1000;
-            final long preroll          = Utils.readUint32(dis);
-            final long indexOffset      = Utils.readUint32(dis);
-            final long dataOffset       = Utils.readUint32(dis);
-            final int numStreams        = Utils.readUint16(dis);
-            final int flags             = Utils.readUint16(dis);
+            long maxBitRate       = Utils.readUint32(dis) / 1000;
+            long avgBitRate       = Utils.readUint32(dis) / 1000;
+            long maxPacketSize    = Utils.readUint32(dis);
+            long avgPacketSize    = Utils.readUint32(dis);
+            long packetCnt        = Utils.readUint32(dis);
+            int duration          = (int)Utils.readUint32(dis) / 1000;
+            long preroll          = Utils.readUint32(dis);
+            long indexOffset      = Utils.readUint32(dis);
+            long dataOffset       = Utils.readUint32(dis);
+            int numStreams        = Utils.readUint16(dis);
+            int flags             = Utils.readUint16(dis);
             info.setBitRate((int) avgBitRate);
             info.setPreciseLength(duration);
             info.setVariableBitRate(maxBitRate != avgBitRate);
@@ -50,18 +50,15 @@ public class RealFileReader extends AudioFileReader
 
     private RealChunk findPropChunk(RandomAccessFile raf) throws IOException, CannotReadException
     {
-    	@SuppressWarnings("unused")
-		final RealChunk rmf = RealChunk.readChunk(raf);
-        final RealChunk prop = RealChunk.readChunk(raf);
+    	@SuppressWarnings("unused") RealChunk rmf = RealChunk.readChunk(raf);
+        RealChunk prop = RealChunk.readChunk(raf);
         return prop;
     }
 
     private RealChunk findContChunk(RandomAccessFile raf) throws IOException, CannotReadException
     {
-    	@SuppressWarnings("unused")
-		final RealChunk rmf = RealChunk.readChunk(raf);
-    	@SuppressWarnings("unused")
-		final RealChunk prop = RealChunk.readChunk(raf);
+    	@SuppressWarnings("unused") RealChunk rmf = RealChunk.readChunk(raf);
+    	@SuppressWarnings("unused") RealChunk prop = RealChunk.readChunk(raf);
         RealChunk rv = RealChunk.readChunk(raf);
         while (!rv.isCONT()) rv = RealChunk.readChunk(raf);
         return rv;
@@ -70,19 +67,19 @@ public class RealFileReader extends AudioFileReader
     @Override
     protected Tag getTag(RandomAccessFile raf) throws CannotReadException, IOException
     {
-        final RealChunk cont = findContChunk(raf);
-        final DataInputStream dis = cont.getDataInputStream();
-        final String title = Utils.readString(dis, Utils.readUint16(dis));
-        final String author = Utils.readString(dis, Utils.readUint16(dis));
-        final String copyright = Utils.readString(dis, Utils.readUint16(dis));
-        final String comment = Utils.readString(dis, Utils.readUint16(dis));
-        final RealTag rv = new RealTag();
+        RealChunk cont = findContChunk(raf);
+        DataInputStream dis = cont.getDataInputStream();
+        String title = Utils.readString(dis, Utils.readUint16(dis));
+        String author = Utils.readString(dis, Utils.readUint16(dis));
+        String copyright = Utils.readString(dis, Utils.readUint16(dis));
+        String comment = Utils.readString(dis, Utils.readUint16(dis));
+        RealTag rv = new RealTag();
         // NOTE: frequently these fields are off-by-one, thus the crazy
         // logic below...
         try
         {
-            rv.addField(FieldKey.TITLE,(title.length() == 0 ? author : title));
-            rv.addField(FieldKey.ARTIST, title.length() == 0 ? copyright : author);
+            rv.addField(FieldKey.TITLE,(title.isEmpty() ? author : title));
+            rv.addField(FieldKey.ARTIST, title.isEmpty() ? copyright : author);
             rv.addField(FieldKey.COMMENT,comment);
         }
         catch(FieldDataInvalidException fdie)

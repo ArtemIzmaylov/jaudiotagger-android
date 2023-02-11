@@ -27,7 +27,7 @@ import java.nio.ByteBuffer;
  * The first frame can sometimes contain a LAME frame at the end of the Xing frame
  *
  * <p>This useful to the library because it allows the encoder to be identified, full specification
- * can be found at http://gabriel.mp3-tech.org/mp3infotag.html
+ * can be found at <a href="http://gabriel.mp3-tech.org/mp3infotag.html">...</a>
  *
  * Summarized here:
  * 4 bytes:LAME
@@ -45,13 +45,13 @@ import java.nio.ByteBuffer;
  * 2 bytes:Music CRC
  * 2 bytes:CRC Tag
  */
-public class LameFrame
+public final class LameFrame
 {
     public static final int LAME_HEADER_BUFFER_SIZE = 36;
     public static final int ENCODER_SIZE = 9;   //Includes LAME ID
     public static final int LAME_ID_SIZE = 4;
     public static final String LAME_ID = "LAME";
-    private String encoder;
+    private final String encoder;
 
     /**
      * Initilise a Lame Mpeg Frame

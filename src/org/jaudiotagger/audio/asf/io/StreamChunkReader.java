@@ -65,34 +65,34 @@ public class StreamChunkReader implements ChunkReader
     /**
      * {@inheritDoc}
      */
-    public Chunk read(final GUID guid, final InputStream stream, final long chunkStart) throws IOException
+    public Chunk read(GUID guid, InputStream stream, long chunkStart) throws IOException
     {
         StreamChunk result = null;
-        final BigInteger chunkLength = Utils.readBig64(stream);
+        BigInteger chunkLength = Utils.readBig64(stream);
         // Now comes GUID indicating whether stream content type is audio or
         // video
-        final GUID streamTypeGUID = Utils.readGUID(stream);
+        GUID streamTypeGUID = Utils.readGUID(stream);
         if (GUID.GUID_AUDIOSTREAM.equals(streamTypeGUID) || GUID.GUID_VIDEOSTREAM.equals(streamTypeGUID))
         {
 
             // A GUID is indicating whether the stream is error
             // concealed
-            final GUID errorConcealment = Utils.readGUID(stream);
+            GUID errorConcealment = Utils.readGUID(stream);
             /*
              * Read the Time Offset
              */
-            final long timeOffset = Utils.readUINT64(stream);
+            long timeOffset = Utils.readUINT64(stream);
 
-            final long typeSpecificDataSize = Utils.readUINT32(stream);
-            final long streamSpecificDataSize = Utils.readUINT32(stream);
+            long typeSpecificDataSize = Utils.readUINT32(stream);
+            long streamSpecificDataSize = Utils.readUINT32(stream);
 
             /*
              * Read a bit field. (Contains stream number, and whether the stream
              * content is encrypted.)
              */
-            final int mask = Utils.readUINT16(stream);
-            final int streamNumber = mask & 127;
-            final boolean contentEncrypted = (mask & 0x8000) != 0;
+            int mask = Utils.readUINT16(stream);
+            int streamNumber = mask & 127;
+            boolean contentEncrypted = (mask & 0x8000) != 0;
 
             /*
              * Skip a reserved field
@@ -111,20 +111,20 @@ public class StreamChunkReader implements ChunkReader
                 /*
                  * Reading audio specific information
                  */
-                final AudioStreamChunk audioStreamChunk = new AudioStreamChunk(chunkLength);
+                AudioStreamChunk audioStreamChunk = new AudioStreamChunk(chunkLength);
                 result = audioStreamChunk;
 
                 /*
                  * read WAVEFORMATEX and format extension.
                  */
-                final long compressionFormat = Utils.readUINT16(stream);
-                final long channelCount = Utils.readUINT16(stream);
-                final long samplingRate = Utils.readUINT32(stream);
-                final long avgBytesPerSec = Utils.readUINT32(stream);
-                final long blockAlignment = Utils.readUINT16(stream);
-                final int bitsPerSample = Utils.readUINT16(stream);
-                final int codecSpecificDataSize = Utils.readUINT16(stream);
-                final byte[] codecSpecificData = new byte[codecSpecificDataSize];
+                long compressionFormat = Utils.readUINT16(stream);
+                long channelCount = Utils.readUINT16(stream);
+                long samplingRate = Utils.readUINT32(stream);
+                long avgBytesPerSec = Utils.readUINT32(stream);
+                long blockAlignment = Utils.readUINT16(stream);
+                int bitsPerSample = Utils.readUINT16(stream);
+                int codecSpecificDataSize = Utils.readUINT16(stream);
+                byte[] codecSpecificData = new byte[codecSpecificDataSize];
                 stream.read(codecSpecificData);
 
                 audioStreamChunk.setCompressionFormat(compressionFormat);
@@ -143,11 +143,11 @@ public class StreamChunkReader implements ChunkReader
                 /*
                  * Reading video specific information
                  */
-                final VideoStreamChunk videoStreamChunk = new VideoStreamChunk(chunkLength);
+                VideoStreamChunk videoStreamChunk = new VideoStreamChunk(chunkLength);
                 result = videoStreamChunk;
 
-                final long pictureWidth = Utils.readUINT32(stream);
-                final long pictureHeight = Utils.readUINT32(stream);
+                long pictureWidth = Utils.readUINT32(stream);
+                long pictureHeight = Utils.readUINT32(stream);
 
                 // Skip unknown field
                 stream.skip(1);
@@ -159,7 +159,7 @@ public class StreamChunkReader implements ChunkReader
                 stream.skip(2);
 
                 stream.skip(16);
-                final byte[] fourCC = new byte[4];
+                byte[] fourCC = new byte[4];
                 stream.read(fourCC);
 
                 videoStreamChunk.setPictureWidth(pictureWidth);

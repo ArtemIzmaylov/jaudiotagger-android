@@ -1,7 +1,5 @@
 package org.jaudiotagger.audio.mp3;
 
-import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
-
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
@@ -14,7 +12,7 @@ import java.util.Arrays;
  * this library is details allowing us to determine the bitrate of a Variable Bit Rate VBR file without having
  * to process the whole file.
  *
- * From http://www.codeproject.com/KB/audio-video/mpegaudioinfo.aspx#SideInfo
+ * From <a href="http://www.codeproject.com/KB/audio-video/mpegaudioinfo.aspx#SideInfo">...</a>
  *
  * This header is only used by MPEG audio files encoded with the Fraunhofer Encoder as far as I know. It is different from the XING header. You find it exactly
  * 32 bytes after the end of the first MPEG audio header in the file. (Note that the position is zero-based; position, length and example are each in byte-format.)
@@ -32,7 +30,7 @@ import java.util.Arrays;
  * 26 						TOC entries for seeking as Big-Endian integral. From size per table entry and number of entries, you can calculate the length of this field.
  *
  */
-public class VbriFrame
+public final class VbriFrame
 {
 
     //The offset into frame
@@ -54,9 +52,9 @@ public class VbriFrame
      */
     private static final byte[] VBRI_VBR_ID = {'V', 'B', 'R', 'I'};
 
-    private ByteBuffer header;
+    private final ByteBuffer header;
 
-    private boolean vbr = false;
+    private static final boolean vbr = false;
     private int frameCount = -1;
     private int audioSize = -1;
     /**
@@ -77,7 +75,7 @@ public class VbriFrame
      */
     private void setAudioSize()
     {
-        byte frameSizeBuffer[] = new byte[VBRI_AUDIOSIZE_BUFFER_SIZE];
+        byte[] frameSizeBuffer = new byte[VBRI_AUDIOSIZE_BUFFER_SIZE];
         header.get(frameSizeBuffer);
         audioSize = (frameSizeBuffer[BYTE_1] << 24) & 0xFF000000 | (frameSizeBuffer[BYTE_2] << 16) & 0x00FF0000 | (frameSizeBuffer[BYTE_3] << 8) & 0x0000FF00 | frameSizeBuffer[BYTE_4] & 0x000000FF;
     }
@@ -87,7 +85,7 @@ public class VbriFrame
      */
     private void setFrameCount()
     {
-        byte frameCountBuffer[] = new byte[VBRI_FRAMECOUNT_BUFFER_SIZE];
+        byte[] frameCountBuffer = new byte[VBRI_FRAMECOUNT_BUFFER_SIZE];
         header.get(frameCountBuffer);
         frameCount = (frameCountBuffer[BYTE_1] << 24) & 0xFF000000 | (frameCountBuffer[BYTE_2] << 16) & 0x00FF0000 | (frameCountBuffer[BYTE_3] << 8) & 0x0000FF00 | frameCountBuffer[BYTE_4] & 0x000000FF;
     }
@@ -96,7 +94,7 @@ public class VbriFrame
     /**
      * @return count of frames
      */
-    public final int getFrameCount()
+    public int getFrameCount()
     {
         return frameCount;
     }
@@ -104,7 +102,7 @@ public class VbriFrame
     /**
      * @return size of audio data in bytes
      */
-    public final int getAudioSize()
+    public int getAudioSize()
     {
         return audioSize;
     }
@@ -114,10 +112,9 @@ public class VbriFrame
      * this is a VBRIFrame
      *
      * @return
-     * @throws org.jaudiotagger.audio.exceptions.InvalidAudioFrameException
      *
      */
-    public static VbriFrame parseVBRIFrame(ByteBuffer header) throws InvalidAudioFrameException
+    public static VbriFrame parseVBRIFrame(ByteBuffer header)
     {
         VbriFrame VBRIFrame = new VbriFrame(header);
         return VBRIFrame;
@@ -161,7 +158,7 @@ public class VbriFrame
      *
      * @return
      */
-    public final boolean isVbr()
+    public boolean isVbr()
     {
         return true;
     }

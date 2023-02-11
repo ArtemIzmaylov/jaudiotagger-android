@@ -19,9 +19,9 @@ import java.util.logging.Logger;
  */
 public class WavId3Chunk extends Chunk
 {
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.wav.chunk");
-    private WavTag wavTag;
-    private String loggingName;
+    public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.wav.chunk");
+    private final WavTag wavTag;
+    private final String loggingName;
     /**
      * Constructor.
      * @param chunkData  The content of this chunk
@@ -29,7 +29,7 @@ public class WavId3Chunk extends Chunk
      * @param tag        The WavTag into which information is stored
      * @param loggingName
      */
-    public WavId3Chunk(final ByteBuffer chunkData, final ChunkHeader chunkHeader, final WavTag tag, String loggingName)
+    public WavId3Chunk(ByteBuffer chunkData, ChunkHeader chunkHeader, WavTag tag, String loggingName)
     {
         super(chunkData, chunkHeader);
         wavTag = tag;
@@ -45,8 +45,8 @@ public class WavId3Chunk extends Chunk
             return false;
         }
 
-        final int version = chunkData.get();
-        final AbstractID3v2Tag id3Tag;
+        int version = chunkData.get();
+        AbstractID3v2Tag id3Tag;
         switch (version)
         {
             case ID3v22Tag.MAJOR_VERSION:
@@ -86,7 +86,7 @@ public class WavId3Chunk extends Chunk
     /**
      * Reads 3 bytes to determine if the tag really looks like ID3 data.
      */
-    private boolean isId3v2Tag(final ByteBuffer headerData) throws IOException
+    private boolean isId3v2Tag(ByteBuffer headerData) throws IOException
     {
         for (int i = 0; i < AbstractID3v2Tag.FIELD_TAGID_LENGTH; i++)
         {

@@ -19,7 +19,7 @@ public class GUIDFormatException extends IllegalArgumentException
      *
      * @param detail detail message.
      */
-    public GUIDFormatException(final String detail)
+    public GUIDFormatException(String detail)
     {
         super(detail);
     }

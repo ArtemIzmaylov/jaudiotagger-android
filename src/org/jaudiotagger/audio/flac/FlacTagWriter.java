@@ -20,7 +20,6 @@ package org.jaudiotagger.audio.flac;
 
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
-import org.jaudiotagger.audio.exceptions.NoWritePermissionsException;
 import org.jaudiotagger.audio.flac.metadatablock.*;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.flac.FlacTag;
@@ -32,9 +31,6 @@ import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.nio.file.AccessDeniedException;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -57,8 +53,8 @@ import java.util.logging.Logger;
 public class FlacTagWriter
 {
     // Logger Object
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.flac");
-    private FlacTagCreator tc = new FlacTagCreator();
+    public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.flac");
+    private final FlacTagCreator tc = new FlacTagCreator();
 
     /**
      *
@@ -72,7 +68,7 @@ public class FlacTagWriter
     public void delete(Tag tag, File file) throws CannotWriteException
     {
         //This will save the file without any Comment or PictureData blocks  
-        FlacTag emptyTag = new FlacTag(null, new ArrayList<MetadataBlockDataPicture>());
+        FlacTag emptyTag = new FlacTag(null, new ArrayList<>());
         write(emptyTag, file);
     }
 
@@ -81,30 +77,21 @@ public class FlacTagWriter
      */
     private static class MetadataBlockInfo
     {
-        private List<MetadataBlock> blocks = new ArrayList<>();
+        private final List<MetadataBlock> blocks = new ArrayList<>();
 
         private MetadataBlock streamInfoBlock;
-        private List<MetadataBlock> metadataBlockPadding        = new ArrayList<MetadataBlock>(1);
-        private List<MetadataBlock> metadataBlockApplication    = new ArrayList<MetadataBlock>(1);
-        private List<MetadataBlock> metadataBlockSeekTable      = new ArrayList<MetadataBlock>(1);
-        private List<MetadataBlock> metadataBlockCueSheet       = new ArrayList<MetadataBlock>(1);
+        private final List<MetadataBlock> metadataBlockPadding        = new ArrayList<>(1);
+        private final List<MetadataBlock> metadataBlockApplication    = new ArrayList<>(1);
+        private final List<MetadataBlock> metadataBlockSeekTable      = new ArrayList<>(1);
+        private final List<MetadataBlock> metadataBlockCueSheet       = new ArrayList<>(1);
 
         public  List<MetadataBlock> getListOfNonMetadataBlocks()
         {
-            for(MetadataBlock next:metadataBlockSeekTable)
-            {
-                blocks.add(next);
-            }
+            blocks.addAll(metadataBlockSeekTable);
 
-            for(MetadataBlock next:metadataBlockCueSheet)
-            {
-                blocks.add(next);
-            }
+            blocks.addAll(metadataBlockCueSheet);
 
-            for(MetadataBlock next:metadataBlockApplication)
-            {
-                blocks.add(next);
-            }
+            blocks.addAll(metadataBlockApplication);
             return blocks;
         }
 
@@ -315,9 +302,8 @@ public class FlacTagWriter
      *
      * @param paddingSize
      * @return
-     * @throws UnsupportedEncodingException
      */
-    public ByteBuffer addPaddingBlock(int paddingSize) throws UnsupportedEncodingException
+    public ByteBuffer addPaddingBlock(int paddingSize)
     {
         //Padding
         logger.config("padding:" + paddingSize);
@@ -368,7 +354,7 @@ public class FlacTagWriter
         }
 
         //Write last non-metadata block
-        if(blocks.size()>0)
+        if(!blocks.isEmpty())
         {
             if (padding > 0)
             {

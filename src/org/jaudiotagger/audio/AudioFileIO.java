@@ -46,7 +46,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -94,7 +93,7 @@ public class AudioFileIO
 {
 
     //Logger
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio");
+    public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio");
 
     // !! Do not forget to also add new supported extensions to AudioFileFilter
     // !!
@@ -235,8 +234,8 @@ public class AudioFileIO
 
     // These tables contains all the readers/writers associated with extension
     // as a key
-    public Map<String, AudioFileReader> readers = new HashMap<String, AudioFileReader>();
-    public Map<String, AudioFileWriter> writers = new HashMap<String, AudioFileWriter>();
+    public final Map<String, AudioFileReader> readers = new HashMap<>();
+    public final Map<String, AudioFileWriter> writers = new HashMap<>();
 
 
     /**
@@ -304,7 +303,7 @@ public class AudioFileIO
         readers.put(SupportedFileFormat.AIFF.getFilesuffix(), new AiffFileReader());
         readers.put(SupportedFileFormat.DSF.getFilesuffix(), new DsfFileReader());
         readers.put(SupportedFileFormat.DFF.getFilesuffix(), new DffFileReader());
-        final RealFileReader realReader = new RealFileReader();
+        RealFileReader realReader = new RealFileReader();
         readers.put(SupportedFileFormat.RA.getFilesuffix(), realReader);
         readers.put(SupportedFileFormat.RM.getFilesuffix(), realReader);
 
@@ -467,7 +466,7 @@ public class AudioFileIO
 
         if (targetPath != null && !targetPath.isEmpty())
         {
-            final File destination = new File(targetPath + "." + ext);
+            File destination = new File(targetPath + "." + ext);
                 try
                 {
                     Utils.copyThrowsOnException(f.getFile(), destination);

@@ -44,12 +44,12 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
     /**
      * key to value map
      */
-    private Map<Integer, String> keyToValue = null;
+    private Map<Integer, String> keyToValue;
 
     /**
      * value to key map
      */
-    private Map<String, Integer> valueToKey = null;
+    private Map<String, Integer> valueToKey;
 
     /**
      *
@@ -160,15 +160,15 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
     {
         if (value instanceof Byte)
         {
-            this.value = (long) ((Byte) value).byteValue();
+            this.value = (long) (Byte) value;
         }
         else if (value instanceof Short)
         {
-            this.value = (long) ((Short) value).shortValue();
+            this.value = (long) (Short) value;
         }
         else if (value instanceof Integer)
         {
-            this.value = (long) ((Integer) value).intValue();
+            this.value = (long) (Integer) value;
         }
         else
         {
@@ -213,7 +213,7 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
         else
         {
             // put them in a treeset first to sort them
-            TreeSet<String> treeSet = new TreeSet<String>(keyToValue.values());
+            TreeSet<String> treeSet = new TreeSet<>(keyToValue.values());
 
             if (hasEmptyValue)
             {

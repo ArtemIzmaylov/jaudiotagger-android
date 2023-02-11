@@ -46,17 +46,17 @@ public class Mp4AtomTree
     private DefaultMutableTreeNode udtaNode;
     private DefaultMutableTreeNode hdlrWithinMdiaNode;
     private DefaultMutableTreeNode hdlrWithinMetaNode;
-    private List<DefaultMutableTreeNode> stcoNodes = new ArrayList<DefaultMutableTreeNode>();
-    private List<DefaultMutableTreeNode> freeNodes = new ArrayList<DefaultMutableTreeNode>();
-    private List<DefaultMutableTreeNode> mdatNodes = new ArrayList<DefaultMutableTreeNode>();
-    private List<DefaultMutableTreeNode> trakNodes = new ArrayList<DefaultMutableTreeNode>();
+    private final List<DefaultMutableTreeNode> stcoNodes = new ArrayList<>();
+    private final List<DefaultMutableTreeNode> freeNodes = new ArrayList<>();
+    private final List<DefaultMutableTreeNode> mdatNodes = new ArrayList<>();
+    private final List<DefaultMutableTreeNode> trakNodes = new ArrayList<>();
 
-    private List<Mp4StcoBox> stcos = new ArrayList<Mp4StcoBox>();
+    private final List<Mp4StcoBox> stcos = new ArrayList<>();
     private ByteBuffer moovBuffer; //Contains all the data under moov
     private Mp4BoxHeader moovHeader;
 
     //Logger Object
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.mp4");
+    public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.mp4");
 
     /**
      * Create Atom Tree
@@ -89,11 +89,10 @@ public class Mp4AtomTree
      *
      * @param raf
      * @param closeExit false to keep randomfileacces open, only used when randomaccessfile already being used
-     * @return
      * @throws IOException
      * @throws org.jaudiotagger.audio.exceptions.CannotReadException
      */
-    public DefaultTreeModel buildTree(RandomAccessFile raf, boolean closeExit) throws IOException, CannotReadException
+    public void buildTree(RandomAccessFile raf, boolean closeExit) throws IOException, CannotReadException
     {
         FileChannel fc = null;
         try
@@ -104,8 +103,8 @@ public class Mp4AtomTree
             fc.position(0);
 
             //Build up map of nodes
-            rootNode = new DefaultMutableTreeNode();
-            dataTree = new DefaultTreeModel(rootNode);
+            rootNode = new DefaultMutableTreeNode<>();
+            dataTree = new DefaultTreeModel<>(rootNode);
 
             //Iterate though all the top level Nodes
             ByteBuffer headerBuffer = ByteBuffer.allocate(Mp4BoxHeader.HEADER_LENGTH);
@@ -197,12 +196,12 @@ public class Mp4AtomTree
                     int  bytesRead = fc.read(data64bitLengthBuffer);
                     if (bytesRead != Mp4BoxHeader.DATA_64BITLENGTH)
                     {
-                        return null;
+                        return;
                     }
                     data64bitLengthBuffer.rewind();
                     long length = data64bitLengthBuffer.getLong();
                     if (length < Mp4BoxHeader.HEADER_LENGTH){
-                        return null;
+                        return;
                     }
 
                     fc.position(fc.position() + length - Mp4BoxHeader.REALDATA_64BITLENGTH);
@@ -212,11 +211,10 @@ public class Mp4AtomTree
                     fc.position(fc.position() + boxHeader.getDataLength());
                 }
             }
-            final long extraDataLength = fc.size() - fc.position();
+            long extraDataLength = fc.size() - fc.position();
             if (extraDataLength != 0) {
                 logger.warning(ErrorMessage.EXTRA_DATA_AT_END_OF_MP4.getMsg(extraDataLength));
             }
-            return dataTree;
         }
         finally
         {
@@ -248,10 +246,10 @@ public class Mp4AtomTree
             Mp4BoxHeader header = (Mp4BoxHeader) nextNode.getUserObject();
             if (header != null)
             {
-                String tabbing = "";
+                StringBuilder tabbing = new StringBuilder();
                 for (int i = 1; i < nextNode.getLevel(); i++)
                 {
-                    tabbing += "\t";
+                    tabbing.append("\t");
                 }
 
                 if(header instanceof NullPadding)

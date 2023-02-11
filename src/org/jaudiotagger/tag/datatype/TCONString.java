@@ -120,9 +120,9 @@ public class TCONString extends TextEncodedStringSizeTerminated
         String[] valuesarray = value.replaceAll("(\\(\\d+\\)|\\(RX\\)|\\(CR\\)\\w*)", "$1\u0000").split("\u0000");
         List<String> values = Arrays.asList(valuesarray);
         //Read only list so if empty have to create new list
-        if (values.size() == 0)
+        if (values.isEmpty())
         {
-            values = new ArrayList<String>(1);
+            values = new ArrayList<>(1);
             values.add("");
         }
         return values;
@@ -152,7 +152,7 @@ public class TCONString extends TextEncodedStringSizeTerminated
     public String getValueWithoutTrailingNull()
     {
         List<String> values = getValues();
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for(int i=0;i<values.size();i++)
         {
             if(i!=0)

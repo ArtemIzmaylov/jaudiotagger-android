@@ -46,12 +46,12 @@ public class WavFormatChunk extends Chunk
     private static final int   EXTENSIBLE_DATA_SIZE = 22;
     public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.wav.chunk");
 
-    private boolean isValid = false;
+    private static final boolean isValid = false;
 
     @SuppressWarnings("unused")
 	private int blockAlign,  channelMask;
     private WavSubFormat wsf;
-    private GenericAudioHeader info;
+    private final GenericAudioHeader info;
 
     public WavFormatChunk(ByteBuffer chunkData, ChunkHeader hdr, GenericAudioHeader info) throws IOException
     {

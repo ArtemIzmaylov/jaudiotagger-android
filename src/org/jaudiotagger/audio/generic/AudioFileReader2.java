@@ -2,12 +2,9 @@ package org.jaudiotagger.audio.generic;
 
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
-import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.audio.exceptions.NoReadPermissionsException;
-import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.Tag;
-import org.jaudiotagger.tag.TagException;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +25,7 @@ public abstract class AudioFileReader2 extends AudioFileReader
    * @exception NoReadPermissionsException if permissions prevent reading of file
    * @exception CannotReadException If anything went bad during the read of this file
    */
-    public AudioFile read(File f) throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException
+    public AudioFile read(File f) throws CannotReadException, IOException
     {
         if(logger.isLoggable(Level.CONFIG))
         {
@@ -61,7 +58,7 @@ public abstract class AudioFileReader2 extends AudioFileReader
      */
     protected abstract GenericAudioHeader getEncodingInfo(File file) throws CannotReadException, IOException;
 
-    protected GenericAudioHeader getEncodingInfo(RandomAccessFile raf) throws CannotReadException, IOException
+    protected GenericAudioHeader getEncodingInfo(RandomAccessFile raf) throws IOException
     {
         throw new UnsupportedOperationException("Old method not used in version 2");
     }
@@ -76,7 +73,7 @@ public abstract class AudioFileReader2 extends AudioFileReader
      */
     protected abstract Tag getTag(File file) throws CannotReadException, IOException;
 
-    protected Tag getTag(RandomAccessFile file) throws CannotReadException, IOException
+    protected Tag getTag(RandomAccessFile file) throws IOException
     {
         throw new UnsupportedOperationException("Old method not used in version 2");
     }

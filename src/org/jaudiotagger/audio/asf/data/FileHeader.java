@@ -103,7 +103,7 @@ public class FileHeader extends Chunk
      * @param maxPkgSize          maximum size of packages
      * @param uncmpVideoFrameSize Size of an uncompressed Video Frame.
      */
-    public FileHeader(final BigInteger chunckLen, final BigInteger size, final BigInteger fileTime, final BigInteger pkgCount, final BigInteger dur, final BigInteger timestampStart, final BigInteger timestampEnd, final long headerFlags, final long minPkgSize, final long maxPkgSize, final long uncmpVideoFrameSize)
+    public FileHeader(BigInteger chunckLen, BigInteger size, BigInteger fileTime, BigInteger pkgCount, BigInteger dur, BigInteger timestampStart, BigInteger timestampEnd, long headerFlags, long minPkgSize, long maxPkgSize, long uncmpVideoFrameSize)
     {
         super(GUID.GUID_FILE, chunckLen);
         this.fileSize = size;
@@ -227,12 +227,11 @@ public class FileHeader extends Chunk
      * @see org.jaudiotagger.audio.asf.data.Chunk#prettyPrint(String)
      */
     @Override
-    public String prettyPrint(final String prefix)
+    public String prettyPrint(String prefix)
     {
-        final StringBuilder result = new StringBuilder(super.prettyPrint(prefix));
-        result.append(prefix).append("  |-> Filesize      = ").append(getFileSize().toString()).append(" Bytes").append(Utils.LINE_SEPARATOR);
-        result.append(prefix).append("  |-> Media duration= ").append(getDuration().divide(new BigInteger("10000")).toString()).append(" ms").append(Utils.LINE_SEPARATOR);
-        result.append(prefix).append("  |-> Created at    = ").append(getFileCreationTime()).append(Utils.LINE_SEPARATOR);
-        return result.toString();
+        String result = super.prettyPrint(prefix) + prefix + "  |-> Filesize      = " + getFileSize().toString() + " Bytes" + Utils.LINE_SEPARATOR +
+                prefix + "  |-> Media duration= " + getDuration().divide(new BigInteger("10000")) + " ms" + Utils.LINE_SEPARATOR +
+                prefix + "  |-> Created at    = " + getFileCreationTime() + Utils.LINE_SEPARATOR;
+        return result;
     }
 }

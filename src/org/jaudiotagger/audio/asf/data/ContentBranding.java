@@ -54,7 +54,7 @@ public final class ContentBranding extends MetadataContainer
 
     static
     {
-        ALLOWED = new HashSet<String>();
+        ALLOWED = new HashSet<>();
         ALLOWED.add(KEY_BANNER_IMAGE);
         ALLOWED.add(KEY_BANNER_TYPE);
         ALLOWED.add(KEY_BANNER_URL);
@@ -75,7 +75,7 @@ public final class ContentBranding extends MetadataContainer
      * @param pos  Position of content description within file or stream
      * @param size Length of content description.
      */
-    public ContentBranding(final long pos, final BigInteger size)
+    public ContentBranding(long pos, BigInteger size)
     {
         super(ContainerType.CONTENT_BRANDING, pos, size);
     }
@@ -135,7 +135,7 @@ public final class ContentBranding extends MetadataContainer
     {
         if (!hasDescriptor(KEY_BANNER_TYPE))
         {
-            final MetadataDescriptor descriptor = new MetadataDescriptor(ContainerType.CONTENT_BRANDING, KEY_BANNER_TYPE, MetadataDescriptor.TYPE_DWORD);
+            MetadataDescriptor descriptor = new MetadataDescriptor(ContainerType.CONTENT_BRANDING, KEY_BANNER_TYPE, MetadataDescriptor.TYPE_DWORD);
             descriptor.setDWordValue(0);
             addDescriptor(descriptor);
         }
@@ -146,7 +146,7 @@ public final class ContentBranding extends MetadataContainer
      * {@inheritDoc}
      */
     @Override
-    public boolean isAddSupported(final MetadataDescriptor descriptor)
+    public boolean isAddSupported(MetadataDescriptor descriptor)
     {
         return ALLOWED.contains(descriptor.getName()) && super.isAddSupported(descriptor);
     }
@@ -157,7 +157,7 @@ public final class ContentBranding extends MetadataContainer
      *
      * @param imageURL image URL to set.
      */
-    public void setBannerImageURL(final String imageURL)
+    public void setBannerImageURL(String imageURL)
     {
         if (Utils.isBlank(imageURL))
         {
@@ -175,7 +175,7 @@ public final class ContentBranding extends MetadataContainer
      *
      * @param copyRight copyright URL to set.
      */
-    public void setCopyRightURL(final String copyRight)
+    public void setCopyRightURL(String copyRight)
     {
         if (Utils.isBlank(copyRight))
         {
@@ -191,7 +191,7 @@ public final class ContentBranding extends MetadataContainer
      * @param imageType
      * @param imageData
      */
-    public void setImage(final long imageType, final byte[] imageData)
+    public void setImage(long imageType, byte[] imageData)
     {
         assert imageType >= 0 && imageType <= 3;
         assert imageType > 0 || imageData.length == 0;
@@ -203,14 +203,14 @@ public final class ContentBranding extends MetadataContainer
      * {@inheritDoc}
      */
     @Override
-    public long writeInto(final OutputStream out) throws IOException
+    public long writeInto(OutputStream out) throws IOException
     {
-        final long chunkSize = getCurrentAsfChunkSize();
+        long chunkSize = getCurrentAsfChunkSize();
         out.write(getGuid().getBytes());
         Utils.writeUINT64(chunkSize, out);
         Utils.writeUINT32(getImageType(), out);
         assert getImageType() >= 0 && getImageType() <= 3;
-        final byte[] imageData = getImageData();
+        byte[] imageData = getImageData();
         assert getImageType() > 0 || imageData.length == 0;
         Utils.writeUINT32(imageData.length, out);
         out.write(imageData);

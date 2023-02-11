@@ -17,7 +17,7 @@ public final class AsfExtendedHeader extends ChunkContainer
      * @param pos    Position within the stream.<br>
      * @param length the length of the extended header object.
      */
-    public AsfExtendedHeader(final long pos, final BigInteger length)
+    public AsfExtendedHeader(long pos, BigInteger length)
     {
         super(GUID.GUID_HEADER_EXTENSION, pos, length);
     }

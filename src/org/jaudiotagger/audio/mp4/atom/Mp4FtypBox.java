@@ -1,13 +1,11 @@
 package org.jaudiotagger.audio.mp4.atom;
 
-import org.jaudiotagger.audio.exceptions.CannotReadException;
-
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.CharacterCodingException;
-import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CodingErrorAction;
+import org.jaudiotagger.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +16,7 @@ public class Mp4FtypBox extends AbstractMp4Box
 {
     private String majorBrand;
     private int majorBrandVersion;
-    private List<String> compatibleBrands = new ArrayList<String>();
+    private final List<String> compatibleBrands = new ArrayList<>();
 
     private static final int MAJOR_BRAND_LENGTH = 4;
     private static final int COMPATIBLE_BRAND_LENGTH = 4; //Can be multiple of these
@@ -34,9 +32,9 @@ public class Mp4FtypBox extends AbstractMp4Box
         this.dataBuffer.order(ByteOrder.BIG_ENDIAN);
     }
 
-    public void processData() throws CannotReadException
+    public void processData()
     {
-        CharsetDecoder decoder = Charset.forName("ISO-8859-1").newDecoder();
+        CharsetDecoder decoder = StandardCharsets.ISO_8859_1.newDecoder();
         try
         {
             majorBrand = decoder.decode((ByteBuffer) dataBuffer.slice().limit(MAJOR_BRAND_LENGTH)).toString();
@@ -73,18 +71,18 @@ public class Mp4FtypBox extends AbstractMp4Box
     public String toString()
     {
 
-        String info = "Major Brand:" + majorBrand + "Version:" + majorBrandVersion;
-        if (compatibleBrands.size() > 0)
+        StringBuilder info = new StringBuilder("Major Brand:" + majorBrand + "Version:" + majorBrandVersion);
+        if (!compatibleBrands.isEmpty())
         {
-            info += "Compatible:";
+            info.append("Compatible:");
             for (String brand : compatibleBrands)
             {
-                info += brand;
-                info += ",";
+                info.append(brand);
+                info.append(",");
             }
             return info.substring(0, info.length() - 1);
         }
-        return info;
+        return info.toString();
     }
 
     public String getMajorBrand()
@@ -109,7 +107,7 @@ public class Mp4FtypBox extends AbstractMp4Box
      * but this is not an exhaustive list, so for that reason we don't force the values read from the file
      * to tie in with this enum.
      */
-    public static enum Brand
+    public enum Brand
     {
         ISO14496_1_BASE_MEDIA("isom", "ISO 14496-1"),
         ISO14496_12_BASE_MEDIA("iso2", "ISO 14496-12"),
@@ -125,8 +123,8 @@ public class Mp4FtypBox extends AbstractMp4Box
         APPLE_AUDIO_ONLY("M4A ", "M4A Audio"), //SOmetimes used by protected mutli track audio
         ;
 
-        private String id;
-        private String description;
+        private final String id;
+        private final String description;
 
         /**
          * @param id          it is stored as in file

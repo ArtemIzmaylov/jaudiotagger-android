@@ -69,10 +69,10 @@ class EncryptionChunkReader implements ChunkReader
     /**
      * {@inheritDoc}
      */
-    public Chunk read(final GUID guid, final InputStream stream, final long chunkStart) throws IOException
+    public Chunk read(GUID guid, InputStream stream, long chunkStart) throws IOException
     {
         EncryptionChunk result;
-        final BigInteger chunkLen = Utils.readBig64(stream);
+        BigInteger chunkLen = Utils.readBig64(stream);
         result = new EncryptionChunk(chunkLen);
 
         // Can't be interpreted
@@ -96,7 +96,6 @@ class EncryptionChunkReader implements ChunkReader
         secretData[fieldLength] = 0;
 
         // Protection type Length
-        fieldLength = 0;
         fieldLength = (int) Utils.readUINT32(stream);
         // Protection Data Length
         protectionType = new byte[fieldLength + 1];
@@ -104,7 +103,6 @@ class EncryptionChunkReader implements ChunkReader
         protectionType[fieldLength] = 0;
 
         // Key ID length
-        fieldLength = 0;
         fieldLength = (int) Utils.readUINT32(stream);
         // Key ID
         keyID = new byte[fieldLength + 1];
@@ -112,7 +110,6 @@ class EncryptionChunkReader implements ChunkReader
         keyID[fieldLength] = 0;
 
         // License URL length
-        fieldLength = 0;
         fieldLength = (int) Utils.readUINT32(stream);
         // License URL
         licenseURL = new byte[fieldLength + 1];

@@ -102,7 +102,7 @@ public final class AudioStreamChunk extends StreamChunk
      *
      * @param chunkLen Length of the entire chunk (including guid and size)
      */
-    public AudioStreamChunk(final BigInteger chunkLen)
+    public AudioStreamChunk(BigInteger chunkLen)
     {
         super(GUID.GUID_AUDIOSTREAM, chunkLen);
     }
@@ -156,9 +156,9 @@ public final class AudioStreamChunk extends StreamChunk
      */
     public String getCodecDescription()
     {
-        final StringBuilder result = new StringBuilder(Long.toHexString(getCompressionFormat()));
+        StringBuilder result = new StringBuilder(Long.toHexString(getCompressionFormat()));
         String furtherDesc = " (Unknown)";
-        for (final String[] aCODEC_DESCRIPTIONS : CODEC_DESCRIPTIONS)
+        for (String[] aCODEC_DESCRIPTIONS : CODEC_DESCRIPTIONS)
         {
             if (aCODEC_DESCRIPTIONS[0].equalsIgnoreCase(result.toString()))
             {
@@ -229,21 +229,20 @@ public final class AudioStreamChunk extends StreamChunk
      * {@inheritDoc}
      */
     @Override
-    public String prettyPrint(final String prefix)
+    public String prettyPrint(String prefix)
     {
-        final StringBuilder result = new StringBuilder(super.prettyPrint(prefix));
-        result.append(prefix).append("  |-> Audio info:").append(Utils.LINE_SEPARATOR);
-        result.append(prefix).append("  |  : Bitrate : ").append(getKbps()).append(Utils.LINE_SEPARATOR);
-        result.append(prefix).append("  |  : Channels : ").append(getChannelCount()).append(" at ").append(getSamplingRate()).append(" Hz").append(Utils.LINE_SEPARATOR);
-        result.append(prefix).append("  |  : Bits per Sample: ").append(getBitsPerSample()).append(Utils.LINE_SEPARATOR);
-        result.append(prefix).append("  |  : Formatcode: ").append(getCodecDescription()).append(Utils.LINE_SEPARATOR);
-        return result.toString();
+        String result = super.prettyPrint(prefix) + prefix + "  |-> Audio info:" + Utils.LINE_SEPARATOR +
+                prefix + "  |  : Bitrate : " + getKbps() + Utils.LINE_SEPARATOR +
+                prefix + "  |  : Channels : " + getChannelCount() + " at " + getSamplingRate() + " Hz" + Utils.LINE_SEPARATOR +
+                prefix + "  |  : Bits per Sample: " + getBitsPerSample() + Utils.LINE_SEPARATOR +
+                prefix + "  |  : Formatcode: " + getCodecDescription() + Utils.LINE_SEPARATOR;
+        return result;
     }
 
     /**
      * @param avgeBytesPerSec The averageBytesPerSec to set.
      */
-    public void setAverageBytesPerSec(final long avgeBytesPerSec)
+    public void setAverageBytesPerSec(long avgeBytesPerSec)
     {
         this.averageBytesPerSec = avgeBytesPerSec;
     }
@@ -253,7 +252,7 @@ public final class AudioStreamChunk extends StreamChunk
      *
      * @param bps
      */
-    public void setBitsPerSample(final int bps)
+    public void setBitsPerSample(int bps)
     {
         this.bitsPerSample = bps;
     }
@@ -263,7 +262,7 @@ public final class AudioStreamChunk extends StreamChunk
      *
      * @param align
      */
-    public void setBlockAlignment(final long align)
+    public void setBlockAlignment(long align)
     {
         this.blockAlignment = align;
     }
@@ -271,7 +270,7 @@ public final class AudioStreamChunk extends StreamChunk
     /**
      * @param channels The channelCount to set.
      */
-    public void setChannelCount(final long channels)
+    public void setChannelCount(long channels)
     {
         this.channelCount = channels;
     }
@@ -281,7 +280,7 @@ public final class AudioStreamChunk extends StreamChunk
      *
      * @param codecSpecificData
      */
-    public void setCodecData(final byte[] codecSpecificData)
+    public void setCodecData(byte[] codecSpecificData)
     {
         if (codecSpecificData == null)
         {
@@ -293,7 +292,7 @@ public final class AudioStreamChunk extends StreamChunk
     /**
      * @param cFormatCode The compressionFormat to set.
      */
-    public void setCompressionFormat(final long cFormatCode)
+    public void setCompressionFormat(long cFormatCode)
     {
         this.compressionFormat = cFormatCode;
     }
@@ -303,7 +302,7 @@ public final class AudioStreamChunk extends StreamChunk
      *
      * @param errConc the type of error concealment the audio stream is stored as.
      */
-    public void setErrorConcealment(final GUID errConc)
+    public void setErrorConcealment(GUID errConc)
     {
         this.errorConcealment = errConc;
     }
@@ -311,7 +310,7 @@ public final class AudioStreamChunk extends StreamChunk
     /**
      * @param sampRate The samplingRate to set.
      */
-    public void setSamplingRate(final long sampRate)
+    public void setSamplingRate(long sampRate)
     {
         this.samplingRate = sampRate;
     }

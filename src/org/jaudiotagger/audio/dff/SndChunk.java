@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 /**
  * DSD Chunk
  */
-public class SndChunk
+public final class SndChunk
 {
     public static final int CHUNKSIZE_LENGTH = 0;
     public static final int SIGNATURE_LENGTH = 4;

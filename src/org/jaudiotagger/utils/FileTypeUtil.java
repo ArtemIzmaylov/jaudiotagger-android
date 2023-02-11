@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 public class FileTypeUtil {
@@ -26,11 +25,11 @@ public class FileTypeUtil {
 	private static final Integer[] mp3v1Sig_4 = { 0xFF, 0xFB };
 	private static final Integer[] mp4Sig = { 0x00, 0x00, 0x00, null, 0x66, 0x74, 0x79, 0x70 };
 
-	private static Map<String, Integer[]> signatureMap;
-	private static Map<String, String> extensionMap;
+	private static final Map<String, Integer[]> signatureMap;
+	private static final Map<String, String> extensionMap;
 
 	static {
-		signatureMap = new HashMap<String, Integer[]>();
+		signatureMap = new HashMap<>();
 		signatureMap.put("MP3IDv2", mp3v2Sig);
 		signatureMap.put("MP3IDv1_1", mp3v1Sig_1);
 		signatureMap.put("MP3IDv1_2", mp3v1Sig_2);
@@ -38,7 +37,7 @@ public class FileTypeUtil {
 		signatureMap.put("MP3IDv1_4", mp3v1Sig_4);
 		signatureMap.put("MP4", mp4Sig);
 		
-		extensionMap = new HashMap<String, String>();
+		extensionMap = new HashMap<>();
 		extensionMap.put("MP3IDv2", "mp3");
 		extensionMap.put("MP3IDv1_1", "mp3");
 		extensionMap.put("MP3IDv1_2", "mp3");
@@ -50,26 +49,26 @@ public class FileTypeUtil {
 	
 	public static String getMagicFileType(File f) throws IOException {
 		byte[] buffer = new byte[BUFFER_SIZE];
-		InputStream in = new FileInputStream(f);
-		try {
+		try (InputStream in = new FileInputStream(f))
+		{
 			int n = in.read(buffer, 0, BUFFER_SIZE);
 			int m = n;
-			while ((m < MAX_SIGNATURE_SIZE) && (n > 0)) {
+			while ((m < MAX_SIGNATURE_SIZE) && (n > 0))
+			{
 				n = in.read(buffer, m, BUFFER_SIZE - m);
 				m += n;
 			}
 
 			String fileType = "UNKNOWN";
-			for (Iterator<String> i = signatureMap.keySet().iterator(); i.hasNext();) {
-				String key = i.next();
-				if (matchesSignature(signatureMap.get(key), buffer, m)) {
+			for (String key : signatureMap.keySet())
+			{
+				if (matchesSignature(signatureMap.get(key), buffer, m))
+				{
 					fileType = key;
 					break;
 				}
 			}
 			return fileType;
-		} finally {
-			in.close();
 		}
 	}
 

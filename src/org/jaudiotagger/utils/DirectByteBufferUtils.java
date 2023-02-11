@@ -13,10 +13,10 @@ import java.util.logging.Logger;
  * <p/>
  * The release method was taken from research in the following places:
  * <ul>
- * <li>http://bugs.java.com/view_bug.do?bug_id=4724038</li>
- * <li>http://stackoverflow.com/questions/2972986/how-to-unmap-a-file-from-memory-mapped-using-filechannel-in-java</li>
- * <li>https://bitbucket.org/vladimir.dolzhenko/gflogger/src/366fd4ee0689/core/src/main/java/org/gflogger/util/DirectBufferUtils.java</li>
- * <li>https://sourceforge.net/p/tuer/code/HEAD/tree/pre_beta/src/main/java/engine/misc/DeallocationHelper.java</li>
+ * <li><a href="http://bugs.java.com/view_bug.do?bug_id=4724038">...</a></li>
+ * <li><a href="http://stackoverflow.com/questions/2972986/how-to-unmap-a-file-from-memory-mapped-using-filechannel-in-java">...</a></li>
+ * <li><a href="https://bitbucket.org/vladimir.dolzhenko/gflogger/src/366fd4ee0689/core/src/main/java/org/gflogger/util/DirectBufferUtils.java">...</a></li>
+ * <li><a href="https://sourceforge.net/p/tuer/code/HEAD/tree/pre_beta/src/main/java/engine/misc/DeallocationHelper.java">...</a></li>
  * </ul>
  *
  * @author gravelld
@@ -26,7 +26,7 @@ public class DirectByteBufferUtils
 
     public static final Logger LOGGER = Logger.getLogger(DirectByteBufferUtils.class.getName());
 
-    private static ReleaseStrategy releaseStrategy;
+    private static final ReleaseStrategy releaseStrategy;
 
     static
     {
@@ -74,14 +74,14 @@ public class DirectByteBufferUtils
         {
             try
             {
-                final Object cleaner = cleanerMethod.invoke(bb);
+                Object cleaner = cleanerMethod.invoke(bb);
                 if (cleaner != null)
                 {
                     cleanMethod.invoke(cleaner);
                 }
                 else
                 {
-                    final Object viewedBuffer = viewedBufferMethod.invoke(bb);
+                    Object viewedBuffer = viewedBufferMethod.invoke(bb);
                     if (viewedBuffer != null)
                     {
                         release((Buffer) viewedBuffer);
@@ -170,7 +170,7 @@ public class DirectByteBufferUtils
     private static ReleaseStrategy decideReleaseStrategy()
     {
 
-        final String javaVendor = System.getProperty("java.vendor");
+        String javaVendor = System.getProperty("java.vendor");
 
         if (javaVendor.equals("Sun Microsystems Inc.") || javaVendor.equals("Oracle Corporation"))
         {
@@ -187,12 +187,12 @@ public class DirectByteBufferUtils
         }
     }
 
-    private static Method loadMethod(final String className, final String methodName)
+    private static Method loadMethod(String className, String methodName)
     {
         try
         {
-            final Class<?> clazz = Class.forName(className);
-            final Method method = clazz.getMethod(methodName);
+            Class<?> clazz = Class.forName(className);
+            Method method = clazz.getMethod(methodName);
             method.setAccessible(true);
             return method;
         }

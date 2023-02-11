@@ -67,12 +67,12 @@ public class ID3v1Iterator implements Iterator<Object>
     /**
      *
      */
-    private ID3v1Tag id3v1tag;
+    private final ID3v1Tag id3v1tag;
 
     /**
      *
      */
-    private int lastIndex = 0;
+    private static final int lastIndex = 0;
 
     /**
      * Creates a new ID3v1Iterator datatype.
@@ -143,19 +143,19 @@ public class ID3v1Iterator implements Iterator<Object>
         switch (index)
         {
             case TITLE:
-                return (id3v1tag.title.length() > 0) || hasNext(index + 1);
+                return (!id3v1tag.title.isEmpty()) || hasNext(index + 1);
 
             case ARTIST:
-                return (id3v1tag.artist.length() > 0) || hasNext(index + 1);
+                return (!id3v1tag.artist.isEmpty()) || hasNext(index + 1);
 
             case ALBUM:
-                return (id3v1tag.album.length() > 0) || hasNext(index + 1);
+                return (!id3v1tag.album.isEmpty()) || hasNext(index + 1);
 
             case COMMENT:
-                return (id3v1tag.comment.length() > 0) || hasNext(index + 1);
+                return (!id3v1tag.comment.isEmpty()) || hasNext(index + 1);
 
             case YEAR:
-                return (id3v1tag.year.length() > 0) || hasNext(index + 1);
+                return (!id3v1tag.year.isEmpty()) || hasNext(index + 1);
 
             case GENRE:
                 return (id3v1tag.genre >= (byte) 0) || hasNext(index + 1);
@@ -182,19 +182,19 @@ public class ID3v1Iterator implements Iterator<Object>
         switch (lastIndex)
         {
             case 0:
-                return (id3v1tag.title.length() > 0) ? id3v1tag.title : next(index + 1);
+                return (!id3v1tag.title.isEmpty()) ? id3v1tag.title : next(index + 1);
 
             case TITLE:
-                return (id3v1tag.artist.length() > 0) ? id3v1tag.artist : next(index + 1);
+                return (!id3v1tag.artist.isEmpty()) ? id3v1tag.artist : next(index + 1);
 
             case ARTIST:
-                return (id3v1tag.album.length() > 0) ? id3v1tag.album : next(index + 1);
+                return (!id3v1tag.album.isEmpty()) ? id3v1tag.album : next(index + 1);
 
             case ALBUM:
-                return (id3v1tag.comment.length() > 0) ? id3v1tag.comment : next(index + 1);
+                return (!id3v1tag.comment.isEmpty()) ? id3v1tag.comment : next(index + 1);
 
             case COMMENT:
-                return (id3v1tag.year.length() > 0) ? id3v1tag.year : next(index + 1);
+                return (!id3v1tag.year.isEmpty()) ? id3v1tag.year : next(index + 1);
 
             case YEAR:
                 return (id3v1tag.genre >= (byte) 0) ? id3v1tag.genre : next(index + 1);

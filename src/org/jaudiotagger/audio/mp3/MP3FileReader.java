@@ -19,12 +19,12 @@ import java.io.RandomAccessFile;
  */
 public class MP3FileReader extends AudioFileReader
 {
-    protected GenericAudioHeader getEncodingInfo(RandomAccessFile raf) throws CannotReadException, IOException
+    protected GenericAudioHeader getEncodingInfo(RandomAccessFile raf) throws IOException
     {
         throw new RuntimeException("MP3FileReader.getEncodingInfo should be called");
     }
 
-    protected Tag getTag(RandomAccessFile raf) throws CannotReadException, IOException
+    protected Tag getTag(RandomAccessFile raf) throws IOException
     {
         throw new RuntimeException("MP3FileReader.getEncodingInfo should be called");
     }

@@ -24,7 +24,7 @@ public abstract class TextChunk extends Chunk
      * @param chunkData The buffer from which the AIFF data are being read
      * @param aiffAudioHeader aiff header                 
      */
-    public TextChunk(final ChunkHeader chunkHeader, final ByteBuffer chunkData, final AiffAudioHeader aiffAudioHeader)
+    public TextChunk(ChunkHeader chunkHeader, ByteBuffer chunkData, AiffAudioHeader aiffAudioHeader)
     {
         super(chunkData, chunkHeader);
         this.aiffAudioHeader = aiffAudioHeader;

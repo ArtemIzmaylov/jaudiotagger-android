@@ -32,10 +32,10 @@ import java.util.logging.Level;
 public abstract class AbstractDataTypeList<T extends AbstractDataType> extends AbstractDataType
 {
 
-    public AbstractDataTypeList(final String identifier, final AbstractTagFrameBody frameBody)
+    public AbstractDataTypeList(String identifier, AbstractTagFrameBody frameBody)
     {
         super(identifier, frameBody);
-        setValue(new ArrayList<T>());
+        setValue(new ArrayList<>());
     }
 
     /**
@@ -46,7 +46,7 @@ public abstract class AbstractDataTypeList<T extends AbstractDataType> extends A
      *
      * @param copy instance
      */
-    protected AbstractDataTypeList(final AbstractDataTypeList<T> copy)
+    protected AbstractDataTypeList(AbstractDataTypeList<T> copy)
     {
         super(copy);
     }
@@ -57,9 +57,9 @@ public abstract class AbstractDataTypeList<T extends AbstractDataType> extends A
         return (List<T>)super.getValue();
     }
 
-    public void setValue(final List<T> list)
+    public void setValue(List<T> list)
     {
-        super.setValue(list == null ? new ArrayList<T>() : new ArrayList<T>(list));
+        super.setValue(list == null ? new ArrayList<T>() : new ArrayList<>(list));
     }
 
     /**
@@ -70,7 +70,7 @@ public abstract class AbstractDataTypeList<T extends AbstractDataType> extends A
     public int getSize()
     {
         int size = 0;
-        for (final T t : getValue()) {
+        for (T t : getValue()) {
             size+=t.getSize();
         }
         return size;
@@ -84,7 +84,7 @@ public abstract class AbstractDataTypeList<T extends AbstractDataType> extends A
      * @throws NullPointerException
      * @throws IndexOutOfBoundsException
      */
-    public void readByteArray(final byte[] buffer, final int offset) throws InvalidDataTypeException
+    public void readByteArray(byte[] buffer, int offset) throws InvalidDataTypeException
     {
         if (buffer == null)
         {
@@ -103,7 +103,7 @@ public abstract class AbstractDataTypeList<T extends AbstractDataType> extends A
             return;
         }
         for (int currentOffset = offset; currentOffset<buffer.length;) {
-            final T data = createListElement();
+            T data = createListElement();
             data.readByteArray(buffer, currentOffset);
             data.setBody(frameBody);
             getValue().add(data);
@@ -130,10 +130,10 @@ public abstract class AbstractDataTypeList<T extends AbstractDataType> extends A
         {
             logger.config("Writing DataTypeList " + this.getIdentifier());
         }
-        final byte[] buffer = new byte[getSize()];
+        byte[] buffer = new byte[getSize()];
         int offset = 0;
-        for (final AbstractDataType data : getValue()) {
-            final byte[] bytes = data.writeByteArray();
+        for (AbstractDataType data : getValue()) {
+            byte[] bytes = data.writeByteArray();
             System.arraycopy(bytes, 0, buffer, offset, bytes.length);
             offset+=bytes.length;
         }

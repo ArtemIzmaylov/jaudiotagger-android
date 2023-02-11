@@ -9,7 +9,7 @@ public enum FileSystemMessage
     PERMISSION_DENIED("Permission denied"),	// message from a *nix OS
 
     ;
-    String msg;
+    final String msg;
 
     FileSystemMessage(String msg)
     {

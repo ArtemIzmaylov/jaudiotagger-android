@@ -48,10 +48,7 @@ public class Mp4GenreField extends Mp4TagTextNumberField
         Integer id3GenreId = GenreTypes.getInstanceOf().getIdForValue(genreId);
         if (id3GenreId != null)
         {
-            if (id3GenreId <= GenreTypes.getMaxStandardGenreId())
-            {
-                return true;
-            }
+            return id3GenreId <= GenreTypes.getMaxStandardGenreId();
         }
         return false;
     }
@@ -71,12 +68,12 @@ public class Mp4GenreField extends Mp4TagTextNumberField
             short genreVal = Short.parseShort(genreId);
             if (genreVal <= GenreTypes.getMaxStandardGenreId())
             {
-                numbers = new ArrayList<Short>();
+                numbers = new ArrayList<>();
                 numbers.add(++genreVal);
                 return;
             }
             //Default
-            numbers = new ArrayList<Short>();
+            numbers = new ArrayList<>();
             numbers.add((short) (1));
             return;
         }
@@ -91,12 +88,12 @@ public class Mp4GenreField extends Mp4TagTextNumberField
         {
             if (id3GenreId <= GenreTypes.getMaxStandardGenreId())
             {
-                numbers = new ArrayList<Short>();
+                numbers = new ArrayList<>();
                 numbers.add((short) (id3GenreId + 1));
                 return;
             }
         }
-        numbers = new ArrayList<Short>();
+        numbers = new ArrayList<>();
         numbers.add((short) (1));
     }
 
@@ -109,7 +106,7 @@ public class Mp4GenreField extends Mp4TagTextNumberField
 
         numbers = databox.getNumbers();
 
-        if(numbers!=null && numbers.size()>0)
+        if(numbers!=null && !numbers.isEmpty())
         {
             int genreId = numbers.get(0);
             //Get value, we have to adjust index by one because iTunes labels from one instead of zero

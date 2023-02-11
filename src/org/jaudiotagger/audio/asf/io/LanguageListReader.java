@@ -41,18 +41,18 @@ public class LanguageListReader implements ChunkReader
     /**
      * {@inheritDoc}
      */
-    public Chunk read(final GUID guid, final InputStream stream, final long streamPosition) throws IOException
+    public Chunk read(GUID guid, InputStream stream, long streamPosition) throws IOException
     {
         assert GUID.GUID_LANGUAGE_LIST.equals(guid);
-        final BigInteger chunkLen = Utils.readBig64(stream);
+        BigInteger chunkLen = Utils.readBig64(stream);
 
-        final int readUINT16 = Utils.readUINT16(stream);
+        int readUINT16 = Utils.readUINT16(stream);
 
-        final LanguageList result = new LanguageList(streamPosition, chunkLen);
+        LanguageList result = new LanguageList(streamPosition, chunkLen);
         for (int i = 0; i < readUINT16; i++)
         {
-            final int langIdLen = (stream.read() & 0xFF);
-            final String langId = Utils.readFixedSizeUTF16Str(stream, langIdLen);
+            int langIdLen = (stream.read() & 0xFF);
+            String langId = Utils.readFixedSizeUTF16Str(stream, langIdLen);
             // langIdLen = 2 bytes for each char and optionally one zero
             // termination character
             assert langId.length() == langIdLen / 2 - 1 || langId.length() == langIdLen / 2;

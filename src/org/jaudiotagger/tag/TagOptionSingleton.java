@@ -47,7 +47,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-public class TagOptionSingleton
+public final class TagOptionSingleton
 {
     private boolean   isWriteWavForTwonky = false;
 
@@ -114,12 +114,12 @@ public class TagOptionSingleton
     /**
      *
      */
-    private static HashMap<String, TagOptionSingleton> tagOptionTable = new HashMap<String, TagOptionSingleton>();
+    private static final HashMap<String, TagOptionSingleton> tagOptionTable = new HashMap<>();
 
     /**
      *
      */
-    private static String DEFAULT = "default";
+    private static final String DEFAULT = "default";
 
     /**
      *
@@ -129,23 +129,23 @@ public class TagOptionSingleton
     /**
      *
      */
-    private HashMap<Class<? extends ID3v24FrameBody>, LinkedList<String>> keywordMap = new HashMap<Class<? extends ID3v24FrameBody>, LinkedList<String>>();
+    private HashMap<Class<? extends ID3v24FrameBody>, LinkedList<String>> keywordMap = new HashMap<>();
 
     /**
      * Map of lyric ID's to Boolean objects if we should or should not save the
      * specific lyrics3 field. Defaults to true.
      */
-    private HashMap<String, Boolean> lyrics3SaveFieldMap = new HashMap<String, Boolean>();
+    private HashMap<String, Boolean> lyrics3SaveFieldMap = new HashMap<>();
 
     /**
      * parenthesis map stuff
      */
-    private HashMap<String, String> parenthesisMap = new HashMap<String, String>();
+    private HashMap<String, String> parenthesisMap = new HashMap<>();
 
     /**
      * <code>HashMap</code> listing words to be replaced if found
      */
-    private HashMap<String, String> replaceWordMap = new HashMap<String, String>();
+    private HashMap<String, String> replaceWordMap = new HashMap<>();
 
 
     /**
@@ -660,7 +660,7 @@ public class TagOptionSingleton
      *
      * @param id3v2ITunes12_6WorkGroupingMode {@code true} or {@code false}.
      */
-    public void setId3v2ITunes12_6WorkGroupingMode(final boolean id3v2ITunes12_6WorkGroupingMode)
+    public void setId3v2ITunes12_6WorkGroupingMode(boolean id3v2ITunes12_6WorkGroupingMode)
     {
         boolean oldMode = this.id3v2ITunes12_6WorkGroupingMode;
         if (oldMode != id3v2ITunes12_6WorkGroupingMode)
@@ -914,7 +914,7 @@ public class TagOptionSingleton
         isWriteWavForTwonky = false;
         wavOptions = WavOptions.READ_ID3_UNLESS_ONLY_INFO;
         wavSaveOptions = WavSaveOptions.SAVE_BOTH;
-        keywordMap = new HashMap<Class<? extends ID3v24FrameBody>, LinkedList<String>>();
+        keywordMap = new HashMap<>();
         filenameTagSave = false;
         id3v1Save = true;
         id3v1SaveAlbum = true;
@@ -931,10 +931,10 @@ public class TagOptionSingleton
         lyrics3KeepEmptyFieldIfRead = false;
         lyrics3Save = true;
         lyrics3SaveEmptyField = false;
-        lyrics3SaveFieldMap = new HashMap<String, Boolean>();
+        lyrics3SaveFieldMap = new HashMap<>();
         numberMP3SyncFrame = 3;
-        parenthesisMap = new HashMap<String, String>();
-        replaceWordMap = new HashMap<String, String>();
+        parenthesisMap = new HashMap<>();
+        replaceWordMap = new HashMap<>();
         timeStampFormat = 2;
         unsyncTags = false;
         removeTrailingTerminatorOnWrite = true;
@@ -1051,13 +1051,13 @@ public class TagOptionSingleton
             throw new TagException("Invalid class type. Must be AbstractId3v2FrameBody " + id3v2FrameBodyClass);
         }
 
-        if ((keyword != null) && (keyword.length() > 0))
+        if ((keyword != null) && (!keyword.isEmpty()))
         {
             LinkedList<String> keywordList;
 
             if (!keywordMap.containsKey(id3v2FrameBodyClass))
             {
-                keywordList = new LinkedList<String>();
+                keywordList = new LinkedList<>();
                 keywordMap.put(id3v2FrameBodyClass, keywordList);
             }
             else
@@ -1390,7 +1390,7 @@ public class TagOptionSingleton
      * @param preserveFileIdentity {@code true} or {@code false}
      * @see #isPreserveFileIdentity()
      */
-    public void setPreserveFileIdentity(final boolean preserveFileIdentity) {
+    public void setPreserveFileIdentity(boolean preserveFileIdentity) {
         this.preserveFileIdentity = preserveFileIdentity;
     }
 

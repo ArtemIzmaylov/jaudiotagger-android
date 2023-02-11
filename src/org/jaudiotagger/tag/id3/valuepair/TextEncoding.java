@@ -39,7 +39,7 @@ import java.util.Map;
  * marks, in JAudioTagger we always implement it as UTF16LE because only this order
  * is understood in Windows, OSX seem to understand both.
  */
-public class TextEncoding extends AbstractIntStringValuePair
+public final class TextEncoding extends AbstractIntStringValuePair
 {
 
     //Supported ID3 charset ids
@@ -77,7 +77,7 @@ public class TextEncoding extends AbstractIntStringValuePair
         idToCharset.put((int) UTF_16BE, StandardCharsets.UTF_16BE);
         idToCharset.put((int) UTF_8, StandardCharsets.UTF_8);
 
-        for (final Map.Entry<Integer, Charset> e : idToCharset.entrySet()) {
+        for (Map.Entry<Integer, Charset> e : idToCharset.entrySet()) {
             idToValue.put(e.getKey(), e.getValue().name());
         }
 
@@ -90,7 +90,7 @@ public class TextEncoding extends AbstractIntStringValuePair
      * @param charset charset
      * @return id, e.g. {@link #ISO_8859_1}, or {@code null}, if not found
      */
-    public Integer getIdForCharset(final Charset charset)
+    public Integer getIdForCharset(Charset charset)
     {
         return valueToId.get(charset.name());
     }
@@ -101,7 +101,7 @@ public class TextEncoding extends AbstractIntStringValuePair
      * @param id id, e.g. {@link #ISO_8859_1}
      * @return charset or {@code null}, if not found
      */
-    public Charset getCharsetForId(final int id)
+    public Charset getCharsetForId(int id)
     {
         return idToCharset.get(id);
     }

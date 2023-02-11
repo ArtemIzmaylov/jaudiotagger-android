@@ -29,7 +29,7 @@ import java.util.Map;
  * @author Paul Taylor
  * @version $Id$
  */
-public class ID3v22Frames extends ID3Frames
+public final class ID3v22Frames extends ID3Frames
 {
     //V2 Frames (only 3 chars)
     public static final String FRAME_ID_V2_ACCOMPANIMENT = "TP2";
@@ -114,12 +114,12 @@ public class ID3v22Frames extends ID3Frames
     /**
      * Maps from Generic key to ID3 key
      */
-    protected EnumMap<FieldKey, ID3v22FieldKey> tagFieldToId3 = new EnumMap<FieldKey, ID3v22FieldKey>(FieldKey.class);
+    protected final EnumMap<FieldKey, ID3v22FieldKey> tagFieldToId3 = new EnumMap<>(FieldKey.class);
 
     /**
      * Maps from ID3 key to Generic key
      */
-    protected EnumMap<ID3v22FieldKey, FieldKey> id3ToTagField = new EnumMap<ID3v22FieldKey,FieldKey>(ID3v22FieldKey.class);
+    protected final EnumMap<ID3v22FieldKey, FieldKey> id3ToTagField = new EnumMap<>(ID3v22FieldKey.class);
 
 
     public static ID3v22Frames getInstanceOf()
@@ -512,7 +512,7 @@ public class ID3v22Frames extends ID3Frames
     }
 
     @Override
-    public void setITunes12_6WorkGroupingMode(final boolean on)
+    public void setITunes12_6WorkGroupingMode(boolean on)
     {
         if (on) {
             tagFieldToId3.put(FieldKey.WORK, ID3v22FieldKey.GROUPING);

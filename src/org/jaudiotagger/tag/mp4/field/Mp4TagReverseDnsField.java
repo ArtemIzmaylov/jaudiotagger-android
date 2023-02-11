@@ -81,7 +81,7 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField
      * @param identifier
      * @param content
      */
-    public Mp4TagReverseDnsField(final String fieldName, final String issuer, final String identifier, final String content)
+    public Mp4TagReverseDnsField(String fieldName, String issuer, String identifier, String content)
     {
         super(fieldName);
         this.issuer     = issuer;
@@ -190,7 +190,7 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField
             baos.write(nameRawData);
 
             //Create DataBox data if we have data only
-            if (content.length() > 0)
+            if (!content.isEmpty())
             {
                 baos.write(getRawContentDataOnly());
             }
@@ -242,7 +242,7 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField
     @Override
     public boolean isEmpty()
     {
-        return "".equals(this.content.trim());
+        return this.content.trim().isEmpty();
     }
 
     @Override

@@ -29,7 +29,7 @@ public enum Tagger
     MINIMSERVER(18,"MinimServer"),
     ;
 
-    private String desc;
+    private final String desc;
 
     Tagger(int compatability,String desc)
     {

@@ -22,7 +22,7 @@ public class AsfTagTextField extends AsfTagField implements TagTextField {
      * @param value
      *            the value to assign.
      */
-    public AsfTagTextField(final AsfFieldKey field, final String value) {
+    public AsfTagTextField(AsfFieldKey field, String value) {
         super(field);
         toWrap.setString(value);
     }
@@ -34,7 +34,7 @@ public class AsfTagTextField extends AsfTagField implements TagTextField {
      *            The metadata descriptor, whose content is published.<br>
      *            Must not be of type {@link MetadataDescriptor#TYPE_BINARY}.
      */
-    public AsfTagTextField(final MetadataDescriptor source) {
+    public AsfTagTextField(MetadataDescriptor source) {
         super(source);
         if (source.getType() == MetadataDescriptor.TYPE_BINARY) {
             throw new IllegalArgumentException(
@@ -50,7 +50,7 @@ public class AsfTagTextField extends AsfTagField implements TagTextField {
      * @param value
      *            the value to assign.
      */
-    public AsfTagTextField(final String fieldKey, final String value) {
+    public AsfTagTextField(String fieldKey, String value) {
         super(fieldKey);
         toWrap.setString(value);
     }
@@ -74,12 +74,12 @@ public class AsfTagTextField extends AsfTagField implements TagTextField {
     }
 
     @Override
-    public void setContent(final String content) {
+    public void setContent(String content) {
         getDescriptor().setString(content);
     }
 
     @Override
-    public void setEncoding(final Charset encoding) {
+    public void setEncoding(Charset encoding) {
         if (!AsfHeader.ASF_CHARSET.equals(encoding)) {
             throw new IllegalArgumentException(
                     "Only UTF-16LE is possible with ASF.");

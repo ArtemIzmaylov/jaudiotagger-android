@@ -25,7 +25,6 @@ import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.logging.ErrorMessage;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
@@ -53,7 +52,7 @@ import java.util.logging.Logger;
 public class Mp4BoxHeader
 {
     // Logger Object
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.mp4.atom");
+    public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.mp4.atom");
 
     public static final int OFFSET_POS = 0;
     public static final int IDENTIFIER_POS = 4;
@@ -99,19 +98,11 @@ public class Mp4BoxHeader
             throw new RuntimeException("Invalid length:atom idenifier should always be 4 characters long");
         }
         dataBuffer = ByteBuffer.allocate(HEADER_LENGTH);
-        try
-        {
-            this.id    = id;
-            dataBuffer.put(4, id.getBytes("ISO-8859-1")[0]);
-            dataBuffer.put(5, id.getBytes("ISO-8859-1")[1]);
-            dataBuffer.put(6, id.getBytes("ISO-8859-1")[2]);
-            dataBuffer.put(7, id.getBytes("ISO-8859-1")[3]);
-        }
-        catch(UnsupportedEncodingException uee)
-        {
-            //Should never happen
-            throw new RuntimeException(uee);
-        }
+        this.id    = id;
+        dataBuffer.put(4, id.getBytes(org.jaudiotagger.StandardCharsets.ISO_8859_1)[0]);
+        dataBuffer.put(5, id.getBytes(org.jaudiotagger.StandardCharsets.ISO_8859_1)[1]);
+        dataBuffer.put(6, id.getBytes(org.jaudiotagger.StandardCharsets.ISO_8859_1)[2]);
+        dataBuffer.put(7, id.getBytes(org.jaudiotagger.StandardCharsets.ISO_8859_1)[3]);
     }
 
     /**

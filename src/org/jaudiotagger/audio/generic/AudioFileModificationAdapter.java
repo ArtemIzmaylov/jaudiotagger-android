@@ -37,7 +37,7 @@ public class AudioFileModificationAdapter implements AudioFileModificationListen
      * @see org.jaudiotagger.audio.generic.AudioFileModificationListener#fileModified(org.jaudiotagger.audio.AudioFile,
      *File)
      */
-    public void fileModified(AudioFile original, File temporary) throws ModifyVetoException
+    public void fileModified(AudioFile original, File temporary)
     {
         // Nothing to do
     }
@@ -58,7 +58,7 @@ public class AudioFileModificationAdapter implements AudioFileModificationListen
      * @see org.jaudiotagger.audio.generic.AudioFileModificationListener#fileWillBeModified(org.jaudiotagger.audio.AudioFile,
      *boolean)
      */
-    public void fileWillBeModified(AudioFile file, boolean delete) throws ModifyVetoException
+    public void fileWillBeModified(AudioFile file, boolean delete)
     {
         // Nothing to do
     }

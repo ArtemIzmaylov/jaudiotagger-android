@@ -51,11 +51,16 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
     private boolean monthOnly = false;
     private boolean hoursOnly = false;
 
-    private static SimpleDateFormat formatYearIn, formatYearOut;
-    private static SimpleDateFormat formatDateIn, formatDateOut, formatMonthOut;
-    private static SimpleDateFormat formatTimeIn, formatTimeOut, formatHoursOut;
+    private static final SimpleDateFormat formatYearIn;
+    private static final SimpleDateFormat formatYearOut;
+    private static final SimpleDateFormat formatDateIn;
+    private static final SimpleDateFormat formatDateOut;
+    private static final SimpleDateFormat formatMonthOut;
+    private static final SimpleDateFormat formatTimeIn;
+    private static final SimpleDateFormat formatTimeOut;
+    private static final SimpleDateFormat formatHoursOut;
 
-    private static final List<SimpleDateFormat> formatters = new ArrayList<SimpleDateFormat>();
+    private static final List<SimpleDateFormat> formatters = new ArrayList<>();
 
     private static final int PRECISION_SECOND = 0;
     private static final int PRECISION_MINUTE = 1;
@@ -145,7 +150,7 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
 
     public String getFormattedText()
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         if (originalID == null)
         {
             return this.getText();
@@ -156,7 +161,7 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
             {
                sb.append(formatAndParse(formatYearOut,formatYearIn,year));
             }
-            if (!date.equals(""))
+            if (!date.isEmpty())
             {
                 if(isMonthOnly())
                 {
@@ -167,7 +172,7 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
                     sb.append(formatAndParse(formatDateOut,formatDateIn,date));
                 }
             }
-            if (!time.equals(""))
+            if (!time.isEmpty())
             {
                 if(isHoursOnly())
                 {
@@ -372,7 +377,7 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
      */
     //TODO currently if user has entered Year and Month, we only store in v23, should we store month with 
     //first day
-    private void extractID3v23Formats(final Date dateRecord, final int precision)
+    private void extractID3v23Formats(Date dateRecord, int precision)
     {
         logger.fine("Precision is:"+precision+"for date:"+dateRecord.toString());
         Date d = dateRecord;

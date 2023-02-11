@@ -39,8 +39,8 @@ import static org.jaudiotagger.StandardCharsets.US_ASCII;
  */
 public class Utils
 {
-    public  static int BITS_IN_BYTE_MULTIPLIER = 8;
-    public static int KILOBYTE_MULTIPLIER = 1000;
+    public  static final int BITS_IN_BYTE_MULTIPLIER = 8;
+    public static final int KILOBYTE_MULTIPLIER = 1000;
 
     private static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.generic.utils");
     private static final int MAX_BASE_TEMP_FILENAME_LENGTH = 20;
@@ -53,10 +53,10 @@ public class Utils
      * @param f The file whose extension is requested
      * @return The extension of the given file
      */
-    public static String getExtension(final File f)
+    public static String getExtension(File f)
     {
-        final String name = f.getName().toLowerCase();
-        final int i = name.lastIndexOf(".");
+        String name = f.getName().toLowerCase();
+        int i = name.lastIndexOf(".");
         if (i == -1)
         {
             return "";
@@ -72,8 +72,8 @@ public class Utils
      * @param f The file whose extension is requested
      * @return The extension of the given file
      */
-	public static String getMagicExtension(final File f) throws IOException{
-		final String fileType = FileTypeUtil.getMagicFileType(f);
+	public static String getMagicExtension(File f) throws IOException{
+		String fileType = FileTypeUtil.getMagicFileType(f);
 		return FileTypeUtil.getMagicExt(fileType);
 	}
 
@@ -89,7 +89,7 @@ public class Utils
      * @return a long number represented by the byte sequence.
      *
      */
-    public static long getLongLE(final ByteBuffer b, final int start, final int end)
+    public static long getLongLE(ByteBuffer b, int start, int end)
     {
         long number = 0;
         for (int i = 0; i < (end - start + 1); i++)
@@ -109,7 +109,7 @@ public class Utils
      *
      * Will fail if end - start >= 8, due to the limitations of the long type.
      */
-    public static long getLongBE(final ByteBuffer b, final int start, final int end)
+    public static long getLongBE(ByteBuffer b, int start, int end)
     {
         long number = 0;
         for (int i = 0; i < (end - start + 1); i++)
@@ -127,7 +127,7 @@ public class Utils
      *
      * @param b The byte array. Maximum length for valid results is 4 bytes.
      */
-    public static int getIntLE(final byte[] b)
+    public static int getIntLE(byte[] b)
     {
         return (int) getLongLE(ByteBuffer.wrap(b), 0, b.length - 1);
     }
@@ -145,7 +145,7 @@ public class Utils
      *
      * @return a int number represented by the byte sequence.
      */
-    public static int getIntLE(final byte[] b, final int start, final int end)
+    public static int getIntLE(byte[] b, int start, int end)
     {
         return (int) getLongLE(ByteBuffer.wrap(b), start, end);
     }
@@ -163,7 +163,7 @@ public class Utils
      *
      * @return an int number represented by the byte sequence.
      */
-    public static int getIntBE(final ByteBuffer b, final int start, final int end)
+    public static int getIntBE(ByteBuffer b, int start, int end)
     {
         return (int) getLongBE(b, start, end);
     }
@@ -181,7 +181,7 @@ public class Utils
      *
      * @return a short number represented by the byte sequence.
      */
-    public static short getShortBE(final ByteBuffer b, final int start, final int end)
+    public static short getShortBE(ByteBuffer b, int start, int end)
     {
         return (short) getIntBE(b, start, end);
     }
@@ -192,9 +192,9 @@ public class Utils
      * @param size
      * @return byte representation
      */
-    public static byte[] getSizeBEInt32(final int size)
+    public static byte[] getSizeBEInt32(int size)
     {
-        final byte[] b = new byte[4];
+        byte[] b = new byte[4];
         b[0] = (byte) ((size >> 24) & 0xFF);
         b[1] = (byte) ((size >> 16) & 0xFF);
         b[2] = (byte) ((size >> 8) & 0xFF);
@@ -208,9 +208,9 @@ public class Utils
      * @param size  number to convert
      * @return byte representation
      */
-    public static byte[] getSizeBEInt16(final short size)
+    public static byte[] getSizeBEInt16(short size)
     {
-        final byte[] b = new byte[2];
+        byte[] b = new byte[2];
         b[0] = (byte) ((size >> 8) & 0xFF);
         b[1] = (byte) (size & 0xFF);
         return b;
@@ -222,9 +222,9 @@ public class Utils
      * @param size   number to convert
      * @return byte representation
      */
-    public static byte[] getSizeLEInt32(final int size)
+    public static byte[] getSizeLEInt32(int size)
     {
-        final byte[] b = new byte[4];
+        byte[] b = new byte[4];
         b[0] = (byte) (size & 0xff);
         b[1] = (byte) ((size >>> 8) & 0xffL);
         b[2] = (byte) ((size >>> 16) & 0xffL);
@@ -240,9 +240,9 @@ public class Utils
      * @return
      * @throws IOException
      */
-    public static String readPascalString(final ByteBuffer bb) throws IOException {
-        final int len = Utils.u(bb.get()); //Read as unsigned value
-        final byte[] buf = new byte[len];
+    public static String readPascalString(ByteBuffer bb) throws IOException {
+        int len = Utils.u(bb.get()); //Read as unsigned value
+        byte[] buf = new byte[len];
         bb.get(buf);
         return new String(buf, 0, len, ISO_8859_1);
     }
@@ -256,9 +256,9 @@ public class Utils
      * @param encoding
      * @return
      */
-    public static String getString(final ByteBuffer buffer, final int offset, final int length, final Charset encoding)
+    public static String getString(ByteBuffer buffer, int offset, int length, Charset encoding)
     {
-        final byte[] b = new byte[length];
+        byte[] b = new byte[length];
         buffer.position(buffer.position() + offset);
         buffer.get(b);
         return new String(b, 0, length, encoding);
@@ -271,9 +271,9 @@ public class Utils
      * @param encoding
      * @return
      */
-    public static String getString(final ByteBuffer buffer, final Charset encoding)
+    public static String getString(ByteBuffer buffer, Charset encoding)
     {
-        final byte[] b = new byte[buffer.remaining()];
+        byte[] b = new byte[buffer.remaining()];
         buffer.get(b);
         return new String(b, 0, b.length, encoding);
     }
@@ -283,9 +283,9 @@ public class Utils
      *
      * Reads 4 bytes but returns as long
      */
-    public static long readUint32(final DataInput di) throws IOException
+    public static long readUint32(DataInput di) throws IOException
     {
-        final byte[] buf8 = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+        byte[] buf8 = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
         di.readFully(buf8, 4, 4);
         return ByteBuffer.wrap(buf8).getLong();
     }
@@ -295,9 +295,9 @@ public class Utils
      *
      * Reads 2 bytes but returns as an integer
      */
-    public static int readUint16(final DataInput di) throws IOException
+    public static int readUint16(DataInput di) throws IOException
     {
-        final byte[] buf = {0x00, 0x00, 0x00, 0x00};
+        byte[] buf = {0x00, 0x00, 0x00, 0x00};
         di.readFully(buf, 2, 2);
         return ByteBuffer.wrap(buf).getInt();
     }
@@ -306,9 +306,9 @@ public class Utils
     /**
      * Read a string of a specified number of ASCII bytes.
      */
-    public static String readString(final DataInput di, final int charsToRead) throws IOException
+    public static String readString(DataInput di, int charsToRead) throws IOException
     {
-        final byte[] buf = new byte[charsToRead];
+        byte[] buf = new byte[charsToRead];
         di.readFully(buf);
         return new String(buf, US_ASCII);
     }
@@ -321,9 +321,9 @@ public class Utils
      * @param file
      * @return
      */
-    public static String getBaseFilenameForTempFile(final File file)
+    public static String getBaseFilenameForTempFile(File file)
     {
-        final String filename = getMinBaseFilenameAllowedForTempFile(file);
+        String filename = getMinBaseFilenameAllowedForTempFile(file);
         if(filename.length()<= MAX_BASE_TEMP_FILENAME_LENGTH)
         {
            return filename;
@@ -336,9 +336,9 @@ public class Utils
      * @return filename with audioformat separator stripped of, lengthened to ensure not too small for valid tempfile
      *         creation.
      */
-    public static String getMinBaseFilenameAllowedForTempFile(final File file)
+    public static String getMinBaseFilenameAllowedForTempFile(File file)
     {
-        final String s = AudioFile.getBaseFilename(file);
+        String s = AudioFile.getBaseFilename(file);
         if (s.length() >= 3)
         {
             return s;
@@ -365,7 +365,7 @@ public class Utils
      * @param toFile
      * @return
      */
-    public static boolean rename(final File fromFile, final File toFile)
+    public static boolean rename(File fromFile, File toFile)
     {
         logger.log(Level.CONFIG,"Renaming From:"+fromFile.getAbsolutePath() + " to "+toFile.getAbsolutePath());
 
@@ -376,7 +376,7 @@ public class Utils
         }
 
         //Rename File, could fail because being  used or because trying to rename over filesystems
-        final boolean result = fromFile.renameTo(toFile);
+        boolean result = fromFile.renameTo(toFile);
         if (!result)
         {
             // Might be trying to rename over filesystem, so try copy and delete instead
@@ -411,7 +411,7 @@ public class Utils
      * @return <code>true</code> if and only if the renaming succeeded;
      *         <code>false</code> otherwise
      */
-    public static boolean copy(final File fromFile, final File toFile)
+    public static boolean copy(File fromFile, File toFile)
     {
         try
         {
@@ -433,7 +433,7 @@ public class Utils
      * @return
      * @throws IOException
      */
-    public static String readFourBytesAsChars(final ByteBuffer bytes)
+    public static String readFourBytesAsChars(ByteBuffer bytes)
     {
         byte[] b = new byte[4];
         bytes.get(b);
@@ -447,7 +447,7 @@ public class Utils
      * @param bytes
      * @return
      */
-    public static String readThreeBytesAsChars(final ByteBuffer bytes)
+    public static String readThreeBytesAsChars(ByteBuffer bytes)
     {
         byte[] b = new byte[3];
         bytes.get(b);
@@ -461,9 +461,9 @@ public class Utils
      * @param n
      * @return
      */
-    public static long u(final int n)
+    public static long u(int n)
     {
-        return n & 0xffffffffl;
+        return n & 0xffffffffL;
     }
 
     /**
@@ -472,7 +472,7 @@ public class Utils
      * @param n
      * @return
      */
-    public static int u(final short n)
+    public static int u(short n)
     {
         return n & 0xffff;
     }
@@ -484,7 +484,7 @@ public class Utils
      * @param n
      * @return
      */
-    public static int u(final byte n)
+    public static int u(byte n)
     {
         return n & 0xff;
     }
@@ -496,9 +496,9 @@ public class Utils
      * @return
      * @throws IOException
      */
-    public static ByteBuffer readFileDataIntoBufferLE(FileChannel fc, final int size) throws IOException
+    public static ByteBuffer readFileDataIntoBufferLE(FileChannel fc, int size) throws IOException
     {
-        final ByteBuffer tagBuffer = ByteBuffer.allocateDirect(size);
+        ByteBuffer tagBuffer = ByteBuffer.allocateDirect(size);
         fc.read(tagBuffer);
         tagBuffer.position(0);
         tagBuffer.order(ByteOrder.LITTLE_ENDIAN);
@@ -512,9 +512,9 @@ public class Utils
      * @return
      * @throws IOException
      */
-    public static ByteBuffer readFileDataIntoBufferBE(FileChannel fc, final int size) throws IOException
+    public static ByteBuffer readFileDataIntoBufferBE(FileChannel fc, int size) throws IOException
     {
-        final ByteBuffer tagBuffer = ByteBuffer.allocateDirect(size);
+        ByteBuffer tagBuffer = ByteBuffer.allocateDirect(size);
         fc.read(tagBuffer);
         tagBuffer.position(0);
         tagBuffer.order(ByteOrder.BIG_ENDIAN);
@@ -528,16 +528,16 @@ public class Utils
      *
      * @throws IOException if any error occurS
      */
-    public static void copyThrowsOnException(final File source, final File destination) throws IOException {
+    public static void copyThrowsOnException(File source, File destination) throws IOException {
         // Must be done in a loop as there's no guarantee that a request smaller than request count will complete in one invocation.
         // Setting the transfer size more than about 1MB is pretty pointless because there is no asymptotic benefit. What you're trying
         // to achieve with larger transfer sizes is fewer context switches, and every time you double the transfer size you halve the
         // context switch cost. Pretty soon it vanishes into the noise.
         try (FileInputStream inStream = new FileInputStream(source); FileOutputStream outStream = new FileOutputStream(destination))
         {
-            final FileChannel inChannel = inStream.getChannel();
-            final FileChannel outChannel = outStream.getChannel();
-            final long size = inChannel.size();
+            FileChannel inChannel = inStream.getChannel();
+            FileChannel outChannel = outStream.getChannel();
+            long size = inChannel.size();
             long position = 0;
             while (position < size)
             {
@@ -553,10 +553,6 @@ public class Utils
      */
     public static boolean isOddLength(long length)
     {
-        if ((length & 1) != 0)
-        {
-            return true;
-        }
-        return false;
+        return (length & 1) != 0;
     }
 }

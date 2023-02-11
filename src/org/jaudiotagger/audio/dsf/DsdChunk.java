@@ -10,7 +10,7 @@ import java.nio.ByteOrder;
 /**
  * DSD Chunk
  */
-public class DsdChunk
+public final class DsdChunk
 {
     private long chunkSizeLength;
     private long fileLength;

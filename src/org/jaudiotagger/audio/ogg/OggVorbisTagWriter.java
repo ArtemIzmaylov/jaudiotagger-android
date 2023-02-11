@@ -44,10 +44,10 @@ import java.util.logging.Logger;
 public class OggVorbisTagWriter
 {
     // Logger Object
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.ogg");
+    public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.ogg");
 
-    private OggVorbisCommentTagCreator tc = new OggVorbisCommentTagCreator();
-    private OggVorbisTagReader reader = new OggVorbisTagReader();
+    private final OggVorbisCommentTagCreator tc = new OggVorbisCommentTagCreator();
+    private final OggVorbisTagReader reader = new OggVorbisTagReader();
 
     public void delete(RandomAccessFile raf, RandomAccessFile tempRaf) throws IOException, CannotReadException, CannotWriteException
     {
@@ -458,7 +458,7 @@ public class OggVorbisTagWriter
         long bytesToDiscard = 0;
         while(bb.hasRemaining())
         {
-            OggPageHeader nextPage=null;
+            OggPageHeader nextPage;
             try
             {
                 nextPage = OggPageHeader.read(bb);
@@ -540,7 +540,7 @@ public class OggVorbisTagWriter
         }
 
         //Setup Header, should be closed
-        if (extraPackets.size() > 0)
+        if (!extraPackets.isEmpty())
         {
             restShouldBe = createSegments(setupHeaderLength, true);
         }
@@ -557,7 +557,7 @@ public class OggVorbisTagWriter
         {
             resultBaos.write(newStart);
             resultBaos.write(restShouldBe);
-            if (extraPackets.size() > 0)
+            if (!extraPackets.isEmpty())
             {
                 //Packets are being copied literally not converted from a length, so always pass
                 //false parameter, TODO is this statement correct
@@ -599,7 +599,7 @@ public class OggVorbisTagWriter
         try
         {
             resultBaos.write(restShouldBe);
-            if (extraPackets.size() > 0)
+            if (!extraPackets.isEmpty())
             {
                 //Packets are being copied literally not converted from a length, so always pass
                 //false parameter, TODO is this statement correct

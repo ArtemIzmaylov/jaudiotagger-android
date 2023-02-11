@@ -15,7 +15,7 @@ import java.util.Set;
 public class AggregatedFrame implements TagTextField
 {
     //TODO rather than just maintaining insertion order we want to define a preset order
-    protected Set<AbstractID3v2Frame> frames = new LinkedHashSet<AbstractID3v2Frame>();
+    protected final Set<AbstractID3v2Frame> frames = new LinkedHashSet<>();
 
     public void addFrame(AbstractID3v2Frame frame)
     {
@@ -49,7 +49,7 @@ public class AggregatedFrame implements TagTextField
      */
     public Charset getEncoding()
     {
-        final byte textEncoding = frames.iterator().next().getBody().getTextEncoding();
+        byte textEncoding = frames.iterator().next().getBody().getTextEncoding();
         return TextEncoding.getInstanceOf().getCharsetForId(textEncoding);
     }
 
@@ -102,7 +102,6 @@ public class AggregatedFrame implements TagTextField
 
     public void isBinary(boolean b)
     {
-        ;
     }
 
     public boolean isEmpty()

@@ -34,7 +34,7 @@ public class ID3v1TagField implements TagTextField
     /**
      * Stores the id (name) of the tag field. <br>
      */
-    private String id;
+    private final String id;
 
     /**
      * Creates an instance.
@@ -42,7 +42,7 @@ public class ID3v1TagField implements TagTextField
      * @param raw Raw byte data of the tagfield.
      * @throws UnsupportedEncodingException If the data doesn't conform "UTF-8" specification.
      */
-    public ID3v1TagField(final byte[] raw) throws UnsupportedEncodingException
+    public ID3v1TagField(byte[] raw) throws UnsupportedEncodingException
     {
         String field = new String(raw, StandardCharsets.ISO_8859_1);
 
@@ -75,7 +75,7 @@ public class ID3v1TagField implements TagTextField
      * @param fieldId      ID (name) of the field.
      * @param fieldContent Content of the field.
      */
-    public ID3v1TagField(final String fieldId, final String fieldContent)
+    public ID3v1TagField(String fieldId, String fieldContent)
     {
         this.id = fieldId.toUpperCase();
         this.content = fieldContent;

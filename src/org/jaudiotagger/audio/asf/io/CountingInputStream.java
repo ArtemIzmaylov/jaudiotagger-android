@@ -31,7 +31,7 @@ class CountingInputStream extends FilterInputStream
      *
      * @param stream stream to actually work with.
      */
-    public CountingInputStream(final InputStream stream)
+    public CountingInputStream(InputStream stream)
     {
         super(stream);
         this.markPos = 0;
@@ -43,7 +43,7 @@ class CountingInputStream extends FilterInputStream
      *
      * @param amountRead number of bytes to increase.
      */
-    private synchronized void bytesRead(final long amountRead)
+    private synchronized void bytesRead(long amountRead)
     {
         if (amountRead >= 0)
         {
@@ -63,7 +63,7 @@ class CountingInputStream extends FilterInputStream
      * {@inheritDoc}
      */
     @Override
-    public synchronized void mark(final int readlimit)
+    public synchronized void mark(int readlimit)
     {
         super.mark(readlimit);
         this.markPos = this.readCount;
@@ -75,7 +75,7 @@ class CountingInputStream extends FilterInputStream
     @Override
     public int read() throws IOException
     {
-        final int result = super.read();
+        int result = super.read();
         bytesRead(1);
         return result;
     }
@@ -84,9 +84,9 @@ class CountingInputStream extends FilterInputStream
      * {@inheritDoc}
      */
     @Override
-    public int read(final byte[] destination, final int off, final int len) throws IOException
+    public int read(byte[] destination, int off, int len) throws IOException
     {
-        final int result = super.read(destination, off, len);
+        int result = super.read(destination, off, len);
         bytesRead(result);
         return result;
     }
@@ -108,9 +108,9 @@ class CountingInputStream extends FilterInputStream
      * {@inheritDoc}
      */
     @Override
-    public long skip(final long amount) throws IOException
+    public long skip(long amount) throws IOException
     {
-        final long skipped = super.skip(amount);
+        long skipped = super.skip(amount);
         bytesRead(skipped);
         return skipped;
     }

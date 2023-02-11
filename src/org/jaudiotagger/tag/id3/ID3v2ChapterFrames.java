@@ -28,7 +28,7 @@ import java.util.TreeSet;
  * @author Marc Gimpel, Horizon Wimba S.A.
  * @version $Id$
  */
-public class ID3v2ChapterFrames extends ID3Frames
+public final class ID3v2ChapterFrames extends ID3Frames
 {
     public static final String FRAME_ID_CHAPTER = "CHAP";
     public static final String FRAME_ID_TABLE_OF_CONTENT = "CTOC";
@@ -49,12 +49,12 @@ public class ID3v2ChapterFrames extends ID3Frames
         idToValue.put(FRAME_ID_CHAPTER, "Chapter");
         idToValue.put(FRAME_ID_TABLE_OF_CONTENT, "Table of content");
         createMaps();
-        multipleFrames = new TreeSet<String>();
-        discardIfFileAlteredFrames = new TreeSet<String>();
+        multipleFrames = new TreeSet<>();
+        discardIfFileAlteredFrames = new TreeSet<>();
     }
 
     @Override
-    public void setITunes12_6WorkGroupingMode(final boolean id3v2ITunes12_6Mode) {
+    public void setITunes12_6WorkGroupingMode(boolean id3v2ITunes12_6Mode) {
         throw new UnsupportedOperationException();
     }
 }

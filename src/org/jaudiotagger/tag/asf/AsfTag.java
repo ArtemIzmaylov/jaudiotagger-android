@@ -39,7 +39,7 @@ public final class AsfTag extends AbstractTag
          *
          * @param iterator iterator to read from.
          */
-        public AsfFieldIterator(final Iterator<TagField> iterator)
+        public AsfFieldIterator(Iterator<TagField> iterator)
         {
             assert iterator != null;
             this.fieldIterator = iterator;
@@ -85,7 +85,7 @@ public final class AsfTag extends AbstractTag
 
     static
     {
-        tagFieldToAsfField = new EnumMap<FieldKey, AsfFieldKey>(FieldKey.class);
+        tagFieldToAsfField = new EnumMap<>(FieldKey.class);
 
         tagFieldToAsfField.put(FieldKey.ACOUSTID_FINGERPRINT, AsfFieldKey.ACOUSTID_FINGERPRINT);
         tagFieldToAsfField.put(FieldKey.ACOUSTID_ID, AsfFieldKey.ACOUSTID_ID);
@@ -266,7 +266,7 @@ public final class AsfTag extends AbstractTag
 
     static
     {
-        COMMON_FIELDS = new HashSet<AsfFieldKey>();
+        COMMON_FIELDS = new HashSet<>();
         COMMON_FIELDS.add(AsfFieldKey.ALBUM);
         COMMON_FIELDS.add(AsfFieldKey.AUTHOR);
         COMMON_FIELDS.add(AsfFieldKey.DESCRIPTION);
@@ -294,7 +294,7 @@ public final class AsfTag extends AbstractTag
      *
      * @param copy look at {@link #isCopyingFields()}.
      */
-    public AsfTag(final boolean copy)
+    public AsfTag(boolean copy)
     {
         super();
         this.copyFields = copy;
@@ -308,7 +308,7 @@ public final class AsfTag extends AbstractTag
      * @param copy   look at {@link #isCopyingFields()}.
      * @throws UnsupportedEncodingException {@link TagField#getRawContent()} which may be called
      */
-    public AsfTag(final Tag source, final boolean copy) throws UnsupportedEncodingException
+    public AsfTag(Tag source, boolean copy) throws UnsupportedEncodingException
     {
         this(copy);
         copyFrom(source);
@@ -319,7 +319,7 @@ public final class AsfTag extends AbstractTag
      */
     @Override
     // TODO introduce copy idea to all formats
-    public void addField(final TagField field)
+    public void addField(TagField field)
     {
         if (isValidField(field))
         {
@@ -339,7 +339,7 @@ public final class AsfTag extends AbstractTag
      *
      * @param copyRight copyright content
      */
-    public void addCopyright(final String copyRight)
+    public void addCopyright(String copyRight)
     {
         addField(createCopyrightField(copyRight));
     }
@@ -349,7 +349,7 @@ public final class AsfTag extends AbstractTag
      *
      * @param rating rating.
      */
-    public void addRating(final String rating)
+    public void addRating(String rating)
     {
         addField(createRatingField(rating));
     }
@@ -359,13 +359,13 @@ public final class AsfTag extends AbstractTag
      *
      * @param source source to read tag fields from.
      */
-    private void copyFrom(final Tag source)
+    private void copyFrom(Tag source)
     {
-        final Iterator<TagField> fieldIterator = source.getFields();
+        Iterator<TagField> fieldIterator = source.getFields();
         // iterate over all fields
         while (fieldIterator.hasNext())
         {
-            final TagField copy = copyFrom(fieldIterator.next());
+            TagField copy = copyFrom(fieldIterator.next());
             if (copy != null)
             {
                 super.addField(copy);
@@ -384,7 +384,7 @@ public final class AsfTag extends AbstractTag
      *         <code>null</code> if the field is empty (empty byte[] or blank
      *         string}.
      */
-    private TagField copyFrom(final TagField source)
+    private TagField copyFrom(TagField source)
     {
         TagField result;
         if (isCopyingFields())
@@ -402,7 +402,7 @@ public final class AsfTag extends AbstractTag
             }
             else if (source instanceof TagTextField)
             {
-                final String content = ((TagTextField) source).getContent();
+                String content = ((TagTextField) source).getContent();
                 result = new AsfTagTextField(source.getId(), content);
             }
             else
@@ -432,7 +432,7 @@ public final class AsfTag extends AbstractTag
      * @param artwork artwork to create a ASF field from.
      * @return ASF field capable of storing artwork.
      */
-    public AsfTagCoverField createField(final Artwork artwork)
+    public AsfTagCoverField createField(Artwork artwork)
     {
         return new AsfTagCoverField(artwork.getBinaryData(), artwork.getPictureType(), artwork.getDescription(), artwork.getMimeType());
     }
@@ -444,7 +444,7 @@ public final class AsfTag extends AbstractTag
      * @return creates a default ASF picture field with default
      *         {@linkplain PictureTypes#DEFAULT_ID picture type}.
      */
-    public AsfTagCoverField createArtworkField(final byte[] data)
+    public AsfTagCoverField createArtworkField(byte[] data)
     {
         return new AsfTagCoverField(data, PictureTypes.DEFAULT_ID, null, null);
     }
@@ -455,7 +455,7 @@ public final class AsfTag extends AbstractTag
      * @param content Copyright value.
      * @return {@link AsfTagTextField}
      */
-    public AsfTagTextField createCopyrightField(final String content)
+    public AsfTagTextField createCopyrightField(String content)
     {
         return new AsfTagTextField(AsfFieldKey.COPYRIGHT, content);
     }
@@ -466,7 +466,7 @@ public final class AsfTag extends AbstractTag
      * @param content Rating value.
      * @return {@link AsfTagTextField}
      */
-    public AsfTagTextField createRatingField(final String content)
+    public AsfTagTextField createRatingField(String content)
     {
         return new AsfTagTextField(AsfFieldKey.RATING, content);
     }
@@ -480,7 +480,7 @@ public final class AsfTag extends AbstractTag
      * @param value       string value for the created field.
      * @return text field with given content.
      */
-    public AsfTagTextField createField(final AsfFieldKey asfFieldKey, final String value)
+    public AsfTagTextField createField(AsfFieldKey asfFieldKey, String value)
     {
         if (value == null)
         {
@@ -505,7 +505,7 @@ public final class AsfTag extends AbstractTag
      * {@inheritDoc}
      */
     @Override
-    public AsfTagTextField createField(final FieldKey genericKey, final String... values) throws KeyNotFoundException, FieldDataInvalidException
+    public AsfTagTextField createField(FieldKey genericKey, String... values) throws KeyNotFoundException
     {
         if (values == null || values[0] == null)
         {
@@ -515,7 +515,7 @@ public final class AsfTag extends AbstractTag
         {
             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         }
-        final AsfFieldKey asfFieldKey = tagFieldToAsfField.get(genericKey);
+        AsfFieldKey asfFieldKey = tagFieldToAsfField.get(genericKey);
         if (asfFieldKey == null)
         {
             throw new KeyNotFoundException(genericKey.toString());
@@ -528,7 +528,7 @@ public final class AsfTag extends AbstractTag
      *
      * @param fieldKey fields to remove.
      */
-    public void deleteField(final AsfFieldKey fieldKey)
+    public void deleteField(AsfFieldKey fieldKey)
     {
         super.deleteField(fieldKey.getFieldName());
     }
@@ -537,7 +537,7 @@ public final class AsfTag extends AbstractTag
      * {@inheritDoc}
      */
     @Override
-    public void deleteField(final FieldKey fieldKey) throws KeyNotFoundException
+    public void deleteField(FieldKey fieldKey) throws KeyNotFoundException
     {
         if (fieldKey == null)
         {
@@ -549,7 +549,7 @@ public final class AsfTag extends AbstractTag
     /**
      * {@inheritDoc}
      */
-    public List<TagField> getFields(final FieldKey fieldKey) throws KeyNotFoundException
+    public List<TagField> getFields(FieldKey fieldKey) throws KeyNotFoundException
     {
         if (fieldKey == null)
         {
@@ -585,13 +585,13 @@ public final class AsfTag extends AbstractTag
      */
     public List<Artwork> getArtworkList()
     {
-        final List<TagField> coverartList = getFields(FieldKey.COVER_ART);
-        final List<Artwork> artworkList = new ArrayList<Artwork>(coverartList.size());
+        List<TagField> coverartList = getFields(FieldKey.COVER_ART);
+        List<Artwork> artworkList = new ArrayList<>(coverartList.size());
 
-        for (final TagField next : coverartList)
+        for (TagField next : coverartList)
         {
-            final AsfTagCoverField coverArt = (AsfTagCoverField) next;
-            final Artwork artwork = ArtworkFactory.getNew();
+            AsfTagCoverField coverArt = (AsfTagCoverField) next;
+            Artwork artwork = ArtworkFactory.getNew();
             artwork.setBinaryData(coverArt.getRawImageData());
             artwork.setMimeType(coverArt.getMimeType());
             artwork.setDescription(coverArt.getDescription());
@@ -631,7 +631,7 @@ public final class AsfTag extends AbstractTag
      * {@inheritDoc}
      */
     @Override
-    public String getFirst(final FieldKey genericKey) throws KeyNotFoundException
+    public String getFirst(FieldKey genericKey) throws KeyNotFoundException
     {
         return getValue(genericKey, 0);
     }
@@ -655,7 +655,7 @@ public final class AsfTag extends AbstractTag
     /**
      * {@inheritDoc}
      */
-    public String getValue(final FieldKey genericKey, int index) throws KeyNotFoundException
+    public String getValue(FieldKey genericKey, int index) throws KeyNotFoundException
     {
         if (genericKey == null)
         {
@@ -678,7 +678,7 @@ public final class AsfTag extends AbstractTag
      * {@inheritDoc}
      */
     @Override
-    public AsfTagField getFirstField(final FieldKey genericKey) throws KeyNotFoundException
+    public AsfTagField getFirstField(FieldKey genericKey) throws KeyNotFoundException
     {
         if (genericKey == null)
         {
@@ -712,7 +712,7 @@ public final class AsfTag extends AbstractTag
      * @param enc
      */
     @Override
-    protected boolean isAllowedEncoding(final Charset enc)
+    protected boolean isAllowedEncoding(Charset enc)
     {
         return AsfHeader.ASF_CHARSET.name().equals(enc);
     }
@@ -743,7 +743,7 @@ public final class AsfTag extends AbstractTag
      * @return <code>true</code> if field may be added.
      */
     // TODO introduce this concept to all formats
-    private boolean isValidField(final TagField field)
+    private boolean isValidField(TagField field)
     {
         if (field == null)
         {
@@ -763,7 +763,7 @@ public final class AsfTag extends AbstractTag
      */
     @Override
     // TODO introduce copy idea to all formats
-    public void setField(final TagField field)
+    public void setField(TagField field)
     {
         if (isValidField(field))
         {
@@ -777,7 +777,7 @@ public final class AsfTag extends AbstractTag
      *
      * @param Copyright the copyright to set.
      */
-    public void setCopyright(final String Copyright)
+    public void setCopyright(String Copyright)
     {
         setField(createCopyrightField(Copyright));
     }
@@ -787,7 +787,7 @@ public final class AsfTag extends AbstractTag
      *
      * @param rating the rating to set.
      */
-    public void setRating(final String rating)
+    public void setRating(String rating)
     {
         setField(createRatingField(rating));
     }
@@ -800,7 +800,7 @@ public final class AsfTag extends AbstractTag
     public boolean hasField(FieldKey genericKey)
     {
         AsfFieldKey mp4FieldKey = tagFieldToAsfField.get(genericKey);
-        return getFields(mp4FieldKey.getFieldName()).size() != 0;
+        return !getFields(mp4FieldKey.getFieldName()).isEmpty();
     }
 
      /**
@@ -810,7 +810,7 @@ public final class AsfTag extends AbstractTag
      */
     public boolean hasField(AsfFieldKey asfFieldKey)
     {
-        return getFields(asfFieldKey.getFieldName()).size() != 0;
+        return !getFields(asfFieldKey.getFieldName()).isEmpty();
     }
 
     public TagField createCompilationField(boolean value) throws KeyNotFoundException, FieldDataInvalidException

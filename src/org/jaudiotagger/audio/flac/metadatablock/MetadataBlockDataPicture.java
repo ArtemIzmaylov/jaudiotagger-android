@@ -9,7 +9,6 @@ import org.jaudiotagger.tag.reference.PictureTypes;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.logging.Logger;
@@ -59,7 +58,7 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
     private byte[] imageData;
 
     // Logger Object
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.flac.MetadataBlockDataPicture");
+    public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.flac.MetadataBlockDataPicture");
 
     private void initFromByteBuffer(ByteBuffer rawdata) throws IOException, InvalidFrameException
     {
@@ -107,7 +106,7 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
         }
         imageData = new byte[lengthOfPictureInBytes];
         rawdata.get(imageData);
-        logger.config("Read image:" + this.toString());
+        logger.config("Read image:" + this);
     }
 
     /**
@@ -323,7 +322,7 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
      *          a specific charset encoding. In these cases an
      *          {@link java.io.UnsupportedEncodingException} may occur.
      */
-    public byte[] getRawContent() throws UnsupportedEncodingException
+    public byte[] getRawContent() //throws UnsupportedEncodingException
     {
         return getBytes().array();
     }

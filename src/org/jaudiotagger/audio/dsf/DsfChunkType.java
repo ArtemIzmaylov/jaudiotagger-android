@@ -16,13 +16,13 @@ public enum DsfChunkType
     ID3("ID3"),
     ;
 
-    private static final Map<String, DsfChunkType> CODE_TYPE_MAP = new HashMap<String, DsfChunkType>();
-    private String code;
+    private static final Map<String, DsfChunkType> CODE_TYPE_MAP = new HashMap<>();
+    private final String code;
 
     /**
      * @param code 4 char string
      */
-    DsfChunkType(final String code)
+    DsfChunkType(String code)
     {
         this.code=code;
     }
@@ -33,9 +33,9 @@ public enum DsfChunkType
      * @param code chunk id
      * @return chunk type or {@code null} if not registered
      */
-    public synchronized static DsfChunkType get(final String code) {
+    public synchronized static DsfChunkType get(String code) {
         if (CODE_TYPE_MAP.isEmpty()) {
-            for (final DsfChunkType type : values()) {
+            for (DsfChunkType type : values()) {
                 CODE_TYPE_MAP.put(type.getCode(), type);
             }
         }

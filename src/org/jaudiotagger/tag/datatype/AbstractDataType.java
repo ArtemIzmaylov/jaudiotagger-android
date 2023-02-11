@@ -33,14 +33,14 @@ import java.util.logging.Logger;
 
 /**
  * Represents a field/data type that can be held within a frames body, these map loosely onto
- * Section 4. ID3v2 frame overview at http://www.id3.org/id3v2.4.0-structure.txt
+ * Section 4. ID3v2 frame overview at <a href="http://www.id3.org/id3v2.4.0-structure.txt">...</a>
  */
 public abstract class AbstractDataType
 {
     protected static final String TYPE_ELEMENT = "element";
 
     //Logger
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.tag.datatype");
+    public static final Logger logger = Logger.getLogger("org.jaudiotagger.tag.datatype");
 
     /**
      * Holds the data
@@ -51,7 +51,7 @@ public abstract class AbstractDataType
      * Holds the key such as "Text" or "PictureType", the naming of keys are fairly arbitary but are intended
      * to make it easier to for the developer, the keys themseleves are not written to the tag.
      */
-    protected String identifier = "";
+    protected final String identifier;
 
     /**
      * Holds the calling body, allows an datatype to query other objects in the
@@ -306,80 +306,49 @@ public abstract class AbstractDataType
         // boolean[]
         if (this.value instanceof boolean[] && object.value instanceof boolean[])
         {
-            if (!Arrays.equals((boolean[]) this.value, (boolean[]) object.value))
-            {
-                return false;
-            }
+            return Arrays.equals((boolean[]) this.value, (boolean[]) object.value);
             // byte[]
         }
         else if (this.value instanceof byte[] && object.value instanceof byte[])
         {
-            if (!Arrays.equals((byte[]) this.value, (byte[]) object.value))
-            {
-                return false;
-            }
+            return Arrays.equals((byte[]) this.value, (byte[]) object.value);
             // char[]
         }
         else if (this.value instanceof char[] && object.value instanceof char[])
         {
-            if (!Arrays.equals((char[]) this.value, (char[]) object.value))
-            {
-                return false;
-            }
+            return Arrays.equals((char[]) this.value, (char[]) object.value);
             // double[]
         }
         else if (this.value instanceof double[] && object.value instanceof double[])
         {
-            if (!Arrays.equals((double[]) this.value, (double[]) object.value))
-            {
-                return false;
-            }
+            return Arrays.equals((double[]) this.value, (double[]) object.value);
             // float[]
         }
         else if (this.value instanceof float[] && object.value instanceof float[])
         {
-            if (!Arrays.equals((float[]) this.value, (float[]) object.value))
-            {
-                return false;
-            }
+            return Arrays.equals((float[]) this.value, (float[]) object.value);
             // int[]
         }
         else if (this.value instanceof int[] && object.value instanceof int[])
         {
-            if (!Arrays.equals((int[]) this.value, (int[]) object.value))
-            {
-                return false;
-            }
+            return Arrays.equals((int[]) this.value, (int[]) object.value);
             // long[]
         }
         else if (this.value instanceof long[] && object.value instanceof long[])
         {
-            if (!Arrays.equals((long[]) this.value, (long[]) object.value))
-            {
-                return false;
-            }
+            return Arrays.equals((long[]) this.value, (long[]) object.value);
             // Object[]
         }
         else if (this.value instanceof Object[] && object.value instanceof Object[])
         {
-            if (!Arrays.equals((Object[]) this.value, (Object[]) object.value))
-            {
-                return false;
-            }
+            return Arrays.equals((Object[]) this.value, (Object[]) object.value);
             // short[]
         }
         else if (this.value instanceof short[] && object.value instanceof short[])
         {
-            if (!Arrays.equals((short[]) this.value, (short[]) object.value))
-            {
-                return false;
-            }
+            return Arrays.equals((short[]) this.value, (short[]) object.value);
         }
-        else if (!this.value.equals(object.value))
-        {
-            return false;
-        }
-        return true;
+        else return this.value.equals(object.value);
     }
 
     /**

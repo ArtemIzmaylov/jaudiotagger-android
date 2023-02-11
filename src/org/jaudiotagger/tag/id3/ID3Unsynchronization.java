@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 public class ID3Unsynchronization
 {
     //Logger
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.tag.id3");
+    public static final Logger logger = Logger.getLogger("org.jaudiotagger.tag.id3");
 
 
     /**

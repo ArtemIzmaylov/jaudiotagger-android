@@ -47,8 +47,8 @@ public class WavTag implements Tag, Id3SupportingTag
     
     private static final String NULL = "\0";
 
-	private List<ChunkSummary> chunkSummaryList  = new ArrayList<ChunkSummary>();
-    private List<ChunkSummary> metadataChunkList = new ArrayList<ChunkSummary>();
+	private final List<ChunkSummary> chunkSummaryList  = new ArrayList<>();
+    private final List<ChunkSummary> metadataChunkList = new ArrayList<>();
 
     public void addChunkSummary(ChunkSummary cs)
     {
@@ -86,7 +86,7 @@ public class WavTag implements Tag, Id3SupportingTag
     private WavInfoTag infoTag;
     private AbstractID3v2Tag id3Tag;
 
-    private WavOptions wavOptions;
+    private final WavOptions wavOptions;
 
     public WavTag(WavOptions wavOptions)
     {
@@ -166,7 +166,7 @@ public class WavTag implements Tag, Id3SupportingTag
         sb.append("Chunk Summary:\n");
         for(ChunkSummary cs:chunkSummaryList)
         {
-            sb.append("\t"+cs.toString()+"\n");
+            sb.append("\t").append(cs.toString()).append("\n");
         }
         sb.append("\n");
         if (id3Tag != null)
@@ -174,15 +174,15 @@ public class WavTag implements Tag, Id3SupportingTag
              sb.append("Wav ID3 Tag:\n");
              if(isExistingId3Tag())
              {
-                 sb.append("\tstartLocation:" + Hex.asDecAndHex(getStartLocationInFileOfId3Chunk()) + "\n");
-                 sb.append("\tendLocation:" + Hex.asDecAndHex(getEndLocationInFileOfId3Chunk()) + "\n");
+                 sb.append("\tstartLocation:").append(Hex.asDecAndHex(getStartLocationInFileOfId3Chunk())).append("\n");
+                 sb.append("\tendLocation:").append(Hex.asDecAndHex(getEndLocationInFileOfId3Chunk())).append("\n");
              }
              //Wav ID3 tags needs trailing null for each value (not usually required) to work in Windows
-             sb.append(id3Tag.toString().replace("\0","")+"\n");
+             sb.append(id3Tag.toString().replace("\0", "")).append("\n");
         }
         if (infoTag != null)
         {
-            sb.append(infoTag.toString()+"\n");
+            sb.append(infoTag).append("\n");
         }
         return sb.toString();
     }
@@ -192,9 +192,6 @@ public class WavTag implements Tag, Id3SupportingTag
     {
         switch(wavOptions)
         {
-            case READ_ID3_ONLY:
-            case READ_ID3_ONLY_AND_SYNC:
-                return id3Tag;
 
             case READ_INFO_ONLY:
             case READ_INFO_ONLY_AND_SYNC:
@@ -364,7 +361,7 @@ public class WavTag implements Tag, Id3SupportingTag
         return getFieldCount();
     }
 
-    public boolean setEncoding(final Charset enc) throws FieldDataInvalidException
+    public boolean setEncoding(Charset enc) throws FieldDataInvalidException
     {
         return getActiveTag().setEncoding(enc);
     }

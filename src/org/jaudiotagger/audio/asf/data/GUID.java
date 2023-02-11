@@ -118,7 +118,7 @@ public final class GUID
     /**
      * The GUID String values format.<br>
      */
-    private final static Pattern GUID_PATTERN = Pattern.compile("[a-f0-9]{8}\\-[a-f0-9]{4}\\-[a-f0-9]{4}\\-[a-f0-9]{4}\\-[a-f0-9]{12}", Pattern.CASE_INSENSITIVE);
+    private final static Pattern GUID_PATTERN = Pattern.compile("[a-f\\d]{8}-[a-f\\d]{4}-[a-f\\d]{4}-[a-f\\d]{4}-[a-f\\d]{12}", Pattern.CASE_INSENSITIVE);
 
     /**
      * This constant stores the GUID indicating a stream object.
@@ -164,8 +164,8 @@ public final class GUID
     static
     {
         KNOWN_GUIDS = new GUID[]{GUID_AUDIO_ERROR_CONCEALEMENT_ABSENT, GUID_CONTENTDESCRIPTION, GUID_AUDIOSTREAM, GUID_ENCODING, GUID_FILE, GUID_HEADER, GUID_STREAM, GUID_EXTENDED_CONTENT_DESCRIPTION, GUID_VIDEOSTREAM, GUID_HEADER_EXTENSION, GUID_STREAM_BITRATE_PROPERTIES, SCRIPT_COMMAND_OBJECT, GUID_CONTENT_ENCRYPTION, GUID_CONTENT_BRANDING, GUID_UNSPECIFIED, GUID_METADATA_LIBRARY, GUID_METADATA, GUID_LANGUAGE_LIST};
-        GUID_TO_CONFIGURED = new HashMap<GUID, GUID>(KNOWN_GUIDS.length);
-        for (final GUID curr : KNOWN_GUIDS)
+        GUID_TO_CONFIGURED = new HashMap<>(KNOWN_GUIDS.length);
+        for (GUID curr : KNOWN_GUIDS)
         {
             assert !GUID_TO_CONFIGURED.containsKey(curr) : "Double definition: \"" + GUID_TO_CONFIGURED.get(curr).getDescription() + "\" <-> \"" + curr.getDescription() + "\"";
             GUID_TO_CONFIGURED.put(curr, curr);
@@ -180,7 +180,7 @@ public final class GUID
      * @return <code>true</code> if <code>value</code> matches the specification
      * of a GUID.
      */
-    public static boolean assertGUID(final int[] value)
+    public static boolean assertGUID(int[] value)
     {
         return value != null && value.length == GUID.GUID_LENGTH;
     }
@@ -193,7 +193,7 @@ public final class GUID
      * @return a GUID instance from {@link #KNOWN_GUIDS} if available.
      * <code>null</code> else.
      */
-    public static GUID getConfigured(final GUID orig)
+    public static GUID getConfigured(GUID orig)
     {
         // safe against null
         return GUID_TO_CONFIGURED.get(orig);
@@ -208,7 +208,7 @@ public final class GUID
      * @param guid GUID, which description is needed.
      * @return description of the GUID if found. Else <code>null</code>
      */
-    public static String getGuidDescription(final GUID guid)
+    public static String getGuidDescription(GUID guid)
     {
         String result = null;
         if (guid == null)
@@ -231,7 +231,7 @@ public final class GUID
      * @return the GUID.
      * @throws GUIDFormatException If the GUID has an invalid format.
      */
-    public static GUID parseGUID(final String guid) throws GUIDFormatException
+    public static GUID parseGUID(String guid) throws GUIDFormatException
     {
         if (guid == null)
         {
@@ -241,11 +241,11 @@ public final class GUID
         {
             throw new GUIDFormatException("Invalid guidData format.");
         }
-        final int[] bytes = new int[GUID_LENGTH];
+        int[] bytes = new int[GUID_LENGTH];
         /*
          * Don't laugh, but did not really come up with a nicer solution today
          */
-        final int[] arrayIndices = {3, 2, 1, 0, 5, 4, 7, 6, 8, 9, 10, 11, 12, 13, 14, 15};
+        int[] arrayIndices = {3, 2, 1, 0, 5, 4, 7, 6, 8, 9, 10, 11, 12, 13, 14, 15};
         int arrayPointer = 0;
         for (int i = 0; i < guid.length(); i++)
         {
@@ -281,10 +281,10 @@ public final class GUID
      *
      * @param value GUID, which should be assigned. (will be converted to int[])
      */
-    public GUID(final byte[] value)
+    public GUID(byte[] value)
     {
         assert value != null;
-        final int[] tmp = new int[value.length];
+        int[] tmp = new int[value.length];
         for (int i = 0; i < value.length; i++)
         {
             tmp[i] = (0xFF & value[i]);
@@ -297,7 +297,7 @@ public final class GUID
      *
      * @param value GUID, which should be assigned.
      */
-    public GUID(final int[] value)
+    public GUID(int[] value)
     {
         setGUID(value);
     }
@@ -309,7 +309,7 @@ public final class GUID
      * @param value GUID, which should be assigned.
      * @param desc  Description for the GUID.
      */
-    public GUID(final int[] value, final String desc)
+    public GUID(int[] value, String desc)
     {
         this(value);
         if (desc == null)
@@ -326,7 +326,7 @@ public final class GUID
      * @param guidString GUID, which should be assigned.
      * @param desc       Description for the GUID.
      */
-    public GUID(final String guidString, final String desc)
+    public GUID(String guidString, String desc)
     {
         this(parseGUID(guidString).getGUID());
         if (desc == null)
@@ -343,12 +343,12 @@ public final class GUID
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    public boolean equals(final Object obj)
+    public boolean equals(Object obj)
     {
         boolean result = false;
         if (obj instanceof GUID)
         {
-            final GUID other = (GUID) obj;
+            GUID other = (GUID) obj;
             result = Arrays.equals(this.getGUID(), other.getGUID());
         }
         return result;
@@ -362,7 +362,7 @@ public final class GUID
      */
     public byte[] getBytes()
     {
-        final byte[] result = new byte[this.guidData.length];
+        byte[] result = new byte[this.guidData.length];
         for (int i = 0; i < result.length; i++)
         {
             result[i] = (byte) (this.guidData[i] & 0xFF);
@@ -385,7 +385,7 @@ public final class GUID
      */
     public int[] getGUID()
     {
-        final int[] copy = new int[this.guidData.length];
+        int[] copy = new int[this.guidData.length];
         System.arraycopy(this.guidData, 0, copy, 0, this.guidData.length);
         return copy;
     }
@@ -396,10 +396,10 @@ public final class GUID
      * @param bytes bytes to convert.
      * @return each byte as 2 digit hex.
      */
-    private String[] getHex(final byte[] bytes)
+    private String[] getHex(byte[] bytes)
     {
-        final String[] result = new String[bytes.length];
-        final StringBuilder tmp = new StringBuilder();
+        String[] result = new String[bytes.length];
+        StringBuilder tmp = new StringBuilder();
         for (int i = 0; i < bytes.length; i++)
         {
             tmp.delete(0, tmp.length());
@@ -422,7 +422,7 @@ public final class GUID
         if (this.hash == -1)
         {
             int tmp = 0;
-            for (final int curr : getGUID())
+            for (int curr : getGUID())
             {
                 tmp = tmp * 31 + curr;
             }
@@ -449,7 +449,7 @@ public final class GUID
      */
     public String prettyPrint()
     {
-        final StringBuilder result = new StringBuilder();
+        StringBuilder result = new StringBuilder();
         String descr = getDescription();
         if (Utils.isBlank(descr))
         {
@@ -459,7 +459,7 @@ public final class GUID
         {
             result.append("Description: ").append(descr).append(Utils.LINE_SEPARATOR).append("   ");
         }
-        result.append(this.toString());
+        result.append(this);
         return result.toString();
     }
 
@@ -470,7 +470,7 @@ public final class GUID
      *
      * @param value GUID to assign.
      */
-    private void setGUID(final int[] value)
+    private void setGUID(int[] value)
     {
         if (assertGUID(value))
         {
@@ -492,8 +492,8 @@ public final class GUID
         // C5F8CBEA-5BAF-4877-8467-AA8C44FA4CCA
         // 0xea, 0xcb,0xf8, 0xc5, 0xaf, 0x5b, 0x77, 0x48, 0x84, 0x67, 0xaa,
         // 0x8c, 0x44,0xfa, 0x4c, 0xca
-        final StringBuilder result = new StringBuilder();
-        final String[] bytes = getHex(getBytes());
+        StringBuilder result = new StringBuilder();
+        String[] bytes = getHex(getBytes());
         result.append(bytes[3]);
         result.append(bytes[2]);
         result.append(bytes[1]);

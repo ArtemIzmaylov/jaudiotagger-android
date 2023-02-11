@@ -16,8 +16,8 @@ public enum WavSubFormat
     FORMAT_GSM_COMPRESSED(0x31, "GSM_COMPRESSED"),
     ;
 
-    private int code;
-    private String description;
+    private final int code;
+    private final String description;
 
     WavSubFormat(int code, String description)
     {
@@ -36,7 +36,7 @@ public enum WavSubFormat
     }
 
     // Reverse-lookup map for getting a compression type from code
-    private static final Map<Integer, WavSubFormat> lookup = new HashMap<Integer, WavSubFormat>();
+    private static final Map<Integer, WavSubFormat> lookup = new HashMap<>();
 
     static
     {

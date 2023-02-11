@@ -175,7 +175,7 @@ public class FrameBodyPOPM extends AbstractID3v2FrameBody implements ID3v24Frame
             setRating(value);
             setEmailToUser(MEDIA_MONKEY_NO_EMAIL);
         }
-        catch(NumberFormatException nfe)
+        catch(NumberFormatException ignored)
         {
 
         }

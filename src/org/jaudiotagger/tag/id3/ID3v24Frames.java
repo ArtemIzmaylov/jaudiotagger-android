@@ -29,7 +29,7 @@ import java.util.Map;
  * @author Paul Taylor
  * @version $Id$
  */
-public class ID3v24Frames extends ID3Frames
+public final class ID3v24Frames extends ID3Frames
 {
     /**
      * Frame IDs beginning with T are text frames, and with W are url frames
@@ -131,12 +131,12 @@ public class ID3v24Frames extends ID3Frames
     public static final String FRAME_ID_PERFORMER_SORT_OWNER = FRAME_ID_ARTIST_SORT_ORDER;
     public static final String FRAME_ID_TITLE_SORT_OWNER = FRAME_ID_TITLE_SORT_ORDER;
 
-    protected EnumMap<FieldKey, ID3v24FieldKey> tagFieldToId3 = new EnumMap<FieldKey, ID3v24FieldKey>(FieldKey.class);
+    protected final EnumMap<FieldKey, ID3v24FieldKey> tagFieldToId3 = new EnumMap<>(FieldKey.class);
 
     /**
      * Maps from ID3 key to Generic key
      */
-    protected EnumMap<ID3v24FieldKey, FieldKey> id3ToTagField = new EnumMap<ID3v24FieldKey,FieldKey>(ID3v24FieldKey.class);
+    protected final EnumMap<ID3v24FieldKey, FieldKey> id3ToTagField = new EnumMap<>(ID3v24FieldKey.class);
 
 
     private static ID3v24Frames id3v24Frames;
@@ -569,7 +569,7 @@ public class ID3v24Frames extends ID3Frames
     }
 
     @Override
-    public void setITunes12_6WorkGroupingMode(final boolean id3v2ITunes12_6Mode)
+    public void setITunes12_6WorkGroupingMode(boolean id3v2ITunes12_6Mode)
     {
         if (id3v2ITunes12_6Mode) {
             tagFieldToId3.put(FieldKey.WORK, ID3v24FieldKey.GROUPING);

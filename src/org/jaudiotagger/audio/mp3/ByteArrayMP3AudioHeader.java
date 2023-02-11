@@ -30,16 +30,9 @@ public class ByteArrayMP3AudioHeader extends MP3AudioHeader
                     syncFound = true;
                     if ((header = XingFrame.isXingFrame(bb, mp3FrameHeader))!=null)
                     {
-                        try
-                        {
-                            // Parses Xing frame without modifying position of main buffer
-                            mp3XingFrame = XingFrame.parseXingFrame(header);
-                        }
-                        catch (InvalidAudioFrameException ex)
-                        {
-                            // We Ignore because even if Xing Header is corrupted
-                            // doesn't mean file is corrupted
-                        }
+                        // Parses Xing frame without modifying position of main buffer
+                        mp3XingFrame = XingFrame.parseXingFrame(header);
+
                         break;
                     }
                     // There is a small but real chance that an unsynchronised ID3 Frame could fool the MPEG

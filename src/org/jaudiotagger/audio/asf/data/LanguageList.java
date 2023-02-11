@@ -22,7 +22,7 @@ public class LanguageList extends Chunk
     /**
      * List of language codes, complying RFC-1766
      */
-    private final List<String> languages = new ArrayList<String>();
+    private final List<String> languages = new ArrayList<>();
 
     /**
      * Creates a new instance.<br>
@@ -38,7 +38,7 @@ public class LanguageList extends Chunk
      * @param pos  position within the ASF file.
      * @param size size of the chunk
      */
-    public LanguageList(final long pos, final BigInteger size)
+    public LanguageList(long pos, BigInteger size)
     {
         super(GUID.GUID_LANGUAGE_LIST, pos, size);
     }
@@ -48,7 +48,7 @@ public class LanguageList extends Chunk
      *
      * @param language language code
      */
-    public void addLanguage(final String language)
+    public void addLanguage(String language)
     {
         if (language.length() < MetadataDescriptor.MAX_LANG_INDEX)
         {
@@ -69,7 +69,7 @@ public class LanguageList extends Chunk
      * @param index the index of the language code to get.
      * @return the language code at given index.
      */
-    public String getLanguage(final int index)
+    public String getLanguage(int index)
     {
         return this.languages.get(index);
     }
@@ -91,16 +91,16 @@ public class LanguageList extends Chunk
      */
     public List<String> getLanguages()
     {
-        return new ArrayList<String>(this.languages);
+        return new ArrayList<>(this.languages);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String prettyPrint(final String prefix)
+    public String prettyPrint(String prefix)
     {
-        final StringBuilder result = new StringBuilder(super.prettyPrint(prefix));
+        StringBuilder result = new StringBuilder(super.prettyPrint(prefix));
         for (int i = 0; i < getLanguageCount(); i++)
         {
             result.append(prefix);
@@ -118,7 +118,7 @@ public class LanguageList extends Chunk
      *
      * @param index index of language to remove.
      */
-    public void removeLanguage(final int index)
+    public void removeLanguage(int index)
     {
         this.languages.remove(index);
     }

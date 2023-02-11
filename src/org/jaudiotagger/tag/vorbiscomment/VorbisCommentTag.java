@@ -29,7 +29,6 @@ import org.jaudiotagger.tag.images.ArtworkFactory;
 import org.jaudiotagger.tag.vorbiscomment.util.Base64Coder;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -43,7 +42,7 @@ import static org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey.VENDOR;
  */
 public class VorbisCommentTag extends AbstractTag
 {
-    private static EnumMap<FieldKey, VorbisCommentFieldKey> tagFieldToOggField = new EnumMap<FieldKey, VorbisCommentFieldKey>(FieldKey.class);
+    private static final EnumMap<FieldKey, VorbisCommentFieldKey> tagFieldToOggField = new EnumMap<>(FieldKey.class);
 
     static
     {
@@ -305,9 +304,8 @@ public class VorbisCommentTag extends AbstractTag
      * @param value
      * @return
      * @throws org.jaudiotagger.tag.KeyNotFoundException
-     * @throws org.jaudiotagger.tag.FieldDataInvalidException
      */
-    public TagField createField(VorbisCommentFieldKey vorbisCommentFieldKey, String value) throws KeyNotFoundException,FieldDataInvalidException
+    public TagField createField(VorbisCommentFieldKey vorbisCommentFieldKey, String value) throws KeyNotFoundException
     {
         if (value == null)
         {
@@ -414,7 +412,7 @@ public class VorbisCommentTag extends AbstractTag
     public boolean hasField(FieldKey genericKey)
     {
         VorbisCommentFieldKey vorbisFieldKey = tagFieldToOggField.get(genericKey);
-        return getFields(vorbisFieldKey.getFieldName()).size() != 0;
+        return !getFields(vorbisFieldKey.getFieldName()).isEmpty();
     }
 
     /**
@@ -424,7 +422,7 @@ public class VorbisCommentTag extends AbstractTag
      */
     public boolean hasField(VorbisCommentFieldKey vorbisFieldKey)
     {
-        return getFields(vorbisFieldKey.getFieldName()).size() != 0;
+        return !getFields(vorbisFieldKey.getFieldName()).isEmpty();
     }
 
     /**
@@ -463,7 +461,6 @@ public class VorbisCommentTag extends AbstractTag
                     VorbisCommentFieldKey vorbisCommentFieldKey = tagFieldToOggField.get(genericKey);
                     deleteField(vorbisCommentFieldKey);
                     deleteField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER);
-                    return;
                 }
 
             }
@@ -561,7 +558,7 @@ public class VorbisCommentTag extends AbstractTag
      */
     public List<Artwork> getArtworkList()
     {
-        List<Artwork>  artworkList  = new ArrayList<Artwork>(1);
+        List<Artwork>  artworkList  = new ArrayList<>(1);
 
         //Read Old Format
         if(getArtworkBinaryData()!=null & getArtworkBinaryData().length>0)
@@ -584,13 +581,9 @@ public class VorbisCommentTag extends AbstractTag
                 Artwork artwork=ArtworkFactory.createArtworkFromMetadataBlockDataPicture(coverArt);
                 artworkList.add(artwork);
             }
-            catch(IOException ioe)
+            catch(IOException | InvalidFrameException ioe)
             {
                 throw new RuntimeException(ioe);
-            }
-            catch(InvalidFrameException ife)
-            {
-                throw new RuntimeException(ife);
             }
         }
         return artworkList;
@@ -643,18 +636,11 @@ public class VorbisCommentTag extends AbstractTag
      */
       public TagField createField(Artwork artwork) throws FieldDataInvalidException
       {
-        try
-        {
-            char[] testdata = Base64Coder.encode(createMetadataBlockDataPicture(artwork).getRawContent());
-            String base64image = new String(testdata);
-            TagField imageTagField  = createField(VorbisCommentFieldKey.METADATA_BLOCK_PICTURE, base64image);
-            return imageTagField;
-        }
-        catch(UnsupportedEncodingException uee)
-        {
-            throw new RuntimeException(uee);
-        }
-    }
+          char[] testdata = Base64Coder.encode(createMetadataBlockDataPicture(artwork).getRawContent());
+          String base64image = new String(testdata);
+          TagField imageTagField  = createField(VorbisCommentFieldKey.METADATA_BLOCK_PICTURE, base64image);
+          return imageTagField;
+      }
 
     /**
      * Create and set artwork field
@@ -669,7 +655,7 @@ public class VorbisCommentTag extends AbstractTag
 
         //If worked okay above then that should be first artwork and if we still had old coverart format
         //that should be removed
-        if(this.getFirst(VorbisCommentFieldKey.COVERART).length()>0)
+        if(!this.getFirst(VorbisCommentFieldKey.COVERART).isEmpty())
         {
             this.deleteField(VorbisCommentFieldKey.COVERART);
             this.deleteField(VorbisCommentFieldKey.COVERARTMIME);
@@ -718,9 +704,8 @@ public class VorbisCommentTag extends AbstractTag
      * @param vorbisCommentKey
      * @param value
      * @throws KeyNotFoundException
-     * @throws FieldDataInvalidException
      */
-    public void setField(String vorbisCommentKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    public void setField(String vorbisCommentKey, String value) throws KeyNotFoundException
     {
         TagField tagfield = createField(vorbisCommentKey,value);
         setField(tagfield);
@@ -731,9 +716,8 @@ public class VorbisCommentTag extends AbstractTag
      * @param vorbisCommentKey
      * @param value
      * @throws KeyNotFoundException
-     * @throws FieldDataInvalidException
      */
-    public void addField(String vorbisCommentKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    public void addField(String vorbisCommentKey, String value) throws KeyNotFoundException
     {
         TagField tagfield = createField(vorbisCommentKey,value);
         addField(tagfield);
@@ -809,7 +793,6 @@ public class VorbisCommentTag extends AbstractTag
                     setField(tagfield1);
                     TagField tagfield2 = createField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER, value);
                     setField(tagfield2);
-                    return;
                 }
 
             }
@@ -874,7 +857,6 @@ public class VorbisCommentTag extends AbstractTag
                     addField(tagfield1);
                     TagField tagfield2 = createField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER, value);
                     addField(tagfield2);
-                    return;
                 }
 
             }

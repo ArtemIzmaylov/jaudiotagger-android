@@ -22,6 +22,7 @@ import org.jaudiotagger.audio.asf.util.Utils;
 
 import java.math.BigInteger;
 import java.nio.charset.Charset;
+import org.jaudiotagger.StandardCharsets;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -39,7 +40,7 @@ public final class AsfHeader extends ChunkContainer
     /**
      * The charset &quot;UTF-16LE&quot; is mandatory for ASF handling.
      */
-    public final static Charset ASF_CHARSET = Charset.forName("UTF-16LE"); //$NON-NLS-1$
+    public final static Charset ASF_CHARSET = StandardCharsets.UTF_16LE; //$NON-NLS-1$
 
     /**
      * Byte sequence representing the zero term character.
@@ -48,7 +49,7 @@ public final class AsfHeader extends ChunkContainer
 
     static
     {
-        Set<GUID> MULTI_CHUNKS = new HashSet<GUID>();
+        Set<GUID> MULTI_CHUNKS = new HashSet<>();
         MULTI_CHUNKS.add(GUID.GUID_STREAM);
     }
 
@@ -65,7 +66,7 @@ public final class AsfHeader extends ChunkContainer
      * @param chunkLen see {@link Chunk#chunkLength}
      * @param chunkCnt
      */
-    public AsfHeader(final long pos, final BigInteger chunkLen, final long chunkCnt)
+    public AsfHeader(long pos, BigInteger chunkLen, long chunkCnt)
     {
         super(GUID.GUID_HEADER, pos, chunkLen);
         this.chunkCount = chunkCnt;
@@ -113,7 +114,7 @@ public final class AsfHeader extends ChunkContainer
      * @return a container of specified type, of <code>null</code> if not
      * contained.
      */
-    public MetadataContainer findMetadataContainer(final ContainerType type)
+    public MetadataContainer findMetadataContainer(ContainerType type)
     {
         MetadataContainer result = (MetadataContainer) getFirst(type.getContainerGUID(), MetadataContainer.class);
         if (result == null)
@@ -132,7 +133,7 @@ public final class AsfHeader extends ChunkContainer
     public AudioStreamChunk getAudioStreamChunk()
     {
         AudioStreamChunk result = null;
-        final List<Chunk> streamChunks = assertChunkList(GUID.GUID_STREAM);
+        List<Chunk> streamChunks = assertChunkList(GUID.GUID_STREAM);
         for (int i = 0; i < streamChunks.size() && result == null; i++)
         {
             if (streamChunks.get(i) instanceof AudioStreamChunk)
@@ -215,9 +216,8 @@ public final class AsfHeader extends ChunkContainer
      * {@inheritDoc}
      */
     @Override
-    public String prettyPrint(final String prefix)
+    public String prettyPrint(String prefix)
     {
-        final StringBuilder result = new StringBuilder(super.prettyPrint(prefix, prefix + "  | : Contains: \"" + getChunkCount() + "\" chunks" + Utils.LINE_SEPARATOR));
-        return result.toString();
+        return super.prettyPrint(prefix, prefix + "  | : Contains: \"" + getChunkCount() + "\" chunks" + Utils.LINE_SEPARATOR);
     }
 }

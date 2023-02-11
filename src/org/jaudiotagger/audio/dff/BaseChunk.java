@@ -89,12 +89,12 @@ public class BaseChunk
     protected void skipToChunkEnd(FileChannel fc) throws IOException
     {
 
-        Long skip = (this.getChunkEnd() - fc.position());
+        long skip = (this.getChunkEnd() - fc.position());
 
         if (skip > 0)
         {
         	// Read audio data
-            Utils.readFileDataIntoBufferLE(fc, skip.intValue());
+            Utils.readFileDataIntoBufferLE(fc, (int) skip);
         }
     }
 

@@ -1,6 +1,5 @@
 package org.jaudiotagger.audio.mp4.atom;
 
-import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.generic.Utils;
 
 import java.nio.ByteBuffer;
@@ -41,7 +40,7 @@ public class Mp4AlacBox extends AbstractMp4Box
         this.dataBuffer = dataBuffer;
     }
 
-    public void processData() throws CannotReadException
+    public void processData()
     {
         //Skip version/other flags
         dataBuffer.position(dataBuffer.position() + OTHER_FLAG_LENGTH);

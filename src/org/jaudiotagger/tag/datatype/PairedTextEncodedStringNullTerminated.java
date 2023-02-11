@@ -132,7 +132,6 @@ public class PairedTextEncodedStringNullTerminated extends AbstractDataType
                     TextEncodedStringSizeTerminated result = new TextEncodedStringSizeTerminated(identifier, frameBody);
                     result.readByteArray(arr, offset);
                     size   += result.getSize();
-                    offset += result.getSize();
                     if (result.getSize() == 0)
                     {
                         break;
@@ -208,7 +207,7 @@ public class PairedTextEncodedStringNullTerminated extends AbstractDataType
      */
     public static class ValuePairs
     {
-        private List<Pair> mapping = new ArrayList<Pair>();
+        private final List<Pair> mapping = new ArrayList<>();
 
         public ValuePairs()
         {
@@ -255,10 +254,10 @@ public class PairedTextEncodedStringNullTerminated extends AbstractDataType
          */
         public String toString()
         {
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             for(Pair next:mapping)
             {
-                sb.append(next.getKey()+':'+next.getValue()+',');
+                sb.append(next.getKey()).append(':').append(next.getValue()).append(',');
             }
             if(sb.length()>0)
             {

@@ -46,7 +46,7 @@ import java.util.regex.Matcher;
  */
 public class ID3v1Tag extends AbstractID3v1Tag implements Tag
 {
-    static EnumMap<FieldKey, ID3v1FieldKey> tagFieldToID3v1Field = new EnumMap<FieldKey, ID3v1FieldKey>(FieldKey.class);
+    static final EnumMap<FieldKey, ID3v1FieldKey> tagFieldToID3v1Field = new EnumMap<>(FieldKey.class);
 
     static
     {
@@ -230,7 +230,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      */
     public List<String> getAll(FieldKey genericKey) throws KeyNotFoundException
     {
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         list.add(getFirst(genericKey.name()));
         return list;
     }
@@ -262,7 +262,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         {
             return getComment();
         }
-        return new ArrayList<TagField>();
+        return new ArrayList<>();
     }
 
     public int getFieldCount()
@@ -277,7 +277,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
 
     protected List<TagField> returnFieldToList(ID3v1TagField field)
     {
-        List<TagField> fields = new ArrayList<TagField>();
+        List<TagField> fields = new ArrayList<>();
         fields.add(field);
         return fields;
     }
@@ -311,14 +311,14 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      */
     public List<TagField> getAlbum()
     {
-        if (getFirstAlbum().length() > 0)
+        if (!getFirstAlbum().isEmpty())
         {
             ID3v1TagField field = new ID3v1TagField(ID3v1FieldKey.ALBUM.name(), getFirstAlbum());
             return returnFieldToList(field);
         }
         else
         {
-            return new ArrayList<TagField>();
+            return new ArrayList<>();
         }
     }
 
@@ -354,14 +354,14 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      */
     public List<TagField> getArtist()
     {
-        if (getFirstArtist().length() > 0)
+        if (!getFirstArtist().isEmpty())
         {
             ID3v1TagField field = new ID3v1TagField(ID3v1FieldKey.ARTIST.name(), getFirstArtist());
             return returnFieldToList(field);
         }
         else
         {
-            return new ArrayList<TagField>();
+            return new ArrayList<>();
         }
     }
 
@@ -385,14 +385,14 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      */
     public List<TagField> getComment()
     {
-        if (getFirstComment().length() > 0)
+        if (!getFirstComment().isEmpty())
         {
             ID3v1TagField field = new ID3v1TagField(ID3v1FieldKey.COMMENT.name(), getFirstComment());
             return returnFieldToList(field);
         }
         else
         {
-            return new ArrayList<TagField>();
+            return new ArrayList<>();
         }
     }
 
@@ -439,7 +439,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      */
     public String getFirstGenre()
     {
-        Integer genreId = genre & BYTE_TO_UNSIGNED;
+        int genreId = genre & BYTE_TO_UNSIGNED;
         String genreValue = GenreTypes.getInstanceOf().getValueForId(genreId);
         if (genreValue == null)
         {
@@ -460,14 +460,14 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      */
     public List<TagField> getGenre()
     {
-        if (getFirst(FieldKey.GENRE).length() > 0)
+        if (!getFirst(FieldKey.GENRE).isEmpty())
         {
             ID3v1TagField field = new ID3v1TagField(ID3v1FieldKey.GENRE.name(), getFirst(FieldKey.GENRE));
             return returnFieldToList(field);
         }
         else
         {
-            return new ArrayList<TagField>();
+            return new ArrayList<>();
         }
     }
 
@@ -504,14 +504,14 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      */
     public List<TagField> getTitle()
     {
-        if (getFirst(FieldKey.TITLE).length() > 0)
+        if (!getFirst(FieldKey.TITLE).isEmpty())
         {
             ID3v1TagField field = new ID3v1TagField(ID3v1FieldKey.TITLE.name(), getFirst(FieldKey.TITLE));
             return returnFieldToList(field);
         }
         else
         {
-            return new ArrayList<TagField>();
+            return new ArrayList<>();
         }
     }
 
@@ -544,14 +544,14 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      */
     public List<TagField> getYear()
     {
-        if (getFirst(FieldKey.YEAR).length() > 0)
+        if (!getFirst(FieldKey.YEAR).isEmpty())
         {
             ID3v1TagField field = new ID3v1TagField(ID3v1FieldKey.YEAR.name(), getFirst(FieldKey.YEAR));
             return returnFieldToList(field);
         }
         else
         {
-            return new ArrayList<TagField>();
+            return new ArrayList<>();
         }
     }
 
@@ -596,7 +596,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
 
         if (results != null)
         {
-            if (results.size() > 0)
+            if (!results.isEmpty())
             {
                 return results.get(0);
             }
@@ -617,7 +617,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
 
     public boolean hasField(FieldKey genericKey)
     {
-        return getFirst(genericKey).length() > 0;
+        return !getFirst(genericKey).isEmpty();
     }
 
     public boolean hasField(String id)
@@ -635,16 +635,16 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
 
     public boolean isEmpty()
     {
-        return !(getFirst(FieldKey.TITLE).length() > 0 ||
-                getFirstArtist().length() > 0 ||
-                getFirstAlbum().length() > 0 ||
-                getFirst(FieldKey.GENRE).length() > 0 ||
-                getFirst(FieldKey.YEAR).length() > 0 ||
-                getFirstComment().length() > 0);
+        return !(!getFirst(FieldKey.TITLE).isEmpty() ||
+                !getFirstArtist().isEmpty() ||
+                !getFirstAlbum().isEmpty() ||
+                !getFirst(FieldKey.GENRE).isEmpty() ||
+                !getFirst(FieldKey.YEAR).isEmpty() ||
+                !getFirstComment().isEmpty());
     }
 
 
-    public void setField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException
+    public void setField(FieldKey genericKey, String... value) throws KeyNotFoundException
     {
         TagField tagfield = createField(genericKey,value);
         setField(tagfield);
@@ -687,7 +687,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
     }
 
     @Override
-    public boolean setEncoding(final Charset encoding)
+    public boolean setEncoding(Charset encoding)
     {
         return true;
     }
@@ -718,7 +718,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
     public TagField getFirstField(FieldKey genericKey)
     {
         List<TagField> l = getFields(genericKey);
-        return (l.size() != 0) ? l.get(0) : null;
+        return (!l.isEmpty()) ? l.get(0) : null;
     }
 
     /**
@@ -751,7 +751,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
                 return getComment();
 
             default:
-                return new ArrayList<TagField>();
+                return new ArrayList<>();
         }
     }
 
@@ -1077,17 +1077,17 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         return null;
     }
 
-    public TagField createField(Artwork artwork) throws FieldDataInvalidException
+    public TagField createField(Artwork artwork)
     {
         throw new UnsupportedOperationException(ErrorMessage.GENERIC_NOT_SUPPORTED.getMsg());
     }
 
-    public void setField(Artwork artwork) throws FieldDataInvalidException
+    public void setField(Artwork artwork)
     {
         throw new UnsupportedOperationException(ErrorMessage.GENERIC_NOT_SUPPORTED.getMsg());
     }
 
-    public void addField(Artwork artwork) throws FieldDataInvalidException
+    public void addField(Artwork artwork)
     {
         throw new UnsupportedOperationException(ErrorMessage.GENERIC_NOT_SUPPORTED.getMsg());
     }
@@ -1101,7 +1101,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         throw new UnsupportedOperationException(ErrorMessage.GENERIC_NOT_SUPPORTED.getMsg());
     }
 
-    public TagField createCompilationField(boolean value) throws KeyNotFoundException, FieldDataInvalidException
+    public TagField createCompilationField(boolean value) throws KeyNotFoundException
     {
         throw new UnsupportedOperationException(ErrorMessage.GENERIC_NOT_SUPPORTED.getMsg());
     }

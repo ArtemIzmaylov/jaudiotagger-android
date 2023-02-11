@@ -28,9 +28,9 @@ import java.util.*;
  */
 public abstract class AbstractValuePair<I, V>
 {
-    protected final Map<I, V> idToValue = new LinkedHashMap<I, V>();
-    protected final Map<V, I> valueToId = new LinkedHashMap<V, I>();
-    protected final List<V> valueList = new ArrayList<V>();
+    protected final Map<I, V> idToValue = new LinkedHashMap<>();
+    protected final Map<V, I> valueToId = new LinkedHashMap<>();
+    protected final List<V> valueList = new ArrayList<>();
 
     protected Iterator<I> iterator = idToValue.keySet().iterator();
 

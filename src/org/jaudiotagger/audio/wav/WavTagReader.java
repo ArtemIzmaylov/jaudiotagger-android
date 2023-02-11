@@ -42,9 +42,9 @@ import java.util.logging.Logger;
  */
 public class WavTagReader
 {
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.wav");
+    public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.wav");
 
-    private String loggingName;
+    private final String loggingName;
     public WavTagReader(String loggingName)
     {
         this.loggingName = loggingName;
@@ -113,7 +113,7 @@ public class WavTagReader
      * @return
      * @throws IOException
      */
-    protected boolean readChunk(FileChannel fc, WavTag tag)throws IOException, CannotReadException
+    protected boolean readChunk(FileChannel fc, WavTag tag)throws IOException
     {
         Chunk chunk;
         ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.LITTLE_ENDIAN);
@@ -125,7 +125,7 @@ public class WavTagReader
 
         String id = chunkHeader.getID();
         logger.info(loggingName + " Reading Chunk:" + id + ":starting at:" + Hex.asDecAndHex(chunkHeader.getStartLocationInFile()) + ":sizeIncHeader:" + (chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
-        final WavChunkType chunkType = WavChunkType.get(id);
+        WavChunkType chunkType = WavChunkType.get(id);
         if (chunkType != null)
         {
             switch (chunkType)
@@ -258,7 +258,6 @@ public class WavTagReader
             restOfFile.flip();
             while(restOfFile.get()==0)
             {
-                ;
             }
             logger.severe(loggingName + "Found Null Padding, starting at " + chunkHeader.getStartLocationInFile()+ ", size:" + restOfFile.position() + ChunkHeader.CHUNK_HEADER_SIZE);
             fc.position(chunkHeader.getStartLocationInFile() + restOfFile.position() + ChunkHeader.CHUNK_HEADER_SIZE - 1);

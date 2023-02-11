@@ -1,7 +1,6 @@
 package org.jaudiotagger.audio.mp3;
 
 import org.jaudiotagger.audio.AudioFile;
-import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.generic.AudioFileWriter;
 import org.jaudiotagger.tag.Tag;
@@ -32,23 +31,22 @@ public class MP3FileWriter extends AudioFileWriter
      * Delete the Id3v1 and ID3v2 tags from file
      *
      * @param af
-     * @throws CannotReadException
      * @throws CannotWriteException
      */
     @Override
-    public synchronized void delete(AudioFile af) throws CannotReadException, CannotWriteException
+    public synchronized void delete(AudioFile af) throws CannotWriteException
     {
         ((MP3File)af).setID3v1Tag(null);
         ((MP3File)af).setID3v2Tag(null);                
         af.commit();
     }
 
-    protected void writeTag(AudioFile audioFile, Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotWriteException, IOException
+    protected void writeTag(AudioFile audioFile, Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws IOException
     {
         throw new RuntimeException("MP3FileReaderwriteTag should not be called");
     }
 
-    protected void deleteTag(Tag tag, RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotWriteException, IOException
+    protected void deleteTag(Tag tag, RandomAccessFile raf, RandomAccessFile tempRaf) throws IOException
     {
         throw new RuntimeException("MP3FileReader.getEncodingInfo should be called");
     }

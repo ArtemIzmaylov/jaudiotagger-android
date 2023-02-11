@@ -42,7 +42,7 @@ public class AsfTagField implements TagField, Cloneable {
      * @param field
      *            the ASF field that should be represented.
      */
-    public AsfTagField(final AsfFieldKey field) {
+    public AsfTagField(AsfFieldKey field) {
         assert field != null;
         this.toWrap = new MetadataDescriptor(field.getHighestContainer(), field
                 .getFieldName(), MetadataDescriptor.TYPE_STRING);
@@ -55,7 +55,7 @@ public class AsfTagField implements TagField, Cloneable {
      *            The descriptor which should be represented as a
      *            {@link TagField}.
      */
-    public AsfTagField(final MetadataDescriptor source) {
+    public AsfTagField(MetadataDescriptor source) {
         assert source != null;
         // XXX Copy ? maybe not really.
         this.toWrap = source.createCopy();
@@ -67,7 +67,7 @@ public class AsfTagField implements TagField, Cloneable {
      * @param fieldKey
      *            The field identifier to use.
      */
-    public AsfTagField(final String fieldKey) {
+    public AsfTagField(String fieldKey) {
         assert fieldKey != null;
         this.toWrap = new MetadataDescriptor(AsfFieldKey.getAsfFieldKey(
                 fieldKey).getHighestContainer(), fieldKey,
@@ -85,7 +85,7 @@ public class AsfTagField implements TagField, Cloneable {
     /**
      * {@inheritDoc}
      */
-    public void copyContent(final TagField field) {
+    public void copyContent(TagField field) {
         throw new UnsupportedOperationException("Not implemented yet.");
     }
 
@@ -123,7 +123,7 @@ public class AsfTagField implements TagField, Cloneable {
     /**
      * {@inheritDoc}
      */
-    public void isBinary(final boolean value) {
+    public void isBinary(boolean value) {
         if (!value && isBinary()) {
             throw new UnsupportedOperationException("No conversion supported.");
         }

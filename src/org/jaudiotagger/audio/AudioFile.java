@@ -2,7 +2,6 @@ package org.jaudiotagger.audio;
 
 import org.jaudiotagger.audio.dsf.Dsf;
 import org.jaudiotagger.audio.exceptions.*;
-import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
 import org.jaudiotagger.audio.real.RealTag;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.Tag;
@@ -40,7 +39,7 @@ import java.util.logging.Logger;
 public class AudioFile
 {
     //Logger
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio");
+    public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio");
 
     /**
      *
@@ -294,7 +293,7 @@ public class AudioFile
         }
         if(SupportedFileFormat.FLAC.getFilesuffix().equals(extension))
         {
-            return new FlacTag(VorbisCommentTag.createNewTag(), new ArrayList< MetadataBlockDataPicture >());
+            return new FlacTag(VorbisCommentTag.createNewTag(), new ArrayList<>());
         }
         else if(SupportedFileFormat.OGG.getFilesuffix().equals(extension))
         {

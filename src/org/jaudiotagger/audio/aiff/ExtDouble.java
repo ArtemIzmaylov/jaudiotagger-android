@@ -20,7 +20,7 @@ package org.jaudiotagger.audio.aiff;
 public class ExtDouble
 {
 
-    byte[] _rawData;
+    final byte[] _rawData;
 
     /**
      * Constructor.

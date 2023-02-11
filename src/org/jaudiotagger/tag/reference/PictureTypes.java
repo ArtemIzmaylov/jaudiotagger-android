@@ -30,7 +30,7 @@ import org.jaudiotagger.tag.datatype.AbstractIntStringValuePair;
  * <P>Note this list is used by APIC and PIC frames within ID3v2. It is also used by Flac format Picture blocks
  * and WMA Picture fields.
  */
-public class PictureTypes extends AbstractIntStringValuePair
+public final class PictureTypes extends AbstractIntStringValuePair
 {
     private static PictureTypes pictureTypes;
 

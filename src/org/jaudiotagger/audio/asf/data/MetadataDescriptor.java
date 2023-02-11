@@ -25,8 +25,8 @@ import org.jaudiotagger.tag.TagOptionSingleton;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import org.jaudiotagger.StandardCharsets;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
@@ -145,7 +145,7 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
      * the index of the language in the {@linkplain LanguageList language list}
      * this descriptor applies to.<br>
      */
-    private int languageIndex = 0;
+    private int languageIndex;
 
     /**
      * The name of the metadata descriptor.
@@ -155,7 +155,7 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
     /**
      * The number of the stream, this descriptor applies to.<br>
      */
-    private int streamNumber = 0;
+    private int streamNumber;
 
     /**
      * Creates an Instance.<br>
@@ -164,7 +164,7 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
      * @param propName Name of the MetadataDescriptor.
      * @param propType Type of the metadata descriptor. See {@link #descriptorType}
      */
-    public MetadataDescriptor(final ContainerType type, final String propName, final int propType)
+    public MetadataDescriptor(ContainerType type, String propName, int propType)
     {
         this(type, propName, propType, 0, 0);
     }
@@ -181,7 +181,7 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
      *                 descriptor refers to.<br>
      *                 <b>Consider</b>: No checks performed if language entry exists.
      */
-    public MetadataDescriptor(final ContainerType type, final String propName, final int propType, final int stream, final int language)
+    public MetadataDescriptor(ContainerType type, String propName, int propType, int stream, int language)
     {
         assert type != null;
         type.assertConstraints(propName, new byte[0], propType, stream, language);
@@ -198,7 +198,7 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
      *
      * @param propName name of the metadata descriptor.
      */
-    public MetadataDescriptor(final String propName)
+    public MetadataDescriptor(String propName)
     {
         this(propName, TYPE_STRING);
     }
@@ -210,7 +210,7 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
      * @param propName Name of the MetadataDescriptor.
      * @param propType Type of the metadata descriptor. See {@link #descriptorType}
      */
-    public MetadataDescriptor(final String propName, final int propType)
+    public MetadataDescriptor(String propName, int propType)
     {
         this(ContainerType.METADATA_LIBRARY_OBJECT, propName, propType, 0, 0);
     }
@@ -254,7 +254,7 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
         }
         if (result == null)
         {
-            final byte[] copy = new byte[this.content.length];
+            byte[] copy = new byte[this.content.length];
             for (int i = 0; i < copy.length; i++)
             {
                 copy[i] = this.content[this.content.length - (i + 1)];
@@ -278,7 +278,7 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
     /**
      * {@inheritDoc}
      */
-    public int compareTo(final MetadataDescriptor other)
+    public int compareTo(MetadataDescriptor other)
     {
         return getName().compareTo(other.getName());
     }
@@ -292,7 +292,7 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
      */
     public MetadataDescriptor createCopy()
     {
-        final MetadataDescriptor result = new MetadataDescriptor(this.containerType, this.name, this.descriptorType, this.streamNumber, this.languageIndex);
+        MetadataDescriptor result = new MetadataDescriptor(this.containerType, this.name, this.descriptorType, this.streamNumber, this.languageIndex);
         result.content = getRawData();
         return result;
     }
@@ -303,7 +303,7 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    public boolean equals(final Object obj)
+    public boolean equals(Object obj)
     {
         boolean result = false;
         if (obj instanceof MetadataDescriptor)
@@ -314,7 +314,7 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
             }
             else
             {
-                final MetadataDescriptor other = (MetadataDescriptor) obj;
+                MetadataDescriptor other = (MetadataDescriptor) obj;
                 result = other.getName().equals(getName()) && other.descriptorType == this.descriptorType && other.languageIndex == this.languageIndex && other.streamNumber == this.streamNumber && Arrays.equals(this.content, other.content);
             }
         }
@@ -343,12 +343,12 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
     @Deprecated
     public byte[] getBytes()
     {
-        final ByteArrayOutputStream result = new ByteArrayOutputStream();
+        ByteArrayOutputStream result = new ByteArrayOutputStream();
         try
         {
             writeInto(result, this.containerType);
         }
-        catch (final IOException e)
+        catch (IOException e)
         {
             LOGGER.warning(e.getMessage());
         }
@@ -372,7 +372,7 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
      * @param type the container type for which the size is calculated.
      * @return size of the descriptor in an ASF file.
      */
-    public int getCurrentAsfSize(final ContainerType type)
+    public int getCurrentAsfSize(ContainerType type)
     {
         /*
          * 2 bytes name length, 2 bytes name zero term, 2 bytes type, 2 bytes
@@ -497,7 +497,7 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
      */
     public byte[] getRawData()
     {
-        final byte[] copy = new byte[this.content.length];
+        byte[] copy = new byte[this.content.length];
         System.arraycopy(this.content, 0, copy, 0, this.content.length);
         return copy;
     }
@@ -530,7 +530,7 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
      */
     public String getString()
     {
-        String result = null;
+        String result;
         switch (getType())
         {
             case TYPE_BINARY:
@@ -548,14 +548,7 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
                 result = String.valueOf(getNumber());
                 break;
             case TYPE_STRING:
-                try
-                {
-                    result = new String(this.content, "UTF-16LE");
-                }
-                catch (final UnsupportedEncodingException e)
-                {
-                    LOGGER.warning(e.getMessage());
-                }
+                result = new String(this.content, StandardCharsets.UTF_16LE);
                 break;
             default:
                 throw new IllegalStateException("Current type is not known.");
@@ -610,7 +603,7 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
      * @throws IllegalArgumentException if data is invalid for {@linkplain #getContainerType()
      *                                  container}.
      */
-    public void setBinaryValue(final byte[] data) throws IllegalArgumentException
+    public void setBinaryValue(byte[] data) throws IllegalArgumentException
     {
         this.containerType.assertConstraints(this.name, data, this.descriptorType, this.streamNumber, this.languageIndex);
         this.content = data.clone();
@@ -624,7 +617,7 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
      *
      * @param value Value to set.
      */
-    public void setBooleanValue(final boolean value)
+    public void setBooleanValue(boolean value)
     {
         this.content = new byte[]{value ? (byte) 1 : 0};
         this.descriptorType = TYPE_BOOLEAN;
@@ -637,7 +630,7 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
      *
      * @param value Value to set.
      */
-    public void setDWordValue(final long value)
+    public void setDWordValue(long value)
     {
         if (value < 0 || value > DWORD_MAXVALUE)
         {
@@ -654,7 +647,7 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
      *
      * @param value value to set.
      */
-    public void setGUIDValue(final GUID value)
+    public void setGUIDValue(GUID value)
     {
         this.containerType.assertConstraints(this.name, value.getBytes(), TYPE_GUID, this.streamNumber, this.languageIndex);
         this.content = value.getBytes();
@@ -668,7 +661,7 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
      *
      * @param language the language index to set
      */
-    public void setLanguageIndex(final int language)
+    public void setLanguageIndex(int language)
     {
         this.containerType.assertConstraints(this.name, this.content, this.descriptorType, this.streamNumber, language);
         this.languageIndex = language;
@@ -683,7 +676,7 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
      * @throws NumberFormatException    on <code>null</code> values.
      * @throws IllegalArgumentException on illegal values or values exceeding range.
      */
-    public void setQWordValue(final BigInteger value) throws IllegalArgumentException
+    public void setQWordValue(BigInteger value) throws IllegalArgumentException
     {
         if (value == null)
         {
@@ -698,7 +691,7 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
             throw new IllegalArgumentException("Value exceeds QWORD (64 bit unsigned)");
         }
         this.content = new byte[8];
-        final byte[] valuesBytes = value.toByteArray();
+        byte[] valuesBytes = value.toByteArray();
         if (valuesBytes.length <= 8)
         {
             for (int i = valuesBytes.length - 1; i >= 0; i--)
@@ -723,11 +716,11 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
      *
      * @param value Value to set.
      */
-    public void setQWordValue(final long value)
+    public void setQWordValue(long value)
     {
         if (value < 0)
         {
-            throw new IllegalArgumentException("value out of range (0-" + MetadataDescriptor.QWORD_MAXVALUE.toString() + ")");
+            throw new IllegalArgumentException("value out of range (0-" + MetadataDescriptor.QWORD_MAXVALUE + ")");
         }
         this.content = Utils.getBytes(value, 8);
         this.descriptorType = TYPE_QWORD;
@@ -740,7 +733,7 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
      *
      * @param stream the stream number to set
      */
-    public void setStreamNumber(final int stream)
+    public void setStreamNumber(int stream)
     {
         this.containerType.assertConstraints(this.name, this.content, this.descriptorType, stream, this.languageIndex);
         this.streamNumber = stream;
@@ -753,7 +746,7 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
      * @param value value to set.
      * @throws IllegalArgumentException If conversion was impossible.
      */
-    public void setString(final String value) throws IllegalArgumentException
+    public void setString(String value) throws IllegalArgumentException
     {
         try
         {
@@ -784,7 +777,7 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
                     throw new IllegalStateException();
             }
         }
-        catch (final NumberFormatException nfe)
+        catch (NumberFormatException nfe)
         {
             throw new IllegalArgumentException("Value cannot be parsed as Number or is out of range (\"" + value + "\")", nfe);
         }
@@ -799,7 +792,7 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
      * @throws IllegalArgumentException If byte representation would take more than 65535 Bytes.
      */
     // TODO Test
-    public void setStringValue(final String value) throws IllegalArgumentException
+    public void setStringValue(String value) throws IllegalArgumentException
     {
         if (value == null)
         {
@@ -807,7 +800,7 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
         }
         else
         {
-            final byte[] tmp = Utils.getBytes(value, AsfHeader.ASF_CHARSET);
+            byte[] tmp = Utils.getBytes(value, AsfHeader.ASF_CHARSET);
             if (getContainerType().isWithinValueRange(tmp.length))
             {
                 // Everything is fine here, data can be stored.
@@ -820,7 +813,7 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
                 if (TagOptionSingleton.getInstance().isTruncateTextWithoutErrors())
                 {
                     // truncate the string
-                    final int copyBytes = (int) getContainerType().getMaximumDataLength().longValue();
+                    int copyBytes = (int) getContainerType().getMaximumDataLength().longValue();
                     this.content = new byte[copyBytes % 2 == 0 ? copyBytes : copyBytes - 1];
                     System.arraycopy(tmp, 0, this.content, 0, this.content.length);
                 }
@@ -843,7 +836,7 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
      * @param value Value to set.
      * @throws IllegalArgumentException on negative values. ASF just supports unsigned values.
      */
-    public void setWordValue(final int value) throws IllegalArgumentException
+    public void setWordValue(int value) throws IllegalArgumentException
     {
         if (value < 0 || value > WORD_MAXVALUE)
         {
@@ -869,12 +862,11 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
      *
      * @param out      stream to write into.
      * @param contType the container type this descriptor is written to.
-     * @return amount of bytes written.
      * @throws IOException on I/O Errors
      */
-    public int writeInto(final OutputStream out, final ContainerType contType) throws IOException
+    public void writeInto(OutputStream out, ContainerType contType) throws IOException
     {
-        final int size = getCurrentAsfSize(contType);
+        int size = getCurrentAsfSize(contType);
         /*
          * Booleans are stored as one byte, if a boolean is written, the data
          * must be converted according to the container type.
@@ -905,7 +897,7 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
         }
 
         // type and content len follow up are identical
-        final int type = getType();
+        int type = getType();
         Utils.writeUINT16(type, out);
         int contentLen = binaryData.length;
         if (TYPE_STRING == type)
@@ -935,6 +927,5 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
         {
             out.write(AsfHeader.ZERO_TERM);
         }
-        return size;
     }
 }

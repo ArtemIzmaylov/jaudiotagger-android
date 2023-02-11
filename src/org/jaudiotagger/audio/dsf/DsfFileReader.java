@@ -4,7 +4,6 @@
  */
 package org.jaudiotagger.audio.dsf;
 
-import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.generic.AudioFileReader2;
 import org.jaudiotagger.audio.generic.GenericAudioHeader;
@@ -71,7 +70,7 @@ public class DsfFileReader extends AudioFileReader2
             DsdChunk dsd = DsdChunk.readChunk(Utils.readFileDataIntoBufferLE(fc, DsdChunk.DSD_HEADER_LENGTH));
             if (dsd != null)
             {
-                logger.config( file +":actualFileSize:" + fc.size()+":"+dsd.toString());
+                logger.config( file +":actualFileSize:" + fc.size()+":"+ dsd);
 
                 return readTag(fc, dsd, file.toString());
             }

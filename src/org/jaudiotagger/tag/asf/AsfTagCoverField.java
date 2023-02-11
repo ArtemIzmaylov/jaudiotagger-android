@@ -7,6 +7,7 @@ import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
+import org.jaudiotagger.StandardCharsets;
 import java.util.logging.Logger;
 
 /**
@@ -60,8 +61,8 @@ public class AsfTagCoverField extends AbstractAsfTagImageField
      * @param description
      * @param mimeType
      */
-    public AsfTagCoverField(final byte[] imageData, final int pictureType,
-            final String description, final String mimeType) {
+    public AsfTagCoverField(byte[] imageData, int pictureType,
+                            String description, String mimeType) {
         super(new MetadataDescriptor(AsfFieldKey.COVER_ART.getFieldName(),
                 MetadataDescriptor.TYPE_BINARY));
         this.getDescriptor()
@@ -76,7 +77,7 @@ public class AsfTagCoverField extends AbstractAsfTagImageField
      * @param source
      *            The metadata descriptor, whose content is published.<br>
      */
-    public AsfTagCoverField(final MetadataDescriptor source) {
+    public AsfTagCoverField(MetadataDescriptor source) {
         super(source);
 
         if (!source.getName().equals(AsfFieldKey.COVER_ART.getFieldName())) {
@@ -89,14 +90,14 @@ public class AsfTagCoverField extends AbstractAsfTagImageField
 
         try {
             processRawContent();
-        } catch (final UnsupportedEncodingException uee) {
+        } catch (UnsupportedEncodingException uee) {
             // Should never happen
             throw new RuntimeException(uee); // NOPMD by Christian Laireiter on 5/9/09 5:45 PM
         }
     }
 
-    private byte[] createRawContent(final byte[] data, final int pictureType,
-            final String description, String mimeType) { // NOPMD by Christian Laireiter on 5/9/09 5:46 PM
+    private byte[] createRawContent(byte[] data, int pictureType,
+                                    String description, String mimeType) { // NOPMD by Christian Laireiter on 5/9/09 5:46 PM
         this.description = description;
         this.imageDataSize = data.length;
         this.pictureType = pictureType;
@@ -115,7 +116,7 @@ public class AsfTagCoverField extends AbstractAsfTagImageField
             }
         }
 
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
         // PictureType
         baos.write(pictureType);
@@ -128,7 +129,7 @@ public class AsfTagCoverField extends AbstractAsfTagImageField
         byte[] mimeTypeData;
         try {
             mimeTypeData = mimeType.getBytes(AsfHeader.ASF_CHARSET.name());
-        } catch (final UnsupportedEncodingException uee) {
+        } catch (UnsupportedEncodingException uee) {
             // Should never happen
             throw new RuntimeException("Unable to find encoding:" // NOPMD by Christian Laireiter on 5/9/09 5:45 PM
                     + AsfHeader.ASF_CHARSET.name());
@@ -140,12 +141,12 @@ public class AsfTagCoverField extends AbstractAsfTagImageField
         baos.write(0x00);
 
         // description
-        if (description != null && description.length() > 0) {
+        if (description != null && !description.isEmpty()) {
             byte[] descriptionData;
             try {
                 descriptionData = description.getBytes(AsfHeader.ASF_CHARSET
                         .name());
-            } catch (final UnsupportedEncodingException uee) {
+            } catch (UnsupportedEncodingException uee) {
                 // Should never happen
                 throw new RuntimeException("Unable to find encoding:" // NOPMD by Christian Laireiter on 5/9/09 5:45 PM
                         + AsfHeader.ASF_CHARSET.name());
@@ -185,7 +186,7 @@ public class AsfTagCoverField extends AbstractAsfTagImageField
      */
     @Override
     public byte[] getRawImageData() {
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
         baos.write(getRawContent(), this.endOfName, this.toWrap
                 .getRawDataSize()
                 - this.endOfName);
@@ -210,11 +211,11 @@ public class AsfTagCoverField extends AbstractAsfTagImageField
             if (getRawContent()[count] == 0 && getRawContent()[count + 1] == 0) {
                 if (this.mimeType == null) {
                     this.mimeType = new String(getRawContent(), 5, (count) - 5,
-                            "UTF-16LE");
+                            StandardCharsets.UTF_16LE);
                     endOfMimeType = count + 2;
                 } else if (this.description == null) {
                     this.description = new String(getRawContent(),
-                            endOfMimeType, count - endOfMimeType, "UTF-16LE");
+                            endOfMimeType, count - endOfMimeType, StandardCharsets.UTF_16LE);
                     this.endOfName = count + 2;
                     break;
                 }

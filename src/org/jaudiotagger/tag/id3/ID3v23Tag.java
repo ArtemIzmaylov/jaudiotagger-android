@@ -29,9 +29,9 @@ import org.jaudiotagger.tag.reference.PictureTypes;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
+import org.jaudiotagger.StandardCharsets;
 import java.util.*;
 import java.util.logging.Level;
 
@@ -52,10 +52,10 @@ public class ID3v23Tag extends AbstractID3v2Tag
     protected static final String TYPE_UNSYNCHRONISATION = "unsyncronisation";
 
 
-    protected static int TAG_EXT_HEADER_LENGTH = 10;
-    protected static int TAG_EXT_HEADER_CRC_LENGTH = 4;
-    protected static int FIELD_TAG_EXT_SIZE_LENGTH = 4;
-    protected static int TAG_EXT_HEADER_DATA_LENGTH = TAG_EXT_HEADER_LENGTH - FIELD_TAG_EXT_SIZE_LENGTH;
+    protected static final int TAG_EXT_HEADER_LENGTH = 10;
+    protected static final int TAG_EXT_HEADER_CRC_LENGTH = 4;
+    protected static final int FIELD_TAG_EXT_SIZE_LENGTH = 4;
+    protected static final int TAG_EXT_HEADER_DATA_LENGTH = TAG_EXT_HEADER_LENGTH - FIELD_TAG_EXT_SIZE_LENGTH;
 
     /**
      * ID3v2.3 Header bit mask
@@ -115,7 +115,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
     /**
      * The tag is compressed
      */
-    protected boolean compression = false;
+    protected static final boolean compression = false;
 
 
     public static final byte RELEASE = 2;
@@ -253,20 +253,20 @@ public class ID3v23Tag extends AbstractID3v2Tag
             FrameBodyTDRC tmpBody = (FrameBodyTDRC) frame.getBody();
             tmpBody.findMatchingMaskAndExtractV3Values();
             ID3v23Frame newFrame;
-            if (!tmpBody.getYear().equals(""))
+            if (!tmpBody.getYear().isEmpty())
             {
                 newFrame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_TYER);
                 ((FrameBodyTYER) newFrame.getBody()).setText(tmpBody.getYear());
                 frames.add(newFrame);
             }
-            if (!tmpBody.getDate().equals(""))
+            if (!tmpBody.getDate().isEmpty())
             {
                 newFrame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_TDAT);
                 ((FrameBodyTDAT) newFrame.getBody()).setText(tmpBody.getDate());
                 ((FrameBodyTDAT) newFrame.getBody()).setMonthOnly(tmpBody.isMonthOnly());
                 frames.add(newFrame);
             }
-            if (!tmpBody.getTime().equals(""))
+            if (!tmpBody.getTime().isEmpty())
             {
                 newFrame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_TIME);
                 ((FrameBodyTIME) newFrame.getBody()).setText(tmpBody.getTime());
@@ -444,9 +444,8 @@ public class ID3v23Tag extends AbstractID3v2Tag
      *
      * <p>Log info messages for flags that have been set and log warnings when bits have been set for unknown flags
      * @param buffer
-     * @throws TagException
      */
-    private void readHeaderFlags(ByteBuffer buffer) throws TagException
+    private void readHeaderFlags(ByteBuffer buffer)
     {
         //Allowable Flags
         byte flags = buffer.get();
@@ -525,7 +524,6 @@ public class ID3v23Tag extends AbstractID3v2Tag
             {
                 logger.config(ErrorMessage.ID3_TAG_PADDING_SIZE.getMsg(getLoggingFilename(),paddingSize));
             }
-            size = size - ( paddingSize + TAG_EXT_HEADER_LENGTH);
         }
         else if (extendedHeaderSize == TAG_EXT_HEADER_DATA_LENGTH + TAG_EXT_HEADER_CRC_LENGTH)
         {
@@ -546,7 +544,6 @@ public class ID3v23Tag extends AbstractID3v2Tag
             {
                 logger.config(ErrorMessage.ID3_TAG_PADDING_SIZE.getMsg(getLoggingFilename(),paddingSize));
             }
-            size = size - (paddingSize + TAG_EXT_HEADER_LENGTH + TAG_EXT_HEADER_CRC_LENGTH);
             //CRC Data
             crc32 = buffer.getInt();
             logger.config(ErrorMessage.ID3_TAG_CRC_SIZE.getMsg(getLoggingFilename(),crc32));
@@ -668,7 +665,6 @@ public class ID3v23Tag extends AbstractID3v2Tag
             {
                 logger.warning(getLoggingFilename() + ":Corrupt Frame:" + idete.getMessage());
                 this.invalidFrames++;
-                continue;
             }
         }
     }
@@ -944,7 +940,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
      */
     public void deleteField(String id)
     {
-        super.doDeleteTagField(new FrameAndSubId(null, id,null));
+        super.doDeleteTagField(new FrameAndSubId(null, id, null));
     }
 
     protected FrameAndSubId getFrameAndSubIdFromGenericKey(FieldKey genericKey)
@@ -981,7 +977,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
     public List<Artwork> getArtworkList()
     {
         List<TagField> coverartList = getFields(FieldKey.COVER_ART);
-        List<Artwork> artworkList = new ArrayList<Artwork>(coverartList.size());
+        List<Artwork> artworkList = new ArrayList<>(coverartList.size());
 
         for (TagField next : coverartList)
         {
@@ -1007,7 +1003,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
     /**
      * {@inheritDoc}
      */    
-    public TagField createField(Artwork artwork) throws FieldDataInvalidException
+    public TagField createField(Artwork artwork)
     {
         AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(FieldKey.COVER_ART).getFrameId());
         FrameBodyAPIC body = (FrameBodyAPIC) frame.getBody();
@@ -1021,14 +1017,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
         }
         else
         {
-            try
-            {
-                body.setObjectValue(DataTypes.OBJ_PICTURE_DATA,artwork.getImageUrl().getBytes("ISO-8859-1"));
-            }
-            catch(UnsupportedEncodingException uoe)
-            {
-                throw new RuntimeException(uoe.getMessage());
-            }
+            body.setObjectValue(DataTypes.OBJ_PICTURE_DATA,artwork.getImageUrl().getBytes(StandardCharsets.ISO_8859_1));
             body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, artwork.getPictureType());
             body.setObjectValue(DataTypes.OBJ_MIME_TYPE, FrameBodyAPIC.IMAGE_IS_URL);
             body.setObjectValue(DataTypes.OBJ_DESCRIPTION, artwork.getDescription());
@@ -1211,7 +1200,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
         else if(genericKey == FieldKey.GENRE)
         {
             List<TagField> fields = getFields(genericKey);
-            if (fields != null && fields.size() > 0)
+            if (fields != null && !fields.isEmpty())
             {
                 AbstractID3v2Frame frame = (AbstractID3v2Frame) fields.get(0);
                 FrameBodyTCON body = (FrameBodyTCON)frame.getBody();
@@ -1244,7 +1233,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
 
         if(frameId.equals(ID3v23Frames.FRAME_ID_V3_TDAT))
         {
-            if(frame.getContent().length()==0)
+            if(frame.getContent().isEmpty())
             {
                 //Discard not useful to complicate by trying to map it
                 logger.warning(getLoggingFilename() + ":TDAT is empty so just ignoring");
@@ -1254,7 +1243,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
         if (map.containsKey(frameId) || map.containsKey(TyerTdatAggregatedFrame.ID_TYER_TDAT))
         {
             //If we have multiple duplicate frames in a tag separate them with semicolons
-            if (this.duplicateFrameId.length() > 0)
+            if (!this.duplicateFrameId.isEmpty())
             {
                 this.duplicateFrameId += ";";
             }
@@ -1325,8 +1314,8 @@ public class ID3v23Tag extends AbstractID3v2Tag
         if(genericKey == FieldKey.GENRE)
         {
             List<TagField> fields = getFields(genericKey);
-            List<String> convertedGenres = new ArrayList<String>();
-            if (fields != null && fields.size() > 0)
+            List<String> convertedGenres = new ArrayList<>();
+            if (fields != null && !fields.isEmpty())
             {
                 AbstractID3v2Frame frame = (AbstractID3v2Frame) fields.get(0);
                 FrameBodyTCON body = (FrameBodyTCON)frame.getBody();
@@ -1341,8 +1330,8 @@ public class ID3v23Tag extends AbstractID3v2Tag
         else if(genericKey == FieldKey.YEAR)
         {
             List<TagField> fields = getFields(genericKey);
-            List<String> results = new ArrayList<String>();
-            if (fields != null && fields.size() > 0)
+            List<String> results = new ArrayList<>();
+            if (fields != null && !fields.isEmpty())
             {
                 for(TagField next:fields)
                 {

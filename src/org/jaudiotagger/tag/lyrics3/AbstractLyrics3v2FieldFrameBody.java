@@ -30,7 +30,6 @@ import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
-import java.util.Iterator;
 
 public abstract class AbstractLyrics3v2FieldFrameBody extends AbstractTagFrameBody
 {
@@ -123,8 +122,7 @@ public abstract class AbstractLyrics3v2FieldFrameBody extends AbstractTagFrameBo
         //Go through the ObjectList of the Frame reading the data into the
         //correct datatype.
         AbstractDataType object;
-        Iterator<AbstractDataType> iterator = objectList.listIterator();
-        while (iterator.hasNext())
+        for (AbstractDataType abstractDataType : objectList)
         {
             //The read has extended further than the defined frame size
             if (offset > (size - 1))
@@ -133,7 +131,7 @@ public abstract class AbstractLyrics3v2FieldFrameBody extends AbstractTagFrameBo
             }
 
             //Get next Object and load it with data from the Buffer
-            object = iterator.next();
+            object = abstractDataType;
             object.readByteArray(buffer, offset);
             //Increment Offset to start of next datatype.
             offset += object.getSize();
@@ -152,10 +150,9 @@ public abstract class AbstractLyrics3v2FieldFrameBody extends AbstractTagFrameBo
         //Write the various fields to file in order
         byte[] buffer;
         AbstractDataType object;
-        Iterator<AbstractDataType> iterator = objectList.listIterator();
-        while (iterator.hasNext())
+        for (AbstractDataType abstractDataType : objectList)
         {
-            object = iterator.next();
+            object = abstractDataType;
             buffer = object.writeByteArray();
             file.write(buffer);
         }

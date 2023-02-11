@@ -26,7 +26,6 @@ import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.logging.Hex;
 
-import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -90,7 +89,7 @@ public class MP3AudioHeader implements AudioHeader
     private static final char   isVbrIdentifier = '~';
 
     //Logger
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.mp3");
+    public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.mp3");
 
     /**
      * After testing the average location of the first MP3Header bit was at 5000 bytes so this is
@@ -114,7 +113,7 @@ public class MP3AudioHeader implements AudioHeader
      * @throws IOException
      * @throws InvalidAudioFrameException
      */
-    public MP3AudioHeader(final File seekFile) throws IOException, InvalidAudioFrameException
+    public MP3AudioHeader(File seekFile) throws IOException, InvalidAudioFrameException
     {
         if (!seek(seekFile, 0))
         {
@@ -139,7 +138,7 @@ public class MP3AudioHeader implements AudioHeader
      * @throws IOException
      * @throws InvalidAudioFrameException
      */
-    public MP3AudioHeader(final File seekFile, long startByte) throws IOException, InvalidAudioFrameException
+    public MP3AudioHeader(File seekFile, long startByte) throws IOException, InvalidAudioFrameException
     {
         if (!seek(seekFile, startByte))
         {
@@ -157,7 +156,7 @@ public class MP3AudioHeader implements AudioHeader
      * @return true if the first MP3 frame can be found
      * @throws IOException on any I/O error
      */
-    public boolean seek(final File seekFile, long startByte) throws IOException
+    public boolean seek(File seekFile, long startByte) throws IOException
     {
         //References to Xing/VRbi Header
         ByteBuffer header;
@@ -165,8 +164,8 @@ public class MP3AudioHeader implements AudioHeader
         //This is substantially faster than updating the filechannels position
         long filePointerCount;
 
-        final FileInputStream fis = new FileInputStream(seekFile);
-        final FileChannel fc = fis.getChannel();
+        FileInputStream fis = new FileInputStream(seekFile);
+        FileChannel fc = fis.getChannel();
 
         //Read into Byte Buffer in Chunks
         ByteBuffer bb = ByteBuffer.allocateDirect(FILE_BUFFER_SIZE);
@@ -221,16 +220,9 @@ public class MP3AudioHeader implements AudioHeader
                             {
                                 MP3AudioHeader.logger.finest("Found Possible XingHeader");
                             }
-                            try
-                            {
-                                //Parses Xing frame without modifying position of main buffer
-                                mp3XingFrame = XingFrame.parseXingFrame(header);
-                            }
-                            catch (InvalidAudioFrameException ex)
-                            {
-                                // We Ignore because even if Xing Header is corrupted
-                                //doesn't mean file is corrupted
-                            }
+                            //Parses Xing frame without modifying position of main buffer
+                            mp3XingFrame = XingFrame.parseXingFrame(header);
+
                             break;
                         }
                         else if ((header = VbriFrame.isVbriFrame(bb, mp3FrameHeader)) != null)
@@ -239,16 +231,9 @@ public class MP3AudioHeader implements AudioHeader
                             {
                                 MP3AudioHeader.logger.finest("Found Possible VbriHeader");
                             }
-                            try
-                            {
-                                //Parses Vbri frame without modifying position of main buffer
-                                mp3VbriFrame = VbriFrame.parseVBRIFrame(header);
-                            }
-                            catch (InvalidAudioFrameException ex)
-                            {
-                                // We Ignore because even if Vbri Header is corrupted
-                                //doesn't mean file is corrupted
-                            }
+                            //Parses Vbri frame without modifying position of main buffer
+                            mp3VbriFrame = VbriFrame.parseVBRIFrame(header);
+
                             break;
                         }
                         // There is a small but real chance that an unsynchronised ID3 Frame could fool the MPEG
@@ -285,15 +270,9 @@ public class MP3AudioHeader implements AudioHeader
             }
             while (!syncFound);
         }
-        catch (EOFException ex)
-        {
-            MP3AudioHeader.logger.log(Level.WARNING, "Reached end of file without finding sync match", ex);
-            syncFound = false;
-        }
         catch (IOException iox)
         {
             MP3AudioHeader.logger.log(Level.SEVERE, "IOException occurred whilst trying to find sync", iox);
-            syncFound = false;
             throw iox;
         }
         finally
@@ -415,7 +394,7 @@ public class MP3AudioHeader implements AudioHeader
      *
      * @param startByte
      */
-    protected void setMp3StartByte(final long startByte)
+    protected void setMp3StartByte(long startByte)
     {
         this.startByte = startByte;
     }
@@ -542,10 +521,10 @@ public class MP3AudioHeader implements AudioHeader
      */
     public String getTrackLengthAsString()
     {
-        final Date timeIn;
+        Date timeIn;
         try
         {
-            final long lengthInSecs = getTrackLength();
+            long lengthInSecs = getTrackLength();
             synchronized (timeInFormat)
             {
                 timeIn = timeInFormat.parse(String.valueOf(lengthInSecs));
@@ -799,20 +778,11 @@ public class MP3AudioHeader implements AudioHeader
     {
         StringBuilder out = new StringBuilder();
         out.append("Audio Header content:\n");
-        out.append("\tfileSize:" + fileSize + "\n"
-                + "\tencoder:" + encoder + "\n"
-                + "\tencoderType:" + getEncodingType() + "\n"
-                + "\tformat:" + getFormat() + "\n"
-                + "\tstartByte:" + Hex.asHex(startByte) + "\n"
-                + "\tnumberOfFrames:" + numberOfFrames + "\n"
-                + "\tnumberOfFramesEst:" + numberOfFramesEstimate + "\n"
-                + "\ttimePerFrame:" + timePerFrame + "\n"
-                + "\tbitrate:" + bitrate + "\n"
-                + "\ttrackLength:" + getTrackLengthAsString() + "\n");
+        out.append("\tfileSize:").append(fileSize).append("\n").append("\tencoder:").append(encoder).append("\n").append("\tencoderType:").append(getEncodingType()).append("\n").append("\tformat:").append(getFormat()).append("\n").append("\tstartByte:").append(Hex.asHex(startByte)).append("\n").append("\tnumberOfFrames:").append(numberOfFrames).append("\n").append("\tnumberOfFramesEst:").append(numberOfFramesEstimate).append("\n").append("\ttimePerFrame:").append(timePerFrame).append("\n").append("\tbitrate:").append(bitrate).append("\n").append("\ttrackLength:").append(getTrackLengthAsString()).append("\n");
 
         if (this.mp3FrameHeader != null)
         {
-            out.append(mp3FrameHeader.toString());
+            out.append(mp3FrameHeader);
         }
         else
         {
@@ -821,7 +791,7 @@ public class MP3AudioHeader implements AudioHeader
 
         if (this.mp3XingFrame != null)
         {
-            out.append(mp3XingFrame.toString());
+            out.append(mp3XingFrame);
         }
         else
         {
@@ -830,7 +800,7 @@ public class MP3AudioHeader implements AudioHeader
 
         if (this.mp3VbriFrame != null)
         {
-            out.append(mp3VbriFrame.toString());
+            out.append(mp3VbriFrame);
         }
         else
         {
@@ -854,7 +824,7 @@ public class MP3AudioHeader implements AudioHeader
      */
     public Long getAudioDataLength()
     {
-        return Long.valueOf(0);
+        return 0L;
     }
 
     @Override

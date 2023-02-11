@@ -17,7 +17,7 @@ public enum StandardIPLSKey
     PRODUCER("producer"),
     ARRANGER("arranger"),;
 
-    private String key;
+    private final String key;
 
     StandardIPLSKey(String key)
     {
@@ -29,7 +29,7 @@ public enum StandardIPLSKey
         return key;
     }
 
-    private static final Map<String, StandardIPLSKey> lookup = new HashMap<String, StandardIPLSKey>();
+    private static final Map<String, StandardIPLSKey> lookup = new HashMap<>();
 
     static
     {

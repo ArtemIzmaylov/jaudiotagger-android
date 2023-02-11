@@ -47,10 +47,10 @@ public class EncodingChunk extends Chunk
      *
      * @param chunkLen Length of current chunk.
      */
-    public EncodingChunk(final BigInteger chunkLen)
+    public EncodingChunk(BigInteger chunkLen)
     {
         super(GUID.GUID_ENCODING, chunkLen);
-        this.strings = new ArrayList<String>();
+        this.strings = new ArrayList<>();
     }
 
     /**
@@ -58,7 +58,7 @@ public class EncodingChunk extends Chunk
      *
      * @param toAdd String to add.
      */
-    public void addString(final String toAdd)
+    public void addString(String toAdd)
     {
         this.strings.add(toAdd);
     }
@@ -71,18 +71,18 @@ public class EncodingChunk extends Chunk
      */
     public Collection<String> getStrings()
     {
-        return new ArrayList<String>(this.strings);
+        return new ArrayList<>(this.strings);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String prettyPrint(final String prefix)
+    public String prettyPrint(String prefix)
     {
-        final StringBuilder result = new StringBuilder(super.prettyPrint(prefix));
+        StringBuilder result = new StringBuilder(super.prettyPrint(prefix));
         this.strings.iterator();
-        for (final String string : this.strings)
+        for (String string : this.strings)
         {
             result.append(prefix).append("  | : ").append(string).append(Utils.LINE_SEPARATOR);
         }

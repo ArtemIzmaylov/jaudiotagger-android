@@ -24,7 +24,6 @@
 package org.jaudiotagger.tag.datatype;
 
 import org.jaudiotagger.StandardCharsets;
-import org.jaudiotagger.tag.InvalidDataTypeException;
 import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 
 public class ID3v2LyricLine extends AbstractDataType
@@ -110,10 +109,8 @@ public class ID3v2LyricLine extends AbstractDataType
     /**
      * @param arr
      * @param offset
-     * @throws NullPointerException
-     * @throws IndexOutOfBoundsException
      */
-    public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
+    public void readByteArray(byte[] arr, int offset)
     {
         if (arr == null)
         {

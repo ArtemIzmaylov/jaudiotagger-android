@@ -37,7 +37,7 @@ import java.util.logging.Logger;
 public class FlacTagCreator extends AbstractTagCreator
 {
     // Logger Object
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.flac");
+    public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.flac");
 
     //TODO make an option
     public static final int DEFAULT_PADDING = 4000;
@@ -77,7 +77,7 @@ public class FlacTagCreator extends AbstractTagCreator
         //If there are other metadata blocks
         if (flacTag.getVorbisCommentTag() != null)
         {
-            if (isLastBlock || (flacTag.getImages().size() > 0))
+            if (isLastBlock || (!flacTag.getImages().isEmpty()))
             {
                 vorbisHeader = new MetadataBlockHeader(false, BlockType.VORBIS_COMMENT, vorbiscomment.capacity());
             }

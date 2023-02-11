@@ -76,7 +76,7 @@ public abstract class StreamChunk extends Chunk
      *                   ):
      * @param chunkLen   length of chunk
      */
-    public StreamChunk(final GUID streamType, final BigInteger chunkLen)
+    public StreamChunk(GUID streamType, BigInteger chunkLen)
     {
         super(GUID.GUID_STREAM, chunkLen);
         assert GUID.GUID_AUDIOSTREAM.equals(streamType) || GUID.GUID_VIDEOSTREAM.equals(streamType);
@@ -139,21 +139,20 @@ public abstract class StreamChunk extends Chunk
      * @see org.jaudiotagger.audio.asf.data.Chunk#prettyPrint(String)
      */
     @Override
-    public String prettyPrint(final String prefix)
+    public String prettyPrint(String prefix)
     {
-        final StringBuilder result = new StringBuilder(super.prettyPrint(prefix));
-        result.append(prefix).append("  |-> Stream number: ").append(getStreamNumber()).append(Utils.LINE_SEPARATOR);
-        result.append(prefix).append("  |-> Type specific data size  : ").append(getTypeSpecificDataSize()).append(Utils.LINE_SEPARATOR);
-        result.append(prefix).append("  |-> Stream specific data size: ").append(getStreamSpecificDataSize()).append(Utils.LINE_SEPARATOR);
-        result.append(prefix).append("  |-> Time Offset              : ").append(getTimeOffset()).append(Utils.LINE_SEPARATOR);
-        result.append(prefix).append("  |-> Content Encryption       : ").append(isContentEncrypted()).append(Utils.LINE_SEPARATOR);
-        return result.toString();
+        String result = super.prettyPrint(prefix) + prefix + "  |-> Stream number: " + getStreamNumber() + Utils.LINE_SEPARATOR +
+                prefix + "  |-> Type specific data size  : " + getTypeSpecificDataSize() + Utils.LINE_SEPARATOR +
+                prefix + "  |-> Stream specific data size: " + getStreamSpecificDataSize() + Utils.LINE_SEPARATOR +
+                prefix + "  |-> Time Offset              : " + getTimeOffset() + Utils.LINE_SEPARATOR +
+                prefix + "  |-> Content Encryption       : " + isContentEncrypted() + Utils.LINE_SEPARATOR;
+        return result;
     }
 
     /**
      * @param cntEnc The contentEncrypted to set.
      */
-    public void setContentEncrypted(final boolean cntEnc)
+    public void setContentEncrypted(boolean cntEnc)
     {
         this.contentEncrypted = cntEnc;
     }
@@ -161,7 +160,7 @@ public abstract class StreamChunk extends Chunk
     /**
      * @param streamNum The streamNumber to set.
      */
-    public void setStreamNumber(final int streamNum)
+    public void setStreamNumber(int streamNum)
     {
         this.streamNumber = streamNum;
     }
@@ -169,7 +168,7 @@ public abstract class StreamChunk extends Chunk
     /**
      * @param strSpecDataSize The streamSpecificDataSize to set.
      */
-    public void setStreamSpecificDataSize(final long strSpecDataSize)
+    public void setStreamSpecificDataSize(long strSpecDataSize)
     {
         this.streamSpecificDataSize = strSpecDataSize;
     }
@@ -177,7 +176,7 @@ public abstract class StreamChunk extends Chunk
     /**
      * @param timeOffs sets the time offset
      */
-    public void setTimeOffset(final long timeOffs)
+    public void setTimeOffset(long timeOffs)
     {
         this.timeOffset = timeOffs;
     }
@@ -185,7 +184,7 @@ public abstract class StreamChunk extends Chunk
     /**
      * @param typeSpecDataSize The typeSpecificDataSize to set.
      */
-    public void setTypeSpecificDataSize(final long typeSpecDataSize)
+    public void setTypeSpecificDataSize(long typeSpecDataSize)
     {
         this.typeSpecificDataSize = typeSpecDataSize;
     }

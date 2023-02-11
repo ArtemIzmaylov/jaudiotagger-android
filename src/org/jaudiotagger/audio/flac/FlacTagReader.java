@@ -32,7 +32,6 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -44,9 +43,9 @@ import java.util.logging.Logger;
 public class FlacTagReader
 {
     // Logger Object
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.flac");
+    public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.flac");
 
-    private VorbisCommentReader vorbisCommentReader = new VorbisCommentReader();
+    private final VorbisCommentReader vorbisCommentReader = new VorbisCommentReader();
 
 
     public FlacTag read(File path) throws CannotReadException, IOException
@@ -59,7 +58,7 @@ public class FlacTagReader
 
             //Hold the metadata
             VorbisCommentTag tag = null;
-            List<MetadataBlockDataPicture> images = new ArrayList<MetadataBlockDataPicture>();
+            List<MetadataBlockDataPicture> images = new ArrayList<>();
 
             //Seems like we have a valid stream
             boolean isLastBlock = false;
@@ -79,7 +78,7 @@ public class FlacTagReader
 
                 if (logger.isLoggable(Level.CONFIG))
                 {
-                    logger.config(path + " Reading MetadataBlockHeader:" + mbh.toString() + " ending at " + fc.position());
+                    logger.config(path + " Reading MetadataBlockHeader:" + mbh + " ending at " + fc.position());
                 }
 
                 //Is it one containing some sort of metadata, therefore interested in it?

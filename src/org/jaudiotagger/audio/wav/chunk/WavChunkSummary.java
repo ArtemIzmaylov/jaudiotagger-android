@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 public class WavChunkSummary
 {
     // Logger Object
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.wav.chunk");
+    public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.wav.chunk");
 
     /**
      * Get start location in file of first metadata chunk (could be LIST or ID3)
@@ -23,7 +23,7 @@ public class WavChunkSummary
     public static long getStartLocationOfFirstMetadataChunk(WavTag tag)
     {
         //Work out the location of the first metadata tag (could be id3 or LIST tag)
-        if(tag.getMetadataChunkSummaryList().size()>0)
+        if(!tag.getMetadataChunkSummaryList().isEmpty())
         {
             return tag.getMetadataChunkSummaryList().get(0).getFileStartLocation();
         }
@@ -72,11 +72,7 @@ public class WavChunkSummary
         }
 
         //Should always be true but this is to protect against something gone wrong
-        if(firstMetadataTag==true)
-        {
-            return true;
-        }
-        return false;
+        return firstMetadataTag;
 
     }
 

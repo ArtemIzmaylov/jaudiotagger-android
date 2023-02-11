@@ -19,7 +19,7 @@ public class ChunkHeader
 
     private long        size;              // This does not include the 8 bytes of header itself
     private String      chunkId;           // Four character Id of the chunk
-    private ByteOrder   byteOrder;
+    private final ByteOrder   byteOrder;
     private long        startLocationInFile;
 
 
@@ -32,7 +32,7 @@ public class ChunkHeader
      *
      * @return {@code true}, if we were able to read a chunk header and believe we found a valid chunk id.
      */
-    public boolean readHeader(final FileChannel fc) throws IOException
+    public boolean readHeader(FileChannel fc) throws IOException
     {
         ByteBuffer header = ByteBuffer.allocate(CHUNK_HEADER_SIZE);
         startLocationInFile = fc.position();
@@ -49,7 +49,7 @@ public class ChunkHeader
      *
      * @return {@code true}, if we were able to read a chunk header and believe we found a valid chunk id.
      */
-    public boolean readHeader(final RandomAccessFile raf) throws IOException
+    public boolean readHeader(RandomAccessFile raf) throws IOException
     {
         ByteBuffer header = ByteBuffer.allocate(CHUNK_HEADER_SIZE);
         startLocationInFile = raf.getFilePointer();
@@ -69,7 +69,7 @@ public class ChunkHeader
      */
     public ByteBuffer writeHeader()
     {
-        final ByteBuffer bb = ByteBuffer.allocate(CHUNK_HEADER_SIZE);
+        ByteBuffer bb = ByteBuffer.allocate(CHUNK_HEADER_SIZE);
         bb.order(byteOrder);
         bb.put(chunkId.getBytes(StandardCharsets.US_ASCII));
         bb.putInt((int)size);
@@ -82,7 +82,7 @@ public class ChunkHeader
      *
      * @param id 4-char id
      */
-    public void setID(final String id)
+    public void setID(String id)
     {
         this.chunkId = id;
     }
@@ -113,7 +113,7 @@ public class ChunkHeader
      * @param size chunk size without header
      * @see #getSize()
      */
-    public void setSize(final long size)
+    public void setSize(long size)
     {
         this.size=size;
     }

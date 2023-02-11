@@ -23,17 +23,17 @@ public enum WavChunkType
     ID3_UPPERCASE("ID3 ", "Stores metadata in ID3 chunk, should be lowercase id"),
     ;
 
-    private static final Map<String, WavChunkType> CODE_TYPE_MAP = new HashMap<String, WavChunkType>();
-    private String code;
+    private static final Map<String, WavChunkType> CODE_TYPE_MAP = new HashMap<>();
+    private final String code;
     /**
      * Get {@link WavChunkType} for code (e.g. "SSND").
      *
      * @param code chunk id
      * @return chunk type or {@code null} if not registered
      */
-    public synchronized static WavChunkType get(final String code) {
+    public synchronized static WavChunkType get(String code) {
         if (CODE_TYPE_MAP.isEmpty()) {
-            for (final WavChunkType type : values()) {
+            for (WavChunkType type : values()) {
                 CODE_TYPE_MAP.put(type.getCode(), type);
             }
         }
@@ -43,7 +43,7 @@ public enum WavChunkType
     /**
      * @param code 4 char string
      */
-    WavChunkType(final String code, String description)
+    WavChunkType(String code, String description)
     {
         this.code=code;
     }

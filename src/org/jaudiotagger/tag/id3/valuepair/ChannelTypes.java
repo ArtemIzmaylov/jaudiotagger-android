@@ -24,7 +24,7 @@ package org.jaudiotagger.tag.id3.valuepair;
 
 import org.jaudiotagger.tag.datatype.AbstractIntStringValuePair;
 
-public class ChannelTypes extends AbstractIntStringValuePair
+public final class ChannelTypes extends AbstractIntStringValuePair
 {
     private static ChannelTypes channelTypes;
 

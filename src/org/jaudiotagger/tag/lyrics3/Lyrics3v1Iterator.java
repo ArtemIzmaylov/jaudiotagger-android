@@ -30,7 +30,7 @@ public class Lyrics3v1Iterator implements Iterator<String>
     /**
      *
      */
-    private Lyrics3v1 tag = null;
+    private final Lyrics3v1 tag;
 
     /**
      *

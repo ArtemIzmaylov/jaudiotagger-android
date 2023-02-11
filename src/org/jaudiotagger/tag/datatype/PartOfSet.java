@@ -1,7 +1,6 @@
 package org.jaudiotagger.tag.datatype;
 
 import org.jaudiotagger.StandardCharsets;
-import org.jaudiotagger.tag.InvalidDataTypeException;
 import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
@@ -82,10 +81,8 @@ public class PartOfSet extends AbstractString
      *
      * @param arr    this is the buffer for the frame
      * @param offset this is where to start reading in the buffer for this field
-     * @throws NullPointerException
-     * @throws IndexOutOfBoundsException
      */
-    public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
+    public void readByteArray(byte[] arr, int offset)
     {
         //Get the Specified Decoder
         CharsetDecoder decoder = getTextEncodingCharSet().newDecoder();
@@ -97,7 +94,7 @@ public class PartOfSet extends AbstractString
         CoderResult coderResult = decoder.decode(inBuffer, outBuffer, true);
         if (coderResult.isError())
         {
-            logger.warning("Decoding error:" + coderResult.toString());
+            logger.warning("Decoding error:" + coderResult);
         }
         decoder.flush(outBuffer);
         outBuffer.flip();
@@ -132,7 +129,7 @@ public class PartOfSet extends AbstractString
         {
             if (TagOptionSingleton.getInstance().isRemoveTrailingTerminatorOnWrite())
             {
-                if (value.length() > 0)
+                if (!value.isEmpty())
                 {
                     if (value.charAt(value.length() - 1) == '\0')
                     {
@@ -141,9 +138,9 @@ public class PartOfSet extends AbstractString
                 }
             }
 
-            final Charset charset = getTextEncodingCharSet();
-            final String valueWithBOM;
-            final CharsetEncoder encoder;
+            Charset charset = getTextEncodingCharSet();
+            String valueWithBOM;
+            CharsetEncoder encoder;
             if (StandardCharsets.UTF_16.equals(charset))
             {
                 encoder = StandardCharsets.UTF_16LE.newEncoder();
@@ -158,7 +155,7 @@ public class PartOfSet extends AbstractString
             encoder.onMalformedInput(CodingErrorAction.IGNORE);
             encoder.onUnmappableCharacter(CodingErrorAction.IGNORE);
 
-            final ByteBuffer bb = encoder.encode(CharBuffer.wrap(valueWithBOM));
+            ByteBuffer bb = encoder.encode(CharBuffer.wrap(valueWithBOM));
             data = new byte[bb.limit()];
             bb.get(data, 0, bb.limit());
 
@@ -182,8 +179,8 @@ public class PartOfSet extends AbstractString
      */
     protected Charset getTextEncodingCharSet()
     {
-        final byte textEncoding = this.getBody().getTextEncoding();
-        final Charset charset = TextEncoding.getInstanceOf().getCharsetForId(textEncoding);
+        byte textEncoding = this.getBody().getTextEncoding();
+        Charset charset = TextEncoding.getInstanceOf().getCharsetForId(textEncoding);
         logger.finest("text encoding:" + textEncoding + " charset:" + charset.name());
         return charset;
     }
@@ -199,8 +196,8 @@ public class PartOfSet extends AbstractString
         static
         {
             //Match track/total pattern allowing for extraneous nulls ecetera at the end
-            trackNoPatternWithTotalCount = Pattern.compile("([0-9]+)/([0-9]+)(.*)", Pattern.CASE_INSENSITIVE);
-            trackNoPattern = Pattern.compile("([0-9]+)(.*)", Pattern.CASE_INSENSITIVE);
+            trackNoPatternWithTotalCount = Pattern.compile("(\\d+)/(\\d+)(.*)", Pattern.CASE_INSENSITIVE);
+            trackNoPattern = Pattern.compile("(\\d+)(.*)", Pattern.CASE_INSENSITIVE);
         }
 
         private static final String SEPARATOR = "/";
@@ -280,7 +277,7 @@ public class PartOfSet extends AbstractString
 
         private void resetValueFromCounts()
         {
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             if(rawCount!=null)
             {
                 sb.append(rawCount);
@@ -291,7 +288,7 @@ public class PartOfSet extends AbstractString
             }
             if(rawTotal!=null)
             {
-                sb.append(SEPARATOR + rawTotal);
+                sb.append(SEPARATOR).append(rawTotal);
             }
             if(extra!=null)
             {

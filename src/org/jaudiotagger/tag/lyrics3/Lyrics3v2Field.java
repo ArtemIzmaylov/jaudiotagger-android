@@ -65,7 +65,7 @@ public class Lyrics3v2Field extends AbstractTagFrame
         this.frameBody = body;
     }
     
-    protected static Set<String> LYRICS_FRAME_IDS;
+    protected static final Set<String> LYRICS_FRAME_IDS;
     static 
     {
     	Set<String> lyricsFrameIds = new HashSet<>();
@@ -114,7 +114,7 @@ public class Lyrics3v2Field extends AbstractTagFrame
         {
             textFrame = (AbstractFrameBodyTextInfo) frame.getBody();
             frameBody = new FieldFrameBodyAUT("");
-            if ((textFrame != null) && (textFrame.getText().length() > 0))
+            if ((textFrame != null) && (!textFrame.getText().isEmpty()))
             {
                 frameBody = new FieldFrameBodyAUT(textFrame.getText());
             }
@@ -122,7 +122,7 @@ public class Lyrics3v2Field extends AbstractTagFrame
         else if (frameIdentifier.equals("TALB"))
         {
             textFrame = (AbstractFrameBodyTextInfo) frame.getBody();
-            if ((textFrame != null) && (textFrame.getText().length() > 0))
+            if ((textFrame != null) && (!textFrame.getText().isEmpty()))
             {
                 frameBody = new FieldFrameBodyEAL(textFrame.getText());
             }
@@ -130,7 +130,7 @@ public class Lyrics3v2Field extends AbstractTagFrame
         else if (frameIdentifier.equals("TPE1"))
         {
             textFrame = (AbstractFrameBodyTextInfo) frame.getBody();
-            if ((textFrame != null) && (textFrame.getText().length() > 0))
+            if ((textFrame != null) && (!textFrame.getText().isEmpty()))
             {
                 frameBody = new FieldFrameBodyEAR(textFrame.getText());
             }
@@ -138,7 +138,7 @@ public class Lyrics3v2Field extends AbstractTagFrame
         else if (frameIdentifier.equals("TIT2"))
         {
             textFrame = (AbstractFrameBodyTextInfo) frame.getBody();
-            if ((textFrame != null) && (textFrame.getText().length() > 0))
+            if ((textFrame != null) && (!textFrame.getText().isEmpty()))
             {
                 frameBody = new FieldFrameBodyETT(textFrame.getText());
             }

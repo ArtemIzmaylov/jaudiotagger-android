@@ -1,7 +1,5 @@
 package org.jaudiotagger.audio.mp4.atom;
 
-import org.jaudiotagger.audio.exceptions.CannotReadException;
-
 import java.nio.ByteBuffer;
 
 /**
@@ -26,9 +24,8 @@ public class Mp4DrmsBox extends AbstractMp4Box
     /**
      * Process direct data
      *
-     * @throws CannotReadException
      */
-    public void processData() throws CannotReadException
+    public void processData()
     {
         while (dataBuffer.hasRemaining())
         {

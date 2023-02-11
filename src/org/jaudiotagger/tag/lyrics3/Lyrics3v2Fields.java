@@ -23,7 +23,7 @@ package org.jaudiotagger.tag.lyrics3;
 
 import org.jaudiotagger.tag.datatype.AbstractStringStringValuePair;
 
-public class Lyrics3v2Fields extends AbstractStringStringValuePair
+public final class Lyrics3v2Fields extends AbstractStringStringValuePair
 {
 
     private static Lyrics3v2Fields lyrics3Fields;

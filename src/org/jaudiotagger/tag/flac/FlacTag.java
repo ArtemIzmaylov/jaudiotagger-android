@@ -23,12 +23,12 @@ import java.util.List;
  */
 public class FlacTag implements Tag
 {
-    private VorbisCommentTag tag = null;
-    private List<MetadataBlockDataPicture> images = new ArrayList<MetadataBlockDataPicture>();
+    private final VorbisCommentTag tag;
+    private final List<MetadataBlockDataPicture> images;
 
     public FlacTag()
     {
-        this(VorbisCommentTag.createNewTag(), new ArrayList< MetadataBlockDataPicture >());
+        this(VorbisCommentTag.createNewTag(), new ArrayList<>());
     }
 
     public FlacTag(VorbisCommentTag tag, List<MetadataBlockDataPicture> images)
@@ -53,7 +53,7 @@ public class FlacTag implements Tag
         return tag;
     }
 
-    public void addField(TagField field) throws FieldDataInvalidException
+    public void addField(TagField field)
     {
         if (field instanceof MetadataBlockDataPicture)
         {
@@ -69,11 +69,8 @@ public class FlacTag implements Tag
     {
         if (id.equals(FieldKey.COVER_ART.name()))
         {
-            List<TagField> castImages = new ArrayList<TagField>();
-            for (MetadataBlockDataPicture image : images)
-            {
-                castImages.add(image);
-            }
+            List<TagField> castImages = new ArrayList<>();
+            castImages.addAll(images);
             return castImages;
         }
         else
@@ -119,7 +116,7 @@ public class FlacTag implements Tag
      */
     public boolean isEmpty()
     {
-        return (tag == null || tag.isEmpty()) && images.size() == 0;
+        return (tag == null || tag.isEmpty()) && images.isEmpty();
     }
 
     @Override
@@ -169,7 +166,6 @@ public class FlacTag implements Tag
                     setField(tagfield1);
                     TagField tagfield2 = createField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER, value);
                     setField(tagfield2);
-                    return;
                 }
 
             }
@@ -235,7 +231,6 @@ public class FlacTag implements Tag
                     addField(tagfield1);
                     TagField tagfield2 = createField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER, value);
                     addField(tagfield2);
-                    return;
                 }
 
             }
@@ -276,13 +271,12 @@ public class FlacTag implements Tag
 
     /**
      * @param field
-     * @throws FieldDataInvalidException
      */
-    public void setField(TagField field) throws FieldDataInvalidException
+    public void setField(TagField field)
     {
         if (field instanceof MetadataBlockDataPicture)
         {
-            if (images.size() == 0)
+            if (images.isEmpty())
             {
                 images.add(0, (MetadataBlockDataPicture) field);
             }
@@ -299,7 +293,7 @@ public class FlacTag implements Tag
 
     public TagField createField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException
     {
-        if (genericKey.equals(FieldKey.COVER_ART))
+        if (genericKey == FieldKey.COVER_ART)
         {
             throw new UnsupportedOperationException(ErrorMessage.ARTWORK_CANNOT_BE_CREATED_WITH_THIS_METHOD.getMsg());
         }
@@ -320,7 +314,7 @@ public class FlacTag implements Tag
      */
     public TagField createField(VorbisCommentFieldKey vorbisCommentFieldKey, String value) throws KeyNotFoundException,FieldDataInvalidException
     {
-        if (vorbisCommentFieldKey.equals(VorbisCommentFieldKey.COVERART))
+        if (vorbisCommentFieldKey == VorbisCommentFieldKey.COVERART)
         {
             throw new UnsupportedOperationException(ErrorMessage.ARTWORK_CANNOT_BE_CREATED_WITH_THIS_METHOD.getMsg());
         }
@@ -360,7 +354,7 @@ public class FlacTag implements Tag
 
     public String getValue(FieldKey id,int index) throws KeyNotFoundException
     {
-        if (id.equals(FieldKey.COVER_ART))
+        if (id == FieldKey.COVER_ART)
         {
             throw new UnsupportedOperationException(ErrorMessage.ARTWORK_CANNOT_BE_RETRIEVED_WITH_THIS_METHOD.getMsg());
         }
@@ -379,7 +373,7 @@ public class FlacTag implements Tag
     {
         if (id.equals(FieldKey.COVER_ART.name()))
         {
-            if (images.size() > 0)
+            if (!images.isEmpty())
             {
                 return images.get(0);
             }
@@ -418,7 +412,7 @@ public class FlacTag implements Tag
      */
     public void deleteField(FieldKey fieldKey) throws KeyNotFoundException
     {
-        if (fieldKey.equals(FieldKey.COVER_ART))
+        if (fieldKey == FieldKey.COVER_ART)
         {
             images.clear();
         }
@@ -458,20 +452,17 @@ public class FlacTag implements Tag
     }
 
     @Override
-    public boolean setEncoding(Charset enc) throws FieldDataInvalidException
+    public boolean setEncoding(Charset enc)
     {
         return tag.setEncoding(enc);
     }
 
     public List<TagField> getFields(FieldKey id) throws KeyNotFoundException
     {
-        if (id.equals(FieldKey.COVER_ART))
+        if (id == FieldKey.COVER_ART)
         {
-            List<TagField> castImages = new ArrayList<TagField>();
-            for (MetadataBlockDataPicture image : images)
-            {
-                castImages.add(image);
-            }
+            List<TagField> castImages = new ArrayList<>();
+            castImages.addAll(images);
             return castImages;
         }
         else
@@ -550,7 +541,7 @@ public class FlacTag implements Tag
 
     public List<Artwork> getArtworkList()
     {         
-        List<Artwork>  artworkList  = new ArrayList<Artwork>(images.size());
+        List<Artwork>  artworkList  = new ArrayList<>(images.size());
 
         for(MetadataBlockDataPicture coverArt:images)
         {
@@ -563,7 +554,7 @@ public class FlacTag implements Tag
     public Artwork getFirstArtwork()
     {
         List<Artwork> artwork = getArtworkList();
-        if(artwork.size()>0)
+        if(!artwork.isEmpty())
         {
             return artwork.get(0);
         }
@@ -589,7 +580,7 @@ public class FlacTag implements Tag
     {
         if (genericKey==FieldKey.COVER_ART)
         {
-            return images.size() > 0;
+            return !images.isEmpty();
         }
         else
         {
@@ -611,7 +602,7 @@ public class FlacTag implements Tag
     {
        if (id.equals(FieldKey.COVER_ART.name()))
        {
-           return images.size() > 0;
+           return !images.isEmpty();
        }
        else
        {
@@ -627,7 +618,7 @@ public class FlacTag implements Tag
     public String toString()
     {
         StringBuilder sb = new StringBuilder("FLAC " + getVorbisCommentTag());
-        if(images.size()>0)
+        if(!images.isEmpty())
         {
             sb.append("\n\tImages\n");
             for (MetadataBlockDataPicture next : images)

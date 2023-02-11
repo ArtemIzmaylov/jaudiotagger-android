@@ -40,8 +40,8 @@ public final class ChunkPositionComparator implements Comparator<Chunk>, Seriali
     /**
      * {@inheritDoc}
      */
-    public int compare(final Chunk first, final Chunk second)
+    public int compare(Chunk first, Chunk second)
     {
-        return Long.valueOf(first.getPosition()).compareTo(second.getPosition());
+        return Long.compare(first.getPosition(), second.getPosition());
     }
 }

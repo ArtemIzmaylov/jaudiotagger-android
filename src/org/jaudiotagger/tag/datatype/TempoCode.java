@@ -36,17 +36,17 @@ public class TempoCode extends AbstractDataType
     private static final int MINIMUM_NO_OF_DIGITS = 1;
     private static final int MAXIMUM_NO_OF_DIGITS = 2;
 
-    public TempoCode(final TempoCode copy)
+    public TempoCode(TempoCode copy)
     {
         super(copy);
     }
 
-    public TempoCode(final String identifier, final AbstractTagFrameBody frameBody)
+    public TempoCode(String identifier, AbstractTagFrameBody frameBody)
     {
         super(identifier, frameBody, 0);
     }
 
-    public TempoCode(final String identifier, final AbstractTagFrameBody frameBody, final Object value) {
+    public TempoCode(String identifier, AbstractTagFrameBody frameBody, Object value) {
         super(identifier, frameBody, value);
     }
 
@@ -65,13 +65,13 @@ public class TempoCode extends AbstractDataType
     }
 
     @Override
-    public boolean equals(final Object that)
+    public boolean equals(Object that)
     {
         return that instanceof TempoCode && super.equals(that);
     }
 
     @Override
-    public void readByteArray(final byte[] arr, final int offset) throws InvalidDataTypeException
+    public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
     {
         if (arr == null)
         {
@@ -98,8 +98,8 @@ public class TempoCode extends AbstractDataType
     @Override
     public byte[] writeByteArray()
     {
-        final int size = getSize();
-        final byte[] arr = new byte[size];
+        int size = getSize();
+        byte[] arr = new byte[size];
         long temp = ID3Tags.getWholeNumber(value);
         int offset = 0;
         if (temp >= 0xFF)

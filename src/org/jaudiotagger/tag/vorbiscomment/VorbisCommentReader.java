@@ -21,10 +21,10 @@ package org.jaudiotagger.tag.vorbiscomment;
 
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.generic.Utils;
-import org.jaudiotagger.audio.ogg.util.VorbisHeader;
 import org.jaudiotagger.logging.ErrorMessage;
 
 import java.io.IOException;
+import org.jaudiotagger.StandardCharsets;
 import java.util.logging.Logger;
 
 /**
@@ -34,7 +34,7 @@ import java.util.logging.Logger;
  * except the framing bit is only present when used within Ogg Vorbis
  *
  * <pre>
- * From the http://xiph.org/vorbis/doc/Vorbis_I_spec.html#vorbis-spec-comment
+ * From the <a href="http://xiph.org/vorbis/doc/Vorbis_I_spec.html#vorbis-spec-comment">...</a>
  * Read decodes the packet data using the following algorithm:
  *  [vendor_length] = read an unsigned integer of 32 bits
  *  [vendor_string] = read a UTF-8 vector as [vendor_length] octets
@@ -51,7 +51,7 @@ import java.util.logging.Logger;
 public class VorbisCommentReader
 {
     // Logger Object
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.tag.vorbiscomment.VorbisCommentReader");
+    public static final Logger logger = Logger.getLogger("org.jaudiotagger.tag.vorbiscomment.VorbisCommentReader");
 
     public static final int FIELD_VENDOR_LENGTH_POS = 0;
     public static final int FIELD_VENDOR_STRING_POS = 4;
@@ -91,7 +91,7 @@ public class VorbisCommentReader
         b = new byte[vendorStringLength];
         System.arraycopy(rawdata, pos, b, 0, vendorStringLength);
         pos += vendorStringLength;
-        tag.setVendor(new String(b, VorbisHeader.CHARSET_UTF_8));
+        tag.setVendor(new String(b, StandardCharsets.UTF_8));
         logger.config("Vendor is:"+tag.getVendor());
         
         b = new byte[FIELD_USER_COMMENT_LIST_LENGTH];

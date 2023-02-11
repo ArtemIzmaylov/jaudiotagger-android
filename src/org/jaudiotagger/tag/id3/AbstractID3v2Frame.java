@@ -211,12 +211,11 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
      * @param byteBuffer
      * @param frameSize
      * @return
-     * @throws InvalidFrameException
      * @throws InvalidDataTypeException
      * @throws InvalidTagException
      */
     protected AbstractID3v2FrameBody readEncryptedBody(String identifier, ByteBuffer byteBuffer, int frameSize)
-            throws InvalidFrameException, InvalidDataTypeException 
+            throws InvalidDataTypeException
     {
         try
         {
@@ -232,16 +231,10 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
 
     protected boolean isPadding(byte[] buffer)
     {
-        if(
-                (buffer[0]=='\0')&&
-                (buffer[1]=='\0')&&
-                (buffer[2]=='\0')&&
-                (buffer[3]=='\0')
-           )
-        {
-            return true;
-        }
-        return false;
+        return (buffer[0] == '\0') &&
+                (buffer[1] == '\0') &&
+                (buffer[2] == '\0') &&
+                (buffer[3] == '\0');
     }
 
     /**
@@ -891,12 +884,8 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
     public boolean isEmpty()
     {
         AbstractTagFrameBody body = this.getBody();
-        if (body == null)
-        {
-            return true;
-        }
+        return body == null;
         //TODO depends on the body
-        return false;
     }
 
     public StatusFlags getStatusFlags()
@@ -909,7 +898,7 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
         return encodingFlags;
     }
 
-    public class StatusFlags
+    public static class StatusFlags
     {
         protected static final String TYPE_FLAGS = "statusFlags";
 
@@ -961,7 +950,7 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
         }
     }
 
-    class EncodingFlags
+    static class EncodingFlags
     {
         protected static final String TYPE_FLAGS = "encodingFlags";
 
@@ -1053,7 +1042,7 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
      */
     public Charset getEncoding()
     {
-        final byte textEncoding = this.getBody().getTextEncoding();
+        byte textEncoding = this.getBody().getTextEncoding();
         return TextEncoding.getInstanceOf().getCharsetForId(textEncoding);
     }
 

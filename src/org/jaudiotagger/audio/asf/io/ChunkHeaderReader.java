@@ -83,9 +83,9 @@ final class ChunkHeaderReader implements ChunkReader
     /**
      * {@inheritDoc}
      */
-    public Chunk read(final GUID guid, final InputStream stream, final long chunkStart) throws IOException
+    public Chunk read(GUID guid, InputStream stream, long chunkStart) throws IOException
     {
-        final BigInteger chunkLen = Utils.readBig64(stream);
+        BigInteger chunkLen = Utils.readBig64(stream);
         stream.skip(chunkLen.longValue() - 24);
         return new Chunk(guid, chunkStart, chunkLen);
     }

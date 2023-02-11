@@ -23,13 +23,13 @@ public enum AiffChunkType
     CORRUPT_TAG_LATE("D3 \u0000"),
     CORRUPT_TAG_EARLY("\u0000ID3");
 
-    private static final Map<String, AiffChunkType> CODE_TYPE_MAP = new HashMap<String, AiffChunkType>();
-    private String code;
+    private static final Map<String, AiffChunkType> CODE_TYPE_MAP = new HashMap<>();
+    private final String code;
 
     /**
      * @param code 4 char string
      */
-    AiffChunkType(final String code)
+    AiffChunkType(String code)
     {
         this.code=code;
     }
@@ -40,9 +40,9 @@ public enum AiffChunkType
      * @param code chunk id
      * @return chunk type or {@code null} if not registered
      */
-    public synchronized static AiffChunkType get(final String code) {
+    public synchronized static AiffChunkType get(String code) {
         if (CODE_TYPE_MAP.isEmpty()) {
-            for (final AiffChunkType type : values()) {
+            for (AiffChunkType type : values()) {
                 CODE_TYPE_MAP.put(type.getCode(), type);
             }
         }

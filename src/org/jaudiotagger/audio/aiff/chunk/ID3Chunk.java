@@ -19,9 +19,9 @@ import java.util.logging.Logger;
  */
 public class ID3Chunk extends Chunk
 {
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.aiff.chunk");
-    private AiffTag aiffTag;
-    private String loggingName;
+    public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.aiff.chunk");
+    private final AiffTag aiffTag;
+    private final String loggingName;
 
     /**
      * Constructor.
@@ -30,7 +30,7 @@ public class ID3Chunk extends Chunk
      * @param tag        The AiffTag into which information is stored
      * @param loggingName
      */
-    public ID3Chunk(final ChunkHeader chunkHeader, final ByteBuffer chunkData, final AiffTag tag, String loggingName)
+    public ID3Chunk(ChunkHeader chunkHeader, ByteBuffer chunkData, AiffTag tag, String loggingName)
     {
         super(chunkData, chunkHeader);
         aiffTag = tag;
@@ -47,8 +47,8 @@ public class ID3Chunk extends Chunk
             return false;
         }
 
-        final int version = chunkData.get();
-        final AbstractID3v2Tag id3Tag;
+        int version = chunkData.get();
+        AbstractID3v2Tag id3Tag;
         switch (version)
         {
             case ID3v22Tag.MAJOR_VERSION:
@@ -84,7 +84,7 @@ public class ID3Chunk extends Chunk
     /**
      * Reads 3 bytes to determine if the tag really looks like ID3 data.
      */
-    private boolean isId3v2Tag(final ByteBuffer headerData) throws IOException
+    private boolean isId3v2Tag(ByteBuffer headerData) throws IOException
     {
         for (int i = 0; i < AbstractID3v2Tag.FIELD_TAGID_LENGTH; i++)
         {

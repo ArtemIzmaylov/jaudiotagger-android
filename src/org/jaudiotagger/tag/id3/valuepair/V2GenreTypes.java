@@ -10,7 +10,7 @@ import java.util.List;
  *
  * <p>Merging of Id3v2 genres and the extended ID3v2 genres
  */
-public class V2GenreTypes
+public final class V2GenreTypes
 {
     private static V2GenreTypes v2GenresTypes;
 

@@ -11,22 +11,22 @@ import java.util.Map;
  *
  * Contains an enum  of countries, their two letter code and description
  * with additional method to allow an enum to be found by its two letter code or its description.
- * More details at http://www.iso.org/iso/country_codes/iso_3166_code_lists/english_country_names_and_code_elements.htm#c
+ * More details at <a href="http://www.iso.org/iso/country_codes/iso_3166_code_lists/english_country_names_and_code_elements.htm#c">...</a>
  */
 public class ISOCountry
 {
-    private static Map<String, Country> codeMap;
-    private static Map<String, Country> descriptionMap;
+    private static final Map<String, Country> codeMap;
+    private static final Map<String, Country> descriptionMap;
 
     static
     {
-        codeMap = new HashMap<String, Country>();
+        codeMap = new HashMap<>();
         for (Country country : Country.values())
         {
             codeMap.put(country.code, country);
         }
 
-        descriptionMap = new HashMap<String, Country>();
+        descriptionMap = new HashMap<>();
         for (Country country : Country.values())
         {
             descriptionMap.put(country.description, country);
@@ -55,7 +55,7 @@ public class ISOCountry
     /**
      * List of valid Iso Country, shows 2 letter abbreviation and country human readable name
      */
-    public static enum Country
+    public enum Country
     {
         AFGHANISTAN(" AF", "Afghanistan"),
         ALAND_ISLANDS("AX", "Åland Islands"),
@@ -305,8 +305,8 @@ public class ISOCountry
         ZIMBABWE("ZW", "Zimbabwe");
 
 
-        private String code;
-        private String description;
+        private final String code;
+        private final String description;
 
         Country(String code, String description)
         {
@@ -332,7 +332,7 @@ public class ISOCountry
 
     public static String[] getDescriptionsAsArray()
     {
-        List<String> descriptions = new ArrayList<String>();
+        List<String> descriptions = new ArrayList<>();
         for (Country country : Country.values())
         {
             descriptions.add(country.description);

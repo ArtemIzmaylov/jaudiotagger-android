@@ -1,5 +1,7 @@
 package org.jaudiotagger.logging;
 
+import android.annotation.SuppressLint;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
@@ -23,6 +25,7 @@ public final class LogFormatter extends Formatter
     // property at the moment that the SimpleFormatter was created.
     private final String lineSeparator = System.lineSeparator();
 
+    @SuppressLint("SimpleDateFormat")
     private final SimpleDateFormat sfDateOut = new SimpleDateFormat("dd/MM/yyyy HH.mm.ss:");
     private final Date date = new Date();
 
@@ -31,9 +34,9 @@ public final class LogFormatter extends Formatter
 
     }
 
-    public final String format(final LogRecord record)
+    public String format(LogRecord record)
     {
-        final StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         date.setTime(record.getMillis());
 
@@ -54,7 +57,7 @@ public final class LogFormatter extends Formatter
             sb.append(recordName);
             sb.append(":");
         }
-        final String message = formatMessage(record);
+        String message = formatMessage(record);
         sb.append(record.getLevel().getLocalizedName());
         sb.append(": ");
         sb.append(message);
@@ -64,13 +67,13 @@ public final class LogFormatter extends Formatter
         {
             try
             {
-                final StringWriter sw = new StringWriter();
-                final PrintWriter pw = new PrintWriter(sw);
+                StringWriter sw = new StringWriter();
+                PrintWriter pw = new PrintWriter(sw);
                 record.getThrown().printStackTrace(pw);
                 pw.close();
-                sb.append(sw.toString());
+                sb.append(sw);
             }
-            catch (Exception ex)
+            catch (Exception ignored)
             {
             }
         }

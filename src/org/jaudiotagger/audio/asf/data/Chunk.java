@@ -54,7 +54,7 @@ public class Chunk
      * @param headerGuid The GUID of header object.
      * @param chunkLen   Length of current chunk.
      */
-    public Chunk(final GUID headerGuid, final BigInteger chunkLen)
+    public Chunk(GUID headerGuid, BigInteger chunkLen)
     {
         if (headerGuid == null)
         {
@@ -75,7 +75,7 @@ public class Chunk
      * @param pos        Position of header object within stream or file.
      * @param chunkLen   Length of current chunk.
      */
-    public Chunk(final GUID headerGuid, final long pos, final BigInteger chunkLen)
+    public Chunk(GUID headerGuid, long pos, BigInteger chunkLen)
     {
         if (headerGuid == null)
         {
@@ -150,13 +150,12 @@ public class Chunk
      * @param prefix each line gets this string prepended.
      * @return Information of current Chunk Object.
      */
-    public String prettyPrint(final String prefix)
+    public String prettyPrint(String prefix)
     {
-        final StringBuilder result = new StringBuilder();
-        result.append(prefix).append("-> GUID: ").append(GUID.getGuidDescription(this.guid)).append(Utils.LINE_SEPARATOR);
-        result.append(prefix).append("  | : Starts at position: ").append(getPosition()).append(Utils.LINE_SEPARATOR);
-        result.append(prefix).append("  | : Last byte at: ").append(getChunkEnd() - 1).append(Utils.LINE_SEPARATOR);
-        return result.toString();
+        String result = prefix + "-> GUID: " + GUID.getGuidDescription(this.guid) + Utils.LINE_SEPARATOR +
+                prefix + "  | : Starts at position: " + getPosition() + Utils.LINE_SEPARATOR +
+                prefix + "  | : Last byte at: " + (getChunkEnd() - 1) + Utils.LINE_SEPARATOR;
+        return result;
     }
 
     /**
@@ -164,7 +163,7 @@ public class Chunk
      *
      * @param pos position to set.
      */
-    public void setPosition(final long pos)
+    public void setPosition(long pos)
     {
         this.position = pos;
     }

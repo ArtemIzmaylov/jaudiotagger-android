@@ -68,5 +68,5 @@ public interface TreeNode<T>
      */
     Enumeration<TreeNode<T>> children();
     
-    public T getUserObject();
+    T getUserObject();
 }

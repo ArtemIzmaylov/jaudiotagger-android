@@ -38,7 +38,7 @@ public class MetadataContainer extends Chunk implements WriteableChunk
          *
          * @param descriptor the metadata descriptor to identify.
          */
-        public DescriptorPointer(final MetadataDescriptor descriptor)
+        public DescriptorPointer(MetadataDescriptor descriptor)
         {
             setDescriptor(descriptor);
         }
@@ -47,12 +47,12 @@ public class MetadataContainer extends Chunk implements WriteableChunk
          * {@inheritDoc}
          */
         @Override
-        public boolean equals(final Object obj)
+        public boolean equals(Object obj)
         {
             boolean result = obj == this;
             if (obj instanceof DescriptorPointer && !result)
             {
-                final MetadataDescriptor other = ((DescriptorPointer) obj).desc;
+                MetadataDescriptor other = ((DescriptorPointer) obj).desc;
                 result = this.desc.getName().equals(other.getName());
                 result &= this.desc.getLanguageIndex() == other.getLanguageIndex();
                 result &= this.desc.getStreamNumber() == other.getStreamNumber();
@@ -79,7 +79,7 @@ public class MetadataContainer extends Chunk implements WriteableChunk
          * @param descriptor the descriptor to identify.
          * @return this instance.
          */
-        protected DescriptorPointer setDescriptor(final MetadataDescriptor descriptor)
+        protected DescriptorPointer setDescriptor(MetadataDescriptor descriptor)
         {
             assert descriptor != null;
             this.desc = descriptor;
@@ -95,11 +95,11 @@ public class MetadataContainer extends Chunk implements WriteableChunk
      * @return matching container type.
      * @throws IllegalArgumentException if no container type matches
      */
-    private static ContainerType determineType(final GUID guid) throws IllegalArgumentException
+    private static ContainerType determineType(GUID guid) throws IllegalArgumentException
     {
         assert guid != null;
         ContainerType result = null;
-        for (final ContainerType curr : ContainerType.values())
+        for (ContainerType curr : ContainerType.values())
         {
             if (curr.getContainerGUID().equals(guid))
             {
@@ -109,7 +109,7 @@ public class MetadataContainer extends Chunk implements WriteableChunk
         }
         if (result == null)
         {
-            throw new IllegalArgumentException("Unknown metadata container specified by GUID (" + guid.toString() + ")");
+            throw new IllegalArgumentException("Unknown metadata container specified by GUID (" + guid + ")");
         }
         return result;
     }
@@ -122,7 +122,7 @@ public class MetadataContainer extends Chunk implements WriteableChunk
     /**
      * Stores the descriptors.
      */
-    private final Map<DescriptorPointer, List<MetadataDescriptor>> descriptors = new Hashtable<DescriptorPointer, List<MetadataDescriptor>>();
+    private final Map<DescriptorPointer, List<MetadataDescriptor>> descriptors = new Hashtable<>();
 
     /**
      * for performance reasons this instance is used to look up existing
@@ -135,7 +135,7 @@ public class MetadataContainer extends Chunk implements WriteableChunk
      *
      * @param type determines the type of the container
      */
-    public MetadataContainer(final ContainerType type)
+    public MetadataContainer(ContainerType type)
     {
         this(type, 0, BigInteger.ZERO);
     }
@@ -147,7 +147,7 @@ public class MetadataContainer extends Chunk implements WriteableChunk
      * @param pos  location in the ASF file
      * @param size size of the chunk.
      */
-    public MetadataContainer(final ContainerType type, final long pos, final BigInteger size)
+    public MetadataContainer(ContainerType type, long pos, BigInteger size)
     {
         super(type.getContainerGUID(), pos, size);
         this.containerType = type;
@@ -160,7 +160,7 @@ public class MetadataContainer extends Chunk implements WriteableChunk
      * @param pos           location in the ASF file
      * @param size          size of the chunk.
      */
-    public MetadataContainer(final GUID containerGUID, final long pos, final BigInteger size)
+    public MetadataContainer(GUID containerGUID, long pos, BigInteger size)
     {
         this(determineType(containerGUID), pos, size);
     }
@@ -172,7 +172,7 @@ public class MetadataContainer extends Chunk implements WriteableChunk
      * @throws IllegalArgumentException if descriptor does not meet container requirements, or
      *                                  already exist.
      */
-    public final void addDescriptor(final MetadataDescriptor toAdd) throws IllegalArgumentException
+    public final void addDescriptor(MetadataDescriptor toAdd) throws IllegalArgumentException
     {
         // check with throwing exceptions
         this.containerType.assertConstraints(toAdd.getName(), toAdd.getRawData(), toAdd.getType(), toAdd.getStreamNumber(), toAdd.getLanguageIndex());
@@ -192,7 +192,7 @@ public class MetadataContainer extends Chunk implements WriteableChunk
         }
         if (list == null)
         {
-            list = new ArrayList<MetadataDescriptor>();
+            list = new ArrayList<>();
             this.descriptors.put(new DescriptorPointer(toAdd), list);
         }
         else
@@ -213,7 +213,7 @@ public class MetadataContainer extends Chunk implements WriteableChunk
      * @return the/a descriptor with the specified name (and initial type of
      * {@link MetadataDescriptor#TYPE_STRING}.
      */
-    protected final MetadataDescriptor assertDescriptor(final String key)
+    protected final MetadataDescriptor assertDescriptor(String key)
     {
         return assertDescriptor(key, MetadataDescriptor.TYPE_STRING);
     }
@@ -226,10 +226,10 @@ public class MetadataContainer extends Chunk implements WriteableChunk
      * @param type if the descriptor is created, this data type is applied.
      * @return the/a descriptor with the specified name.
      */
-    protected final MetadataDescriptor assertDescriptor(final String key, final int type)
+    protected final MetadataDescriptor assertDescriptor(String key, int type)
     {
         MetadataDescriptor desc;
-        final List<MetadataDescriptor> descriptorsByName = getDescriptorsByName(key);
+        List<MetadataDescriptor> descriptorsByName = getDescriptorsByName(key);
         if (descriptorsByName == null || descriptorsByName.isEmpty())
         {
             desc = new MetadataDescriptor(getContainerType(), key, type);
@@ -250,7 +250,7 @@ public class MetadataContainer extends Chunk implements WriteableChunk
      * @param lookup descriptor to look up.
      * @return <code>true</code> if such a descriptor already exists.
      */
-    public final boolean containsDescriptor(final MetadataDescriptor lookup)
+    public final boolean containsDescriptor(MetadataDescriptor lookup)
     {
         assert lookup != null;
         return this.descriptors.containsKey(this.perfPoint.setDescriptor(lookup));
@@ -275,7 +275,7 @@ public class MetadataContainer extends Chunk implements WriteableChunk
          * 16 bytes GUID, 8 bytes chunk size, 2 bytes descriptor count
          */
         long result = 26;
-        for (final MetadataDescriptor curr : getDescriptors())
+        for (MetadataDescriptor curr : getDescriptors())
         {
             result += curr.getCurrentAsfSize(this.containerType);
         }
@@ -299,8 +299,8 @@ public class MetadataContainer extends Chunk implements WriteableChunk
      */
     public final List<MetadataDescriptor> getDescriptors()
     {
-        final List<MetadataDescriptor> result = new ArrayList<MetadataDescriptor>();
-        for (final List<MetadataDescriptor> curr : this.descriptors.values())
+        List<MetadataDescriptor> result = new ArrayList<>();
+        for (List<MetadataDescriptor> curr : this.descriptors.values())
         {
             result.addAll(curr);
         }
@@ -314,12 +314,12 @@ public class MetadataContainer extends Chunk implements WriteableChunk
      * @param name name of the descriptors to return
      * @return list of descriptors with given name.
      */
-    public final List<MetadataDescriptor> getDescriptorsByName(final String name)
+    public final List<MetadataDescriptor> getDescriptorsByName(String name)
     {
         assert name != null;
-        final List<MetadataDescriptor> result = new ArrayList<MetadataDescriptor>();
-        final Collection<List<MetadataDescriptor>> values = this.descriptors.values();
-        for (final List<MetadataDescriptor> currList : values)
+        List<MetadataDescriptor> result = new ArrayList<>();
+        Collection<List<MetadataDescriptor>> values = this.descriptors.values();
+        for (List<MetadataDescriptor> currList : values)
         {
             if (!currList.isEmpty() && currList.get(0).getName().equals(name))
             {
@@ -337,10 +337,10 @@ public class MetadataContainer extends Chunk implements WriteableChunk
      * @return the string representation of a found descriptors value. Even an
      * empty string if no descriptor has been found.
      */
-    protected final String getValueFor(final String name)
+    protected final String getValueFor(String name)
     {
         String result = "";
-        final List<MetadataDescriptor> descs = getDescriptorsByName(name);
+        List<MetadataDescriptor> descs = getDescriptorsByName(name);
         if (descs != null)
         {
             assert descs.size() <= 1;
@@ -359,7 +359,7 @@ public class MetadataContainer extends Chunk implements WriteableChunk
      * @param name Name of the descriptor to look for.
      * @return <code>true</code> if descriptor has been found.
      */
-    public final boolean hasDescriptor(final String name)
+    public final boolean hasDescriptor(String name)
     {
         return !getDescriptorsByName(name).isEmpty();
     }
@@ -373,7 +373,7 @@ public class MetadataContainer extends Chunk implements WriteableChunk
      * @return <code>true</code> if {@link #addDescriptor(MetadataDescriptor)}
      * can be called with given descriptor.
      */
-    public boolean isAddSupported(final MetadataDescriptor descriptor)
+    public boolean isAddSupported(MetadataDescriptor descriptor)
     {
         boolean result = getContainerType().checkConstraints(descriptor.getName(), descriptor.getRawData(), descriptor.getType(), descriptor.getStreamNumber(), descriptor.getLanguageIndex()) == null;
         // Now check if there is already a value contained.
@@ -381,7 +381,7 @@ public class MetadataContainer extends Chunk implements WriteableChunk
         {
             synchronized (this.perfPoint)
             {
-                final List<MetadataDescriptor> list = this.descriptors.get(this.perfPoint.setDescriptor(descriptor));
+                List<MetadataDescriptor> list = this.descriptors.get(this.perfPoint.setDescriptor(descriptor));
                 if (list != null)
                 {
                     result = list.isEmpty();
@@ -399,7 +399,7 @@ public class MetadataContainer extends Chunk implements WriteableChunk
         boolean result = true;
         if (getDescriptorCount() != 0)
         {
-            final Iterator<MetadataDescriptor> iterator = getDescriptors().iterator();
+            Iterator<MetadataDescriptor> iterator = getDescriptors().iterator();
             while (result && iterator.hasNext())
             {
                 result &= iterator.next().isEmpty();
@@ -412,10 +412,10 @@ public class MetadataContainer extends Chunk implements WriteableChunk
      * {@inheritDoc}
      */
     @Override
-    public String prettyPrint(final String prefix)
+    public String prettyPrint(String prefix)
     {
-        final StringBuilder result = new StringBuilder(super.prettyPrint(prefix));
-        for (final MetadataDescriptor curr : getDescriptors())
+        StringBuilder result = new StringBuilder(super.prettyPrint(prefix));
+        for (MetadataDescriptor curr : getDescriptors())
         {
             result.append(prefix).append("  |-> ");
             result.append(curr);
@@ -430,13 +430,13 @@ public class MetadataContainer extends Chunk implements WriteableChunk
      *
      * @param name the name to remove.
      */
-    public final void removeDescriptorsByName(final String name)
+    public final void removeDescriptorsByName(String name)
     {
         assert name != null;
-        final Iterator<List<MetadataDescriptor>> iterator = this.descriptors.values().iterator();
+        Iterator<List<MetadataDescriptor>> iterator = this.descriptors.values().iterator();
         while (iterator.hasNext())
         {
-            final List<MetadataDescriptor> curr = iterator.next();
+            List<MetadataDescriptor> curr = iterator.next();
             if (!curr.isEmpty() && curr.get(0).getName().equals(name))
             {
                 iterator.remove();
@@ -453,7 +453,7 @@ public class MetadataContainer extends Chunk implements WriteableChunk
      * @param name  the name of the descriptor to set the value for.
      * @param value the string value.
      */
-    protected final void setStringValue(final String name, final String value)
+    protected final void setStringValue(String name, String value)
     {
         assertDescriptor(name).setStringValue(value);
     }
@@ -461,14 +461,14 @@ public class MetadataContainer extends Chunk implements WriteableChunk
     /**
      * {@inheritDoc}
      */
-    public long writeInto(final OutputStream out) throws IOException
+    public long writeInto(OutputStream out) throws IOException
     {
-        final long chunkSize = getCurrentAsfChunkSize();
-        final List<MetadataDescriptor> descriptorList = getDescriptors();
+        long chunkSize = getCurrentAsfChunkSize();
+        List<MetadataDescriptor> descriptorList = getDescriptors();
         out.write(getGuid().getBytes());
         Utils.writeUINT64(chunkSize, out);
         Utils.writeUINT16(descriptorList.size(), out);
-        for (final MetadataDescriptor curr : descriptorList)
+        for (MetadataDescriptor curr : descriptorList)
         {
             curr.writeInto(out, this.containerType);
         }

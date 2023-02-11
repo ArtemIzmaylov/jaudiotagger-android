@@ -30,7 +30,7 @@ final class ModificationResult
     /**
      * Stores all GUIDs, which have been read.<br>
      */
-    private final Set<GUID> occuredGUIDs = new HashSet<GUID>();
+    private final Set<GUID> occuredGUIDs = new HashSet<>();
 
     /**
      * Creates an instance.<br>
@@ -39,7 +39,7 @@ final class ModificationResult
      * @param bytesDiffer    amount of bytes added or removed.
      * @param occurred       all GUIDs which have been occurred, during processing
      */
-    public ModificationResult(final int chunkCountDiff, final long bytesDiffer, final GUID... occurred)
+    public ModificationResult(int chunkCountDiff, long bytesDiffer, GUID... occurred)
     {
         assert occurred != null && occurred.length > 0;
         this.chunkDifference = chunkCountDiff;
@@ -54,7 +54,7 @@ final class ModificationResult
      * @param bytesDiffer    amount of bytes added or removed.
      * @param occurred       all GUIDs which have been occurred, during processing
      */
-    public ModificationResult(final int chunkCountDiff, final long bytesDiffer, final Set<GUID> occurred)
+    public ModificationResult(int chunkCountDiff, long bytesDiffer, Set<GUID> occurred)
     {
         this.chunkDifference = chunkCountDiff;
         this.byteDifference = bytesDiffer;
@@ -88,7 +88,7 @@ final class ModificationResult
      */
     public Set<GUID> getOccuredGUIDs()
     {
-        return new HashSet<GUID>(this.occuredGUIDs);
+        return new HashSet<>(this.occuredGUIDs);
     }
 
 }

@@ -67,19 +67,19 @@ public class StreamBitratePropertiesReader implements ChunkReader
     /**
      * {@inheritDoc}
      */
-    public Chunk read(final GUID guid, final InputStream stream, final long chunkStart) throws IOException
+    public Chunk read(GUID guid, InputStream stream, long chunkStart) throws IOException
     {
-        final BigInteger chunkLen = Utils.readBig64(stream);
-        final StreamBitratePropertiesChunk result = new StreamBitratePropertiesChunk(chunkLen);
+        BigInteger chunkLen = Utils.readBig64(stream);
+        StreamBitratePropertiesChunk result = new StreamBitratePropertiesChunk(chunkLen);
 
         /*
          * Read the amount of bitrate records
          */
-        final long recordCount = Utils.readUINT16(stream);
+        long recordCount = Utils.readUINT16(stream);
         for (int i = 0; i < recordCount; i++)
         {
-            final int flags = Utils.readUINT16(stream);
-            final long avgBitrate = Utils.readUINT32(stream);
+            int flags = Utils.readUINT16(stream);
+            long avgBitrate = Utils.readUINT32(stream);
             result.addBitrateRecord(flags & 0x00FF, avgBitrate);
         }
 

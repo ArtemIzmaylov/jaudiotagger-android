@@ -36,7 +36,7 @@ import java.util.List;
  * instrument and every even is an artist or a comma delimited list of artists.
  *
  */
-public class FrameBodyTMCL extends AbstractFrameBodyPairs implements ID3v24FrameBody
+public class FrameBodyTMCL extends AbstractFrameBodyPairs
 {
     /**
      * Creates a new FrameBodyTMCL datatype.

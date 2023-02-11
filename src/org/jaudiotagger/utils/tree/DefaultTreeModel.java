@@ -43,7 +43,7 @@ public class DefaultTreeModel<T> implements Serializable, TreeModel<T> {
 	/** Root of the tree. */
     protected TreeNode<T> root;
     /** Listeners. */
-    protected EventListenerList listenerList = new EventListenerList();
+    protected final EventListenerList listenerList = new EventListenerList();
     /**
       * Determines how the <code>isLeaf</code> method figures
       * out if a node is a leaf node. If true, a node is a leaf 

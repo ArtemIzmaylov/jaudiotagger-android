@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 /**
  * PROP Chunk.
  */
-public class PropChunk
+public final class PropChunk
 {
     public static final int CHUNKSIZE_LENGTH = 8;
     public static final int SIGNATURE_LENGTH = 4;

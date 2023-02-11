@@ -32,7 +32,7 @@ import java.util.Map;
  * <p>This is the IDv1 list with additional values as defined by Winamp, this list is also used in Mp4
  * files, note iTunes doesn't understand genres above MAX_STANDARD_GENRE_ID, Winamp does.
  */
-public class GenreTypes extends AbstractIntStringValuePair
+public final class GenreTypes extends AbstractIntStringValuePair
 {
     private static final int MAX_STANDARD_GENRE_ID    = 125;
     private static final int MAX_GENRE_ID             = 191;
@@ -63,7 +63,7 @@ public class GenreTypes extends AbstractIntStringValuePair
     }
 
     //This maps the lowercase version to the id, so applications can map from the lowercase value to the id
-    private Map<String, Integer> nameToIdMap;
+    private final Map<String, Integer> nameToIdMap;
 
 
     private GenreTypes()
@@ -266,7 +266,7 @@ public class GenreTypes extends AbstractIntStringValuePair
         createMaps();
 
         //We now need to map from lowercase version to Id
-        nameToIdMap = new LinkedHashMap<String, Integer>(idToValue.size());
+        nameToIdMap = new LinkedHashMap<>(idToValue.size());
         for (Map.Entry<Integer, String> entry : idToValue.entrySet())
         {
             nameToIdMap.put(entry.getValue().toLowerCase(), entry.getKey());

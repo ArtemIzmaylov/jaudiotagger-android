@@ -28,7 +28,7 @@ import java.util.logging.Logger;
  * @author : Eric Farng
  * @version $Id$
  */
-public class ID3Tags
+public final class ID3Tags
 {
     //Logger
     public static Logger logger = Logger.getLogger("org.jaudiotagger.tag.id3");

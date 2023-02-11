@@ -29,7 +29,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
-import java.nio.file.Path;
 import java.util.logging.Logger;
 
 /**
@@ -38,7 +37,7 @@ import java.util.logging.Logger;
 public class FlacInfoReader
 {
     // Logger Object
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.flac");
+    public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.flac");
 
 
 
@@ -57,10 +56,10 @@ public class FlacInfoReader
             //Search for StreamInfo Block, but even after we found it we still have to continue through all
             //the metadata blocks so that we can find the start of the audio frames which we need to calculate
             //the bitrate
-            while (isLastBlock==false)
+            while (!isLastBlock)
             {
                 MetadataBlockHeader mbh = MetadataBlockHeader.readHeader(fc);
-                logger.info(path.toString() + " "  + mbh.toString());
+                logger.info(path + " "  + mbh);
                 if (mbh.getBlockType() == BlockType.STREAMINFO)
                 {
                     //See #253:MetadataBlockDataStreamInfo exception when bytes length is 0

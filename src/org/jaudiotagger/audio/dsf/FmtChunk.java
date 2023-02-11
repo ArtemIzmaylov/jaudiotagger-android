@@ -18,12 +18,12 @@ import static org.jaudiotagger.audio.dsf.DsdChunk.CHUNKSIZE_LENGTH;
 /**
  * Created by Paul on 25/01/2016.
  */
-public class FmtChunk
+public final class FmtChunk
 {
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.dsf.FmtChunk");
+    public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.dsf.FmtChunk");
 
     public static final int FMT_CHUNK_MIN_DATA_SIZE_ = 40;
-    private long chunkSizeLength;
+    private final long chunkSizeLength;
 
     public static FmtChunk readChunkHeader(ByteBuffer dataBuffer)
     {

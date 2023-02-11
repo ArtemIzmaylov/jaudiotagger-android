@@ -61,8 +61,8 @@ public class  ImageFormats
      */
     public static final String MIME_TYPE_JPG  = "image/jpg";
 
-    private static Map<String, String> imageFormatsToMimeType = new HashMap<String, String>();
-    private static Map<String, String> imageMimeTypeToFormat = new HashMap <String, String>();
+    private static final Map<String, String> imageFormatsToMimeType = new HashMap<>();
+    private static final Map<String, String> imageMimeTypeToFormat = new HashMap<>();
 
     static
     {
@@ -75,10 +75,10 @@ public class  ImageFormats
         imageFormatsToMimeType.put(V22_PIC_FORMAT, MIME_TYPE_PICT);
 
         String value;
-        for (String key : imageFormatsToMimeType.keySet())
+        for (Map.Entry<String, String> entry : imageFormatsToMimeType.entrySet())
         {
-            value = imageFormatsToMimeType.get(key);
-            imageMimeTypeToFormat.put(value, key);
+            value = entry.getValue();
+            imageMimeTypeToFormat.put(value, entry.getKey());
         }
 
         //The mapping isn't one-one lets add other mimetypes
@@ -127,7 +127,7 @@ public class  ImageFormats
      * @param data
      * @return true if binary data matches expected header for a jpg
      *
-     * Some details http://www.obrador.com/essentialjpeg/headerinfo.htm
+     * Some details <a href="http://www.obrador.com/essentialjpeg/headerinfo.htm">...</a>
      */
     public static boolean binaryDataIsJpgFormat(byte[] data)
     {
@@ -178,7 +178,7 @@ public class  ImageFormats
     /**
      * Is this binary data a pdf image
      *
-     * Details at http://en.wikipedia.org/wiki/Magic_number_%28programming%29
+     * Details at <a href="http://en.wikipedia.org/wiki/Magic_number_%28programming%29">...</a>
      *
      * @param data
      * @return true if binary data matches expected header for a pdf
@@ -196,7 +196,7 @@ public class  ImageFormats
     /**
      * is this binary data a tiff image
      *
-     * Details at http://en.wikipedia.org/wiki/Magic_number_%28programming%29
+     * Details at <a href="http://en.wikipedia.org/wiki/Magic_number_%28programming%29">...</a>
      * @param data
      * @return true if binary data matches expected header for a tiff
      */

@@ -28,21 +28,21 @@ public class EventTimingCode extends AbstractDataType implements Cloneable
 {
 
     private static final int SIZE = 5;
-    private NumberHashMap type = new NumberHashMap(DataTypes.OBJ_TYPE_OF_EVENT, null, 1);
-    private NumberFixedLength timestamp = new NumberFixedLength(DataTypes.OBJ_DATETIME, null, 4);
+    private final NumberHashMap type = new NumberHashMap(DataTypes.OBJ_TYPE_OF_EVENT, null, 1);
+    private final NumberFixedLength timestamp = new NumberFixedLength(DataTypes.OBJ_DATETIME, null, 4);
 
-    public EventTimingCode(final EventTimingCode copy) {
+    public EventTimingCode(EventTimingCode copy) {
         super(copy);
         this.type.setValue(copy.type.getValue());
         this.timestamp.setValue(copy.timestamp.getValue());
     }
 
-    public EventTimingCode(final String identifier, final AbstractTagFrameBody frameBody)
+    public EventTimingCode(String identifier, AbstractTagFrameBody frameBody)
     {
         this(identifier, frameBody, 0x00, 0L);
     }
 
-    public EventTimingCode(final String identifier, final AbstractTagFrameBody frameBody, final int type, final long timestamp)
+    public EventTimingCode(String identifier, AbstractTagFrameBody frameBody, int type, long timestamp)
     {
         super(identifier, frameBody);
         setBody(frameBody);
@@ -51,7 +51,7 @@ public class EventTimingCode extends AbstractDataType implements Cloneable
     }
 
     @Override
-    public void setBody(final AbstractTagFrameBody frameBody)
+    public void setBody(AbstractTagFrameBody frameBody)
     {
         super.setBody(frameBody);
         this.type.setBody(frameBody);
@@ -63,7 +63,7 @@ public class EventTimingCode extends AbstractDataType implements Cloneable
         return ((Number)timestamp.getValue()).longValue();
     }
 
-    public void setTimestamp(final long timestamp)
+    public void setTimestamp(long timestamp)
     {
         this.timestamp.setValue(timestamp);
     }
@@ -73,7 +73,7 @@ public class EventTimingCode extends AbstractDataType implements Cloneable
         return ((Number) type.getValue()).intValue();
     }
 
-    public void setType(final int type)
+    public void setType(int type)
     {
         this.type.setValue(type);
     }
@@ -85,7 +85,7 @@ public class EventTimingCode extends AbstractDataType implements Cloneable
     }
 
     @Override
-    public void readByteArray(final byte[] buffer, final int originalOffset) throws InvalidDataTypeException
+    public void readByteArray(byte[] buffer, int originalOffset) throws InvalidDataTypeException
     {
         int localOffset = originalOffset;
         int size = getSize();
@@ -103,32 +103,30 @@ public class EventTimingCode extends AbstractDataType implements Cloneable
         this.type.readByteArray(buffer, localOffset);
         localOffset += this.type.getSize();
         this.timestamp.readByteArray(buffer, localOffset);
-        localOffset += this.timestamp.getSize();
     }
 
     @Override
     public byte[] writeByteArray()
     {
-        final byte[] typeData = this.type.writeByteArray();
-        final byte[] timeData = this.timestamp.writeByteArray();
+        byte[] typeData = this.type.writeByteArray();
+        byte[] timeData = this.timestamp.writeByteArray();
         if (typeData == null || timeData == null) return null;
 
-        final byte[] objectData = new byte[typeData.length + timeData.length];
+        byte[] objectData = new byte[typeData.length + timeData.length];
         System.arraycopy(typeData, 0, objectData, 0, typeData.length);
         System.arraycopy(timeData, 0, objectData, typeData.length, timeData.length);
         return objectData;
     }
 
     @Override
-    public boolean equals(final Object o)
+    public boolean equals(Object o)
     {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
 
-        final EventTimingCode that = (EventTimingCode) o;
-        if (this.getType() != that.getType() || this.getTimestamp() != that.getTimestamp()) return false;
-        return true;
+        EventTimingCode that = (EventTimingCode) o;
+        return this.getType() == that.getType() && this.getTimestamp() == that.getTimestamp();
     }
 
     @Override
@@ -141,7 +139,7 @@ public class EventTimingCode extends AbstractDataType implements Cloneable
 
     @Override
     public String toString() {
-        return "" + getType() + " (\"" + EventTimingTypes.getInstanceOf().getValueForId(getType()) + "\"), " + getTimestamp();
+        return getType() + " (\"" + EventTimingTypes.getInstanceOf().getValueForId(getType()) + "\"), " + getTimestamp();
     }
 
     @Override

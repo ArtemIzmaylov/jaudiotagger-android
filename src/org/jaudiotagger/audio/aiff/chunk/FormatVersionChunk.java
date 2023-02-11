@@ -35,14 +35,14 @@ import java.util.Date;
  */
 public class FormatVersionChunk extends Chunk
 {
-    private AiffAudioHeader aiffHeader;
+    private final AiffAudioHeader aiffHeader;
 
     /**
      * @param chunkHeader  The header for this chunk
      * @param chunkData  The buffer from which the AIFF data are being read
      * @param aiffAudioHeader The AiffTag into which information is stored
      */
-    public FormatVersionChunk(final ChunkHeader chunkHeader, final ByteBuffer chunkData, final AiffAudioHeader aiffAudioHeader)
+    public FormatVersionChunk(ChunkHeader chunkHeader, ByteBuffer chunkData, AiffAudioHeader aiffAudioHeader)
     {
         super(chunkData, chunkHeader);
         this.aiffHeader = aiffAudioHeader;
@@ -56,10 +56,10 @@ public class FormatVersionChunk extends Chunk
      */
     public boolean readChunk() throws IOException
     {
-        final long rawTimestamp = chunkData.getInt();
+        long rawTimestamp = chunkData.getInt();
         // The timestamp is in seconds since January 1, 1904.
         // We must convert to Java time.
-        final Date timestamp = AiffUtil.timestampToDate(rawTimestamp);
+        Date timestamp = AiffUtil.timestampToDate(rawTimestamp);
         aiffHeader.setTimestamp(timestamp);
         return true;
     }

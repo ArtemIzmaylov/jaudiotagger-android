@@ -54,7 +54,7 @@ public class VorbisCommentTagField implements TagTextField
     /**
      * Stores the id (name) of the tag field. <br>
      */
-    private String id;
+    private final String id;
 
     /**
      * If id is invalid
@@ -69,7 +69,7 @@ public class VorbisCommentTagField implements TagTextField
      */
     public VorbisCommentTagField(byte[] raw) throws UnsupportedEncodingException
     {
-        String field = new String(raw, "UTF-8");
+        String field = new String(raw, org.jaudiotagger.StandardCharsets.UTF_8);
         int i = field.indexOf("=");
         if (i == -1)
         {
@@ -217,7 +217,7 @@ public class VorbisCommentTagField implements TagTextField
     @Override
     public boolean isEmpty()
     {
-        return this.content.equals("");
+        return this.content.isEmpty();
     }
 
     @Override
@@ -227,7 +227,7 @@ public class VorbisCommentTagField implements TagTextField
     }
 
     @Override
-    public void setEncoding(final Charset s)
+    public void setEncoding(Charset s)
     {
         if (!StandardCharsets.UTF_8.equals(s))
         {

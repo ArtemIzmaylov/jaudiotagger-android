@@ -18,7 +18,7 @@ public class FullRequestInputStream extends FilterInputStream
      *
      * @param source stream to read from.
      */
-    public FullRequestInputStream(final InputStream source)
+    public FullRequestInputStream(InputStream source)
     {
         super(source);
     }
@@ -27,7 +27,7 @@ public class FullRequestInputStream extends FilterInputStream
      * {@inheritDoc}
      */
     @Override
-    public int read(final byte[] buffer) throws IOException
+    public int read(byte[] buffer) throws IOException
     {
         return read(buffer, 0, buffer.length);
     }
@@ -36,7 +36,7 @@ public class FullRequestInputStream extends FilterInputStream
      * {@inheritDoc}
      */
     @Override
-    public int read(final byte[] buffer, final int off, final int len) throws IOException
+    public int read(byte[] buffer, int off, int len) throws IOException
     {
         int totalRead = 0;
         int read;
@@ -59,7 +59,7 @@ public class FullRequestInputStream extends FilterInputStream
      * {@inheritDoc}
      */
     @Override
-    public long skip(final long amount) throws IOException
+    public long skip(long amount) throws IOException
     {
         long skipped = 0;
         int zeroSkipCnt = 0;

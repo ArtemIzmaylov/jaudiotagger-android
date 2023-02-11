@@ -26,7 +26,7 @@ public class AsfTagBannerField extends AbstractAsfTagImageField
      * @param descriptor
      *            image content.
      */
-    public AsfTagBannerField(final MetadataDescriptor descriptor) {
+    public AsfTagBannerField(MetadataDescriptor descriptor) {
         super(descriptor);
         assert descriptor.getName().equals(
                 AsfFieldKey.BANNER_IMAGE.getFieldName());
@@ -38,7 +38,7 @@ public class AsfTagBannerField extends AbstractAsfTagImageField
      * @param imageData
      *            image content.
      */
-    public AsfTagBannerField(final byte[] imageData) {
+    public AsfTagBannerField(byte[] imageData) {
         super(new MetadataDescriptor(ContainerType.CONTENT_BRANDING,
                 AsfFieldKey.BANNER_IMAGE.getFieldName(),
                 MetadataDescriptor.TYPE_BINARY));

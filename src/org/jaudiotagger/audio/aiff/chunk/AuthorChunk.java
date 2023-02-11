@@ -18,7 +18,7 @@ public class AuthorChunk extends TextChunk
      * @param chunkData  The buffer from which the AIFF data are being read
      * @param aiffAudioHeader The AiffAudioHeader into which information is stored
      */
-    public AuthorChunk(final ChunkHeader chunkHeader, final ByteBuffer chunkData, final AiffAudioHeader aiffAudioHeader)
+    public AuthorChunk(ChunkHeader chunkHeader, ByteBuffer chunkData, AiffAudioHeader aiffAudioHeader)
     {
         super(chunkHeader, chunkData, aiffAudioHeader);
     }

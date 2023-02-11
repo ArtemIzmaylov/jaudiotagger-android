@@ -26,15 +26,15 @@ public class AiffAudioHeader extends GenericAudioHeader
     private String author;
     private String copyright;
 
-    private List<String> applicationIdentifiers;
-    private List<String> comments;
-    private List<String> annotations;
+    private final List<String> applicationIdentifiers;
+    private final List<String> comments;
+    private final List<String> annotations;
 
     public AiffAudioHeader()
     {
-        this.applicationIdentifiers = new ArrayList<String>();
-        this.comments = new ArrayList<String>();
-        this.annotations = new ArrayList<String>();
+        this.applicationIdentifiers = new ArrayList<>();
+        this.comments = new ArrayList<>();
+        this.annotations = new ArrayList<>();
         this.endian = Endian.BIG_ENDIAN;
     }
 
@@ -189,45 +189,45 @@ public class AiffAudioHeader extends GenericAudioHeader
 
         if(name!=null && !name.isEmpty())
         {
-            sb.append("\tName:"+name+"\n");
+            sb.append("\tName:").append(name).append("\n");
         }
 
         if(author!=null && !author.isEmpty())
         {
-            sb.append("\tAuthor:"+author+"\n");
+            sb.append("\tAuthor:").append(author).append("\n");
         }
 
         if(copyright!=null && !copyright.isEmpty())
         {
-            sb.append("\tCopyright:"+copyright+"\n");
+            sb.append("\tCopyright:").append(copyright).append("\n");
         }
 
-        if(comments.size()>0)
+        if(!comments.isEmpty())
         {
             sb.append("Comments:\n");
             for(String next:comments)
             {
-                sb.append("\t"+next+"\n");
+                sb.append("\t").append(next).append("\n");
             }
         }
 
-        if(applicationIdentifiers.size()>0)
+        if(!applicationIdentifiers.isEmpty())
         {
             sb.append("ApplicationIds:\n");
             for(String next:applicationIdentifiers)
             {
-                sb.append("\t"+next+"\n");
+                sb.append("\t").append(next).append("\n");
             }
         }
 
-        if(annotations.size()>0)
+        if(!annotations.isEmpty())
         {
             sb.append("Annotations:\n");
             for(String next:annotations)
             {
-                sb.append("\t"+next+"\n");
+                sb.append("\t").append(next).append("\n");
             }
         }
-        return super.toString() + sb.toString();
+        return super.toString() + sb;
     }
 }

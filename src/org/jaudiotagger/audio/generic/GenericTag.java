@@ -56,7 +56,7 @@ public abstract class GenericTag extends AbstractTag
      *
      * @author Raphaël Slinckx
      */
-    protected class GenericTagTextField implements TagTextField
+    protected static class GenericTagTextField implements TagTextField
     {
 
         /**
@@ -75,14 +75,14 @@ public abstract class GenericTag extends AbstractTag
          * @param fieldId        The identifier.
          * @param initialContent The string.
          */
-        public GenericTagTextField(final String fieldId, final String initialContent)
+        public GenericTagTextField(String fieldId, String initialContent)
         {
             this.id = fieldId;
             this.content = initialContent;
         }
 
         @Override
-        public void copyContent(final TagField field)
+        public void copyContent(TagField field)
         {
             if (field instanceof TagTextField)
             {
@@ -139,13 +139,13 @@ public abstract class GenericTag extends AbstractTag
         }
 
         @Override
-        public void setContent(final String s)
+        public void setContent(String s)
         {
             this.content = s;
         }
 
         @Override
-        public void setEncoding(final Charset s)
+        public void setEncoding(Charset s)
         {
             /* Not allowed */
         }
@@ -158,13 +158,13 @@ public abstract class GenericTag extends AbstractTag
     }
 
     @Override
-    protected boolean isAllowedEncoding(final Charset enc)
+    protected boolean isAllowedEncoding(Charset enc)
     {
         return true;
     }
 
     @Override
-    public TagField createField(final FieldKey genericKey, final String... values) throws KeyNotFoundException, FieldDataInvalidException
+    public TagField createField(FieldKey genericKey, String... values) throws KeyNotFoundException
     {
         if(supportedKeys.contains(genericKey))
         {
@@ -172,7 +172,7 @@ public abstract class GenericTag extends AbstractTag
             {
                 throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
             }
-            return new GenericTagTextField(genericKey.name(),values[0]);
+            return new GenericTagTextField(genericKey.name(), values[0]);
         }
         else
         {
@@ -181,13 +181,13 @@ public abstract class GenericTag extends AbstractTag
     }
 
     @Override
-    public String getFirst(final FieldKey genericKey) throws KeyNotFoundException
+    public String getFirst(FieldKey genericKey) throws KeyNotFoundException
     {
         return getValue(genericKey, 0);
     }
 
     @Override
-    public String getValue(final FieldKey genericKey, final int index) throws KeyNotFoundException
+    public String getValue(FieldKey genericKey, int index) throws KeyNotFoundException
     {
         if(supportedKeys.contains(genericKey))
         {
@@ -200,24 +200,24 @@ public abstract class GenericTag extends AbstractTag
     }
 
     @Override
-    public List<TagField> getFields(final FieldKey genericKey) throws KeyNotFoundException
+    public List<TagField> getFields(FieldKey genericKey) throws KeyNotFoundException
     {
         List<TagField> list = fields.get(genericKey.name());
         if (list == null)
         {
-            return new ArrayList<TagField>();
+            return new ArrayList<>();
         }
         return list;
     }
 
     @Override
-    public List<String> getAll(final FieldKey genericKey) throws KeyNotFoundException
+    public List<String> getAll(FieldKey genericKey) throws KeyNotFoundException
     {
         return super.getAll(genericKey.name());
     }
 
     @Override
-    public void deleteField(final FieldKey genericKey) throws KeyNotFoundException
+    public void deleteField(FieldKey genericKey) throws KeyNotFoundException
     {
         if(supportedKeys.contains(genericKey))
         {
@@ -230,7 +230,7 @@ public abstract class GenericTag extends AbstractTag
     }
 
     @Override
-    public TagField getFirstField(final FieldKey genericKey) throws KeyNotFoundException
+    public TagField getFirstField(FieldKey genericKey) throws KeyNotFoundException
     {
         if(supportedKeys.contains(genericKey))
         {
@@ -249,7 +249,7 @@ public abstract class GenericTag extends AbstractTag
     }
 
     @Override
-    public TagField createField(final Artwork artwork) throws FieldDataInvalidException
+    public TagField createField(Artwork artwork)
     {
         throw new UnsupportedOperationException(ErrorMessage.GENERIC_NOT_SUPPORTED.getMsg());
     }

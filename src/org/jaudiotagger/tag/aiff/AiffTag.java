@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class AiffTag implements Tag, Id3SupportingTag
 {
-    private List<ChunkSummary> chunkSummaryList = new ArrayList<ChunkSummary>();
+    private final List<ChunkSummary> chunkSummaryList = new ArrayList<>();
 
     public void addChunkSummary(ChunkSummary cs)
     {
@@ -319,20 +319,20 @@ public class AiffTag implements Tag, Id3SupportingTag
     public String toString()
     {
         StringBuilder sb = new StringBuilder();
-        sb.append("FileSize:"      + Hex.asDecAndHex(fileSize) + "\n");
-        sb.append("FORMSize:"      + Hex.asDecAndHex(formSize + ChunkHeader.CHUNK_HEADER_SIZE) + "\n");
+        sb.append("FileSize:").append(Hex.asDecAndHex(fileSize)).append("\n");
+        sb.append("FORMSize:").append(Hex.asDecAndHex(formSize + ChunkHeader.CHUNK_HEADER_SIZE)).append("\n");
         if(lastChunkSizeExtendsPastFormSize)
         {
             sb.append("Last Chunk extends past Form stated size\n");
         }
         else if(fileSize > (formSize + ChunkHeader.CHUNK_HEADER_SIZE))
         {
-            sb.append("Non Iff Data at End of File:"+(fileSize - (formSize + ChunkHeader.CHUNK_HEADER_SIZE)) + " bytes" + "\n");
+            sb.append("Non Iff Data at End of File:").append(fileSize - (formSize + ChunkHeader.CHUNK_HEADER_SIZE)).append(" bytes").append("\n");
         }
         sb.append("Chunks:\n");
         for(ChunkSummary cs:chunkSummaryList)
         {
-            sb.append("\t"+cs.toString()+"\n");
+            sb.append("\t").append(cs.toString()).append("\n");
         }
         if (id3Tag != null)
         {
@@ -344,10 +344,10 @@ public class AiffTag implements Tag, Id3SupportingTag
                     sb.append("\tincorrectly starts as odd byte\n");
                 }
 
-                sb.append("\tstartLocation:" + Hex.asDecAndHex(getStartLocationInFileOfId3Chunk()) + "\n");
-                sb.append("\tendLocation:"   + Hex.asDecAndHex(getEndLocationInFileOfId3Chunk()) + "\n");
+                sb.append("\tstartLocation:").append(Hex.asDecAndHex(getStartLocationInFileOfId3Chunk())).append("\n");
+                sb.append("\tendLocation:").append(Hex.asDecAndHex(getEndLocationInFileOfId3Chunk())).append("\n");
             }
-            sb.append(id3Tag.toString()+"\n");
+            sb.append(id3Tag.toString()).append("\n");
             return sb.toString();
         }
         else

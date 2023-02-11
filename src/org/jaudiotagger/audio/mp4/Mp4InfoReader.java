@@ -30,9 +30,6 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
-import java.nio.channels.SeekableByteChannel;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.logging.Logger;
 
 /**
@@ -61,12 +58,12 @@ import java.util.logging.Logger;
 public class Mp4InfoReader
 {
     // Logger Object
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.mp4.atom");
+    public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.mp4.atom");
 
-    private boolean isTrackAtomVideo(Mp4FtypBox ftyp,  Mp4BoxHeader boxHeader, ByteBuffer mvhdBuffer )
+    private boolean isTrackAtomVideo(Mp4FtypBox ftyp, ByteBuffer mvhdBuffer )
             throws IOException
     {
-        boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer, Mp4AtomIdentifier.MDIA.getFieldName());
+        Mp4BoxHeader boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer, Mp4AtomIdentifier.MDIA.getFieldName());
         if (boxHeader == null)
         {
             return false;
@@ -83,11 +80,7 @@ public class Mp4InfoReader
             return false;
         }
         boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer, Mp4AtomIdentifier.VMHD.getFieldName());
-        if (boxHeader != null)
-        {
-            return true;
-        }
-        return false;
+        return boxHeader != null;
     }
 
     public GenericAudioHeader read(RandomAccessFile raf) throws CannotReadException, IOException
@@ -328,7 +321,7 @@ public class Mp4InfoReader
             }
     
             //This is the most likely option if cant find a match
-            if (info.getEncodingType().equals(""))
+            if (info.getEncodingType().isEmpty())
             {
                 info.setEncodingType(EncoderType.AAC.getDescription());
             }
@@ -344,7 +337,7 @@ public class Mp4InfoReader
                 boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer, Mp4AtomIdentifier.TRAK.getFieldName());
                 if (boxHeader != null)
                 {
-                    if(isTrackAtomVideo(ftyp,boxHeader,mvhdBuffer))
+                    if(isTrackAtomVideo(ftyp, mvhdBuffer))
                     {
                         throw new CannotReadVideoException(ErrorMessage.MP4_FILE_IS_VIDEO.getMsg());
                     }

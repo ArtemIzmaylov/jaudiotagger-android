@@ -19,7 +19,6 @@
 package org.jaudiotagger.audio.dsf;
 
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
-import org.jaudiotagger.audio.exceptions.NoWritePermissionsException;
 import org.jaudiotagger.audio.generic.AudioFileWriter2;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.tag.Tag;
@@ -32,9 +31,6 @@ import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.nio.file.AccessDeniedException;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 
 /**
  * Write/delete tag info for Dsf file
@@ -61,7 +57,7 @@ public class DsfFileWriter extends AudioFileWriter2
                             //Remove Existing tag
                             fc.position(dsd.getMetadataOffset());
                             fc.truncate(fc.position());
-                            final ByteBuffer bb = convert((AbstractID3v2Tag) tag);
+                            ByteBuffer bb = convert((AbstractID3v2Tag) tag);
                             fc.write(bb);
                             dsd.setFileLength(fc.size());
                             fc.position(0);
@@ -77,7 +73,7 @@ public class DsfFileWriter extends AudioFileWriter2
                     {
                         fc.position(dsd.getMetadataOffset());
                         fc.truncate(fc.position());
-                        final ByteBuffer bb = convert((AbstractID3v2Tag) tag);
+                        ByteBuffer bb = convert((AbstractID3v2Tag) tag);
                         fc.write(bb);
                         dsd.setFileLength(fc.size());
                         fc.position(0);
@@ -89,7 +85,7 @@ public class DsfFileWriter extends AudioFileWriter2
                     //Write new tag and new offset and size
                     fc.position(fc.size());
                     dsd.setMetadataOffset(fc.size());
-                    final ByteBuffer bb = convert((AbstractID3v2Tag) tag);
+                    ByteBuffer bb = convert((AbstractID3v2Tag) tag);
                     fc.write(bb);
                     dsd.setFileLength(fc.size());
                     fc.position(0);
@@ -110,7 +106,7 @@ public class DsfFileWriter extends AudioFileWriter2
      * @return
      * @throws UnsupportedEncodingException
      */
-    public ByteBuffer convert(final AbstractID3v2Tag tag) throws UnsupportedEncodingException
+    public ByteBuffer convert(AbstractID3v2Tag tag) throws UnsupportedEncodingException
     {
         try
         {
@@ -133,7 +129,7 @@ public class DsfFileWriter extends AudioFileWriter2
                 baos = new ByteArrayOutputStream();
                 tag.write(baos, newSize);
             }
-            final ByteBuffer buf = ByteBuffer.wrap(baos.toByteArray());
+            ByteBuffer buf = ByteBuffer.wrap(baos.toByteArray());
             buf.rewind();
             return buf;
         }

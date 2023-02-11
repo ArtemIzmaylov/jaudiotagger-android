@@ -44,7 +44,7 @@ public abstract class AbstractTag implements Tag
      * that they are added in is preserved, the only exception to this rule is when two fields of the same id
      * exist, both will be returned according to when the first item was added to the file. <br>
      */
-    protected Map<String, List<TagField>> fields = new LinkedHashMap<String, List<TagField>>();
+    protected final Map<String, List<TagField>> fields = new LinkedHashMap<>();
 
     /**
      * Add field
@@ -65,7 +65,7 @@ public abstract class AbstractTag implements Tag
         // There was no previous item
         if (list == null)
         {
-            list = new ArrayList<TagField>();
+            list = new ArrayList<>();
             list.add(field);
             fields.put(field.getId(), list);
             if (field.isCommon())
@@ -93,7 +93,7 @@ public abstract class AbstractTag implements Tag
 
         if (list == null)
         {
-            return new ArrayList<TagField>();
+            return new ArrayList<>();
         }
 
         return list;
@@ -103,7 +103,7 @@ public abstract class AbstractTag implements Tag
 
     public List<String> getAll(String id) throws KeyNotFoundException
     {
-        List<String>   fields = new ArrayList<String>();
+        List<String>   fields = new ArrayList<>();
         List<TagField> tagFields = getFields(id);
         for(TagField tagField:tagFields)
         {
@@ -140,25 +140,22 @@ public abstract class AbstractTag implements Tag
     public String getFirst(String id)
     {
         List<TagField> l = getFields(id);
-        return (l.size() != 0) ? l.get(0).toString() : "";
+        return (!l.isEmpty()) ? l.get(0).toString() : "";
     }
 
     @Override
     public TagField getFirstField(String id)
     {
         List<TagField> l = getFields(id);
-        return (l.size() != 0) ? l.get(0) : null;
+        return (!l.isEmpty()) ? l.get(0) : null;
     }
 
     public List<TagField> getAll()
     {
-        List<TagField> fieldList = new ArrayList<TagField>();
+        List<TagField> fieldList = new ArrayList<>();
         for(List<TagField> listOfFields : fields.values())
         {
-            for(TagField next:listOfFields)
-            {
-                fieldList.add(next);
-            }
+            fieldList.addAll(listOfFields);
         }
         return fieldList;
     }
@@ -166,7 +163,7 @@ public abstract class AbstractTag implements Tag
     @Override
     public Iterator<TagField> getFields()
     {
-        final Iterator<Map.Entry<String, List<TagField>>> it = this.fields.entrySet().iterator();
+        Iterator<Map.Entry<String, List<TagField>>> it = this.fields.entrySet().iterator();
         return new Iterator<TagField>()
         {
             private Iterator<TagField> fieldsIt;
@@ -257,7 +254,7 @@ public abstract class AbstractTag implements Tag
     @Override
     public boolean hasField(String id)
     {
-        return getFields(id).size() != 0;
+        return !getFields(id).isEmpty();
     }
 
     @Override
@@ -283,7 +280,7 @@ public abstract class AbstractTag implements Tag
     @Override
     public boolean isEmpty()
     {
-        return fields.size() == 0;
+        return fields.isEmpty();
     }
 
     /**
@@ -342,7 +339,7 @@ public abstract class AbstractTag implements Tag
         }
 
         // Else we put the new field in the fields.
-        list = new ArrayList<TagField>();
+        list = new ArrayList<>();
         list.add(field);
         fields.put(field.getId(), list);
         if (field.isCommon())
@@ -356,7 +353,7 @@ public abstract class AbstractTag implements Tag
      *
      * @see org.jaudiotagger.tag.Tag#setEncoding(java.lang.String)
      */
-    public boolean setEncoding(final Charset enc)
+    public boolean setEncoding(Charset enc)
     {
         if (!isAllowedEncoding(enc))
         {
@@ -383,7 +380,7 @@ public abstract class AbstractTag implements Tag
      */
     public String toString()
     {
-        StringBuffer out = new StringBuffer();
+        StringBuilder out = new StringBuilder();
         out.append("Tag content:\n");
         Iterator<TagField> it = getFields();
         while (it.hasNext())
@@ -392,10 +389,10 @@ public abstract class AbstractTag implements Tag
             out.append("\t");
             out.append(field.getId());
             out.append(":");
-            out.append(field.toString());
+            out.append(field);
             out.append("\n");
         }
-        return out.toString().substring(0, out.length() - 1);
+        return out.substring(0, out.length() - 1);
     }
 
     /**
@@ -437,7 +434,7 @@ public abstract class AbstractTag implements Tag
     public Artwork getFirstArtwork()
     {
         List<Artwork> artwork = getArtworkList();
-        if(artwork.size()>0)
+        if(!artwork.isEmpty())
         {
             return artwork.get(0);
         }

@@ -155,8 +155,8 @@ public abstract class AbstractFrameBodyUrlLink extends AbstractID3v2FrameBody
     {
         try
         {
-            final String[] splitURL = url.split("(?<!/)/(?!/)", -1);
-            final StringBuffer sb = new StringBuffer(splitURL[0]);
+            String[] splitURL = url.split("(?<!/)/(?!/)", -1);
+            StringBuilder sb = new StringBuilder(splitURL[0]);
             for (int i = 1; i < splitURL.length; i++)
             {
                 sb.append("/").append(URLEncoder.encode(splitURL[i], "utf-8"));

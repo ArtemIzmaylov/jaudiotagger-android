@@ -12,7 +12,7 @@ import java.nio.channels.FileChannel;
 public class ChnlChunk extends BaseChunk
 {
     private short numChannels;
-    String IDs[];
+    String[] IDs;
 
     public ChnlChunk(ByteBuffer dataBuffer)
     {

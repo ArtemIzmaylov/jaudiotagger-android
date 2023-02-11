@@ -5,7 +5,7 @@ import org.jaudiotagger.tag.datatype.AbstractIntStringValuePair;
 /**
  * Content Type used by Sysnchronised Lyrics Frame (SYLT)
  */
-public class SynchronisedLyricsContentType extends AbstractIntStringValuePair
+public final class SynchronisedLyricsContentType extends AbstractIntStringValuePair
 {
     private static SynchronisedLyricsContentType eventTimingTypes;
 

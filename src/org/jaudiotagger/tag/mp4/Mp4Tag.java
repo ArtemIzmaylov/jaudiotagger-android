@@ -40,7 +40,7 @@ import static org.jaudiotagger.tag.mp4.Mp4FieldKey.*;
 public class Mp4Tag extends AbstractTag
 {
 
-    private static final EnumMap<FieldKey, Mp4FieldKey> tagFieldToMp4Field = new EnumMap<FieldKey, Mp4FieldKey>(FieldKey.class);
+    private static final EnumMap<FieldKey, Mp4FieldKey> tagFieldToMp4Field = new EnumMap<>(FieldKey.class);
 
     public static EnumMap<FieldKey, Mp4FieldKey> getMapping()
     {
@@ -276,7 +276,7 @@ public class Mp4Tag extends AbstractTag
      */
     public boolean hasField(FieldKey genericKey)
     {
-        return getFields(genericKey).size() != 0;
+        return !getFields(genericKey).isEmpty();
     }
 
     /**
@@ -286,7 +286,7 @@ public class Mp4Tag extends AbstractTag
      */
     public boolean hasField(Mp4FieldKey mp4FieldKey)
     {
-        return getFields(mp4FieldKey.getFieldName()).size() != 0;
+        return !getFields(mp4FieldKey.getFieldName()).isEmpty();
     }
 
     /**
@@ -308,11 +308,11 @@ public class Mp4Tag extends AbstractTag
         }
 
         List<TagField> list = getFields(mp4FieldKey.getFieldName());
-        List<TagField> filteredList = new ArrayList<TagField>();
+        List<TagField> filteredList = new ArrayList<>();
 
         if (genericKey==FieldKey.KEY)
         {
-            if (list.size() == 0)
+            if (list.isEmpty())
             {
                 list = getFields(KEY_OLD.getFieldName());
             }
@@ -320,7 +320,7 @@ public class Mp4Tag extends AbstractTag
         }
         else if(genericKey==FieldKey.GENRE)
         {
-            if (list.size() == 0)
+            if (list.isEmpty())
             {
                 list = getFields(GENRE_CUSTOM.getFieldName());
             }
@@ -389,7 +389,7 @@ public class Mp4Tag extends AbstractTag
      */
     public List<String> getAll(FieldKey genericKey) throws KeyNotFoundException
     {
-        List<String>   values = new ArrayList<String>();
+        List<String>   values = new ArrayList<>();
         List<TagField> fields = getFields(genericKey);
         for(TagField tagfield:fields)
         {
@@ -489,7 +489,7 @@ public class Mp4Tag extends AbstractTag
     public Mp4TagField getFirstField(FieldKey genericKey) throws KeyNotFoundException
     {
         List<TagField> fields = getFields(genericKey);
-        if(fields.size() == 0)
+        if(fields.isEmpty())
         {
             return null;
         }
@@ -526,61 +526,53 @@ public class Mp4Tag extends AbstractTag
         else if (genericKey == FieldKey.TRACK)
         {
             String trackTotal = this.getFirst(FieldKey.TRACK_TOTAL);
-            if(trackTotal.length()==0)
+            if(trackTotal.isEmpty())
             {
                 super.deleteField(mp4FieldName);
-                return;
             }
             else
             {
                 Mp4TrackField field = (Mp4TrackField)this.getFirstField(FieldKey.TRACK_TOTAL);
                 field.setTrackNo(0);
-                return;
             }
         }
         else if (genericKey == FieldKey.TRACK_TOTAL)
         {
             String track = this.getFirst(FieldKey.TRACK);
-            if(track.length()==0)
+            if(track.isEmpty())
             {
                 super.deleteField(mp4FieldName);
-                return;
             }
             else
             {
                 Mp4TrackField field = (Mp4TrackField)this.getFirstField(FieldKey.TRACK);
                 field.setTrackTotal(0);
-                return;
             }
         }
         else if (genericKey == FieldKey.DISC_NO)
         {
             String discTotal = this.getFirst(FieldKey.DISC_TOTAL);
-            if(discTotal.length()==0)
+            if(discTotal.isEmpty())
             {
                 super.deleteField(mp4FieldName);
-                return;
             }
             else
             {
                 Mp4DiscNoField field = (Mp4DiscNoField)this.getFirstField(FieldKey.DISC_TOTAL);
                 field.setDiscNo(0);
-                return;
             }
         }
         else if (genericKey == FieldKey.DISC_TOTAL)
         {
             String discno = this.getFirst(FieldKey.DISC_NO);
-            if(discno.length()==0)
+            if(discno.isEmpty())
             {
                 super.deleteField(mp4FieldName);
-                return;
             }
             else
             {
                 Mp4DiscNoField field = (Mp4DiscNoField)this.getFirstField(FieldKey.DISC_NO);
                 field.setDiscTotal(0);
-                return;
             }
         }
         else if(genericKey == FieldKey.GENRE)
@@ -626,7 +618,7 @@ public class Mp4Tag extends AbstractTag
      *    
      * @return
      */
-    public TagField createField(Artwork artwork) throws FieldDataInvalidException
+    public TagField createField(Artwork artwork)
     {
         return new Mp4TagCoverField(artwork.getBinaryData());
     }
@@ -795,7 +787,7 @@ public class Mp4Tag extends AbstractTag
         if(field.getId().equals(TRACK.getFieldName()))
         {
             List<TagField> list = fields.get(field.getId());
-            if(list==null||list.size()==0)
+            if(list==null|| list.isEmpty())
             {
                  super.setField(field);
             }
@@ -821,7 +813,7 @@ public class Mp4Tag extends AbstractTag
         else if(field.getId().equals(DISCNUMBER.getFieldName()))
         {
             List<TagField> list = fields.get(field.getId());
-            if(list==null||list.size()==0)
+            if(list==null|| list.isEmpty())
             {
                  super.setField(field);
             }
@@ -941,7 +933,7 @@ public class Mp4Tag extends AbstractTag
     public List<Artwork> getArtworkList()
     {
         List<TagField> coverartList = get(Mp4FieldKey.ARTWORK);
-        List<Artwork> artworkList = new ArrayList<Artwork>(coverartList.size());
+        List<Artwork> artworkList = new ArrayList<>(coverartList.size());
 
         for(TagField next:coverartList)
         {
@@ -956,7 +948,7 @@ public class Mp4Tag extends AbstractTag
 
     public TagField createCompilationField(boolean origValue) throws KeyNotFoundException, FieldDataInvalidException
     {
-        String value = "";
+        String value;
         if(origValue)
         {
             value=Mp4TagByteField.TRUE_VALUE;

@@ -39,11 +39,11 @@ public enum WavInfoIdentifier
     ALBUM_GAIN("IAGL", null, 21), //Currently No mapping to a FieldKey for this
     TWONKY_TRACKNO("itrk", null, 1), //Uses nonstandard field
     ;
-    private static final Map<String, WavInfoIdentifier> CODE_TYPE_MAP = new HashMap<String, WavInfoIdentifier>();
-    private static final Map<FieldKey, WavInfoIdentifier> FIELDKEY_TYPE_MAP = new HashMap<FieldKey, WavInfoIdentifier>();
-    private String code;
-    private FieldKey fieldKey;
-    private int      preferredWriteOrder;
+    private static final Map<String, WavInfoIdentifier> CODE_TYPE_MAP = new HashMap<>();
+    private static final Map<FieldKey, WavInfoIdentifier> FIELDKEY_TYPE_MAP = new HashMap<>();
+    private final String code;
+    private final FieldKey fieldKey;
+    private final int      preferredWriteOrder;
 
     WavInfoIdentifier(String code, FieldKey fieldKey, int preferredWriteOrder)
     {
@@ -73,11 +73,11 @@ public enum WavInfoIdentifier
      * @param code chunk id
      * @return chunk type or {@code null} if not registered
      */
-    public synchronized static WavInfoIdentifier getByCode(final String code)
+    public synchronized static WavInfoIdentifier getByCode(String code)
     {
         if (CODE_TYPE_MAP.isEmpty())
         {
-            for (final WavInfoIdentifier type : values())
+            for (WavInfoIdentifier type : values())
             {
                 CODE_TYPE_MAP.put(type.getCode(), type);
             }
@@ -91,11 +91,11 @@ public enum WavInfoIdentifier
      * @param fieldKey
      * @return chunk type or {@code null} if not registered
      */
-    public synchronized static WavInfoIdentifier getByFieldKey(final FieldKey fieldKey)
+    public synchronized static WavInfoIdentifier getByFieldKey(FieldKey fieldKey)
     {
         if (FIELDKEY_TYPE_MAP.isEmpty())
         {
-            for (final WavInfoIdentifier type : values())
+            for (WavInfoIdentifier type : values())
             {
                 if (type.getFieldKey() != null)
                 {

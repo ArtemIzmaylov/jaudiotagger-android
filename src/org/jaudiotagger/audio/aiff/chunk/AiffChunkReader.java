@@ -21,9 +21,9 @@ public abstract class AiffChunkReader
      * @return
      * @throws java.io.IOException
      */
-    protected ByteBuffer readChunkDataIntoBuffer(FileChannel fc, final ChunkHeader chunkHeader) throws IOException
+    protected ByteBuffer readChunkDataIntoBuffer(FileChannel fc, ChunkHeader chunkHeader) throws IOException
     {
-        final ByteBuffer chunkData = ByteBuffer.allocateDirect((int)chunkHeader.getSize());
+        ByteBuffer chunkData = ByteBuffer.allocateDirect((int)chunkHeader.getSize());
         chunkData.order(ByteOrder.BIG_ENDIAN);
         fc.read(chunkData);
         chunkData.position(0);

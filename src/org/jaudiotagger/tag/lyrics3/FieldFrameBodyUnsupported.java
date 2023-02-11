@@ -119,9 +119,8 @@ public class FieldFrameBodyUnsupported extends AbstractLyrics3v2FieldFrameBody
 
     /**
      * @param byteBuffer
-     * @throws IOException
      */
-    public void read(ByteBuffer byteBuffer) throws InvalidTagException
+    public void read(ByteBuffer byteBuffer)
     {
         int size;
         byte[] buffer = new byte[5];

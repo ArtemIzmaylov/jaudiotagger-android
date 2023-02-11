@@ -36,7 +36,7 @@ import java.util.logging.Logger;
 /**
  * $Id$
  *
- * reference:http://xiph.org/ogg/doc/framing.html
+ * reference:<a href="http://xiph.org/ogg/doc/framing.html">...</a>
  *
  * @author Raphael Slinckx (KiKiDonK)
  * @version 16 d�cembre 2003
@@ -44,7 +44,7 @@ import java.util.logging.Logger;
 public class OggPageHeader
 {
     // Logger Object
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.ogg.atom");
+    public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.ogg.atom");
 
     //Capture pattern at start of header
     public static final byte[] CAPTURE_PATTERN = {'O', 'g', 'g', 'S'};
@@ -88,17 +88,17 @@ public class OggPageHeader
     public static final int FIELD_PAGE_CHECKSUM_LENGTH = 4;
     public static final int FIELD_PAGE_SEGMENTS_LENGTH = 1;
 
-    private byte[] rawHeaderData;
+    private final byte[] rawHeaderData;
     private double absoluteGranulePosition;
     private int checksum;
-    private byte headerTypeFlag;
+    private final byte headerTypeFlag;
 
     private boolean isValid = false;
     private int pageLength = 0;
     private int pageSequenceNumber, streamSerialNumber;
     private byte[] segmentTable;
 
-    private List<PacketStartAndLength> packetList = new ArrayList<PacketStartAndLength>();
+    private final List<PacketStartAndLength> packetList = new ArrayList<>();
     private boolean lastPacketIncomplete = false;
 
     private long startByte = 0;
@@ -234,7 +234,7 @@ public class OggPageHeader
 
         if(logger.isLoggable(Level.CONFIG))
         {
-            logger.config("Constructed OggPage:" + this.toString());
+            logger.config("Constructed OggPage:" + this);
         }
     }
 
@@ -314,13 +314,13 @@ public class OggPageHeader
 
     public String toString()
     {
-        String out = "Ogg Page Header:isValid:" + isValid + ":type:" + headerTypeFlag + ":oggPageHeaderLength:" + rawHeaderData.length + ":length:" + pageLength + ":seqNo:" + getPageSequence() + ":packetIncomplete:" + isLastPacketIncomplete() + ":serNum:" + this.getSerialNumber();
+        StringBuilder out = new StringBuilder("Ogg Page Header:isValid:" + isValid + ":type:" + headerTypeFlag + ":oggPageHeaderLength:" + rawHeaderData.length + ":length:" + pageLength + ":seqNo:" + getPageSequence() + ":packetIncomplete:" + isLastPacketIncomplete() + ":serNum:" + this.getSerialNumber());
 
         for (PacketStartAndLength packet : getPacketList())
         {
-            out += packet.toString();
+            out.append(packet.toString());
         }
-        return out;
+        return out.toString();
     }
 
     /** Startbyte of this pageHeader in the file
@@ -344,8 +344,8 @@ public class OggPageHeader
      */
     public static class PacketStartAndLength
     {
-        private Integer startPosition = 0;
-        private Integer length = 0;
+        private Integer startPosition;
+        private Integer length;
 
         public PacketStartAndLength(int startPosition, int length)
         {
@@ -385,14 +385,14 @@ public class OggPageHeader
      * a file would normally have a value of 0x5 because both the CONTINUED_PACKET
      * bit and the END_OF_BITSTREAM bit would be set.
      */
-    public static enum HeaderTypeFlag
+    public enum HeaderTypeFlag
     {
         FRESH_PACKET((byte) 0x0),
         CONTINUED_PACKET((byte) 0x1),
         START_OF_BITSTREAM((byte) 0x2),
         END_OF_BITSTREAM((byte) 0x4);
 
-        byte fileValue;
+        final byte fileValue;
 
         HeaderTypeFlag(byte fileValue)
         {

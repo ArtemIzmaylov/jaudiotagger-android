@@ -75,13 +75,12 @@ public abstract class AudioFileWriter2 extends AudioFileWriter
      *
      * @param tag
      * @param file
-     * @throws CannotReadException
      * @throws CannotWriteException
      */
-    protected abstract void deleteTag(Tag tag, File file) throws CannotReadException, CannotWriteException;
+    protected abstract void deleteTag(Tag tag, File file) throws CannotWriteException;
 
 
-    public void deleteTag(Tag tag, RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotReadException, CannotWriteException, IOException
+    public void deleteTag(Tag tag, RandomAccessFile raf, RandomAccessFile tempRaf) throws IOException
     {
         throw new UnsupportedOperationException("Old method not used in version 2");
     }
@@ -95,7 +94,7 @@ public abstract class AudioFileWriter2 extends AudioFileWriter
      */
     protected abstract void writeTag(Tag tag, File file) throws CannotWriteException;
 
-    protected   void writeTag(AudioFile audioFile, Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotReadException, CannotWriteException, IOException
+    protected   void writeTag(AudioFile audioFile, Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws IOException
     {
         throw new UnsupportedOperationException("Old method not used in version 2");
     }

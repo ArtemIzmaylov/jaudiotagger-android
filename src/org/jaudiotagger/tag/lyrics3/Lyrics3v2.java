@@ -44,7 +44,7 @@ public class Lyrics3v2 extends AbstractLyrics3
     /**
      *
      */
-    private HashMap<String, Lyrics3v2Field> fieldMap = new HashMap<String, Lyrics3v2Field>();
+    private HashMap<String, Lyrics3v2Field> fieldMap = new HashMap<>();
 
     /**
      * Creates a new Lyrics3v2 datatype.
@@ -133,11 +133,10 @@ public class Lyrics3v2 extends AbstractLyrics3
     /**
      * Creates a new Lyrics3v2 datatype.
      *
-     * @throws TagNotFoundException
      * @throws IOException
      * @param byteBuffer
      */
-    public Lyrics3v2(ByteBuffer byteBuffer) throws TagNotFoundException, IOException
+    public Lyrics3v2(ByteBuffer byteBuffer) throws IOException
     {
         try
         {
@@ -269,7 +268,7 @@ public class Lyrics3v2 extends AbstractLyrics3
         seek(byteBuffer);
         byteBuffer.position();
 
-        fieldMap = new HashMap<String, Lyrics3v2Field>();
+        fieldMap = new HashMap<>();
 
         Lyrics3v2Field lyric;
 
@@ -358,15 +357,15 @@ public class Lyrics3v2 extends AbstractLyrics3
     {
         Iterator<Lyrics3v2Field> iterator = fieldMap.values().iterator();
         Lyrics3v2Field field;
-        String str = getIdentifier() + " " + this.getSize() + "\n";
+        StringBuilder str = new StringBuilder(getIdentifier() + " " + this.getSize() + "\n");
 
         while (iterator.hasNext())
         {
             field = iterator.next();
-            str += (field.toString() + "\n");
+            str.append(field.toString()).append("\n");
         }
 
-        return str;
+        return str.toString();
     }
 
     /**

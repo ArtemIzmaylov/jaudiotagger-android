@@ -91,7 +91,7 @@ public class StringFixedLength extends AbstractString
         logger.config("Reading from array from offset:" + offset);
         try
         {
-            final CharsetDecoder decoder = getTextEncodingCharSet().newDecoder();
+            CharsetDecoder decoder = getTextEncodingCharSet().newDecoder();
 
             //Decode buffer if runs into problems should through exception which we
             //catch and then set value to empty string.
@@ -145,8 +145,8 @@ public class StringFixedLength extends AbstractString
 
         try
         {
-            final Charset charset = getTextEncodingCharSet();
-            final CharsetEncoder encoder;
+            Charset charset = getTextEncodingCharSet();
+            CharsetEncoder encoder;
             if (StandardCharsets.UTF_16.equals(charset))
             {
                 //Note remember LE BOM is ff fe but tis is handled by encoder Unicode char is fe ff
@@ -221,8 +221,8 @@ public class StringFixedLength extends AbstractString
      */
     protected Charset getTextEncodingCharSet()
     {
-        final byte textEncoding = this.getBody().getTextEncoding();
-        final Charset charset = TextEncoding.getInstanceOf().getCharsetForId(textEncoding);
+        byte textEncoding = this.getBody().getTextEncoding();
+        Charset charset = TextEncoding.getInstanceOf().getCharsetForId(textEncoding);
         logger.finest("text encoding:" + textEncoding + " charset:" + charset.name());
         return charset;
     }

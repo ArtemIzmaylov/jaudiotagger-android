@@ -110,9 +110,9 @@ public abstract class AbstractString extends AbstractDataType
     {
         //Try and write to buffer using the CharSet defined by the textEncoding field (note if using UTF16 we dont
         //need to worry about LE,BE at this point it makes no difference)
-        final byte textEncoding = this.getBody().getTextEncoding();
-        final TextEncoding encoding = TextEncoding.getInstanceOf();
-        final Charset charset = encoding.getCharsetForId(textEncoding);
+        byte textEncoding = this.getBody().getTextEncoding();
+        TextEncoding encoding = TextEncoding.getInstanceOf();
+        Charset charset = encoding.getCharsetForId(textEncoding);
         CharsetEncoder encoder = charset.newEncoder();
 
         if (encoder.canEncode((String) value))
@@ -121,7 +121,7 @@ public abstract class AbstractString extends AbstractDataType
         }
         else
         {
-            logger.finest("Failed Trying to decode" + value + "with" + encoder.toString());
+            logger.finest("Failed Trying to decode" + value + "with" + encoder);
             return false;
         }
     }
@@ -136,7 +136,7 @@ public abstract class AbstractString extends AbstractDataType
      */
     protected CharsetDecoder getCorrectDecoder(ByteBuffer inBuffer)
     {
-        CharsetDecoder decoder=null;
+        CharsetDecoder decoder;
         if(inBuffer.remaining()<=2)
         {
             decoder = getTextEncodingCharSet().newDecoder();
@@ -183,8 +183,8 @@ public abstract class AbstractString extends AbstractDataType
      */
     protected Charset getTextEncodingCharSet()
     {
-        final byte textEncoding = this.getBody().getTextEncoding();
-        final Charset charSetName = TextEncoding.getInstanceOf().getCharsetForId(textEncoding);
+        byte textEncoding = this.getBody().getTextEncoding();
+        Charset charSetName = TextEncoding.getInstanceOf().getCharsetForId(textEncoding);
         return charSetName;
     }
 }

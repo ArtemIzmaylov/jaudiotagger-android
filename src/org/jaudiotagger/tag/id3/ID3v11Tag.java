@@ -157,59 +157,59 @@ public class ID3v11Tag extends ID3v1Tag
                     id3tag = (ID3v24Tag) mp3tag;
                 }
                 ID3v24Frame frame;
-                String text;
+                StringBuilder text;
                 if (id3tag.hasFrame(ID3v24Frames.FRAME_ID_TITLE))
                 {
                     List<TagField> fields =  id3tag.getFrame(ID3v24Frames.FRAME_ID_TITLE);
                     frame = (ID3v24Frame)fields.get(0);
-                    text = ((FrameBodyTIT2) frame.getBody()).getText();
-                    this.title = ID3Tags.truncate(text, FIELD_TITLE_LENGTH);
+                    text = new StringBuilder(((FrameBodyTIT2) frame.getBody()).getText());
+                    this.title = ID3Tags.truncate(text.toString(), FIELD_TITLE_LENGTH);
                 }
                 if (id3tag.hasFrame(ID3v24Frames.FRAME_ID_ARTIST))
                 {
                     List<TagField> fields =  id3tag.getFrame(ID3v24Frames.FRAME_ID_ARTIST);
                     frame = (ID3v24Frame)fields.get(0);
-                    text = ((FrameBodyTPE1) frame.getBody()).getText();
-                    this.artist = ID3Tags.truncate(text, FIELD_ARTIST_LENGTH);
+                    text = new StringBuilder(((FrameBodyTPE1) frame.getBody()).getText());
+                    this.artist = ID3Tags.truncate(text.toString(), FIELD_ARTIST_LENGTH);
                 }
                 if (id3tag.hasFrame(ID3v24Frames.FRAME_ID_ALBUM))
                 {
                     List<TagField> fields =  id3tag.getFrame(ID3v24Frames.FRAME_ID_ALBUM);
                     frame = (ID3v24Frame)fields.get(0);
-                    text = ((FrameBodyTALB) frame.getBody()).getText();
-                    this.album = ID3Tags.truncate(text, FIELD_ALBUM_LENGTH);
+                    text = new StringBuilder(((FrameBodyTALB) frame.getBody()).getText());
+                    this.album = ID3Tags.truncate(text.toString(), FIELD_ALBUM_LENGTH);
                 }
                 if (id3tag.hasFrame(ID3v24Frames.FRAME_ID_YEAR))
                 {
                     List<TagField> fields =  id3tag.getFrame(ID3v24Frames.FRAME_ID_YEAR);
                     frame = (ID3v24Frame)fields.get(0);
-                    text = ((FrameBodyTDRC) frame.getBody()).getText();
-                    this.year = ID3Tags.truncate(text, FIELD_YEAR_LENGTH);
+                    text = new StringBuilder(((FrameBodyTDRC) frame.getBody()).getText());
+                    this.year = ID3Tags.truncate(text.toString(), FIELD_YEAR_LENGTH);
                 }
 
                 if (id3tag.hasFrame(ID3v24Frames.FRAME_ID_COMMENT))
                 {
                     Iterator<Object> iterator = id3tag.getFrameOfType(ID3v24Frames.FRAME_ID_COMMENT);
-                    text = "";
+                    text = new StringBuilder();
                     while (iterator.hasNext())
                     {
                         frame = (ID3v24Frame) iterator.next();
-                        text += (((FrameBodyCOMM) frame.getBody()).getText() + " ");
+                        text.append(((FrameBodyCOMM) frame.getBody()).getText()).append(" ");
                     }
-                    this.comment = ID3Tags.truncate(text, FIELD_COMMENT_LENGTH);
+                    this.comment = ID3Tags.truncate(text.toString(), FIELD_COMMENT_LENGTH);
                 }
                 if (id3tag.hasFrame(ID3v24Frames.FRAME_ID_GENRE))
                 {
                     List<TagField> fields =  id3tag.getFrame(ID3v24Frames.FRAME_ID_GENRE);
                     frame = (ID3v24Frame) fields.get(0);
-                    text = ((FrameBodyTCON) frame.getBody()).getText();
+                    text = new StringBuilder(((FrameBodyTCON) frame.getBody()).getText());
                     try
                     {
-                        this.genre = (byte) ID3Tags.findNumber(text);
+                        this.genre = (byte) ID3Tags.findNumber(text.toString());
                     }
                     catch (TagException ex)
                     {
-                    	Integer genreId = GenreTypes.getInstanceOf().getIdForValue(text);
+                    	Integer genreId = GenreTypes.getInstanceOf().getIdForValue(text.toString());
                     	if(null!= genreId) this.genre = genreId.byteValue();
                     	else
                     	{
@@ -341,14 +341,14 @@ public class ID3v11Tag extends ID3v1Tag
 
     public List<TagField> getTrack()
     {
-        if (getFirst(FieldKey.TRACK).length() > 0)
+        if (!getFirst(FieldKey.TRACK).isEmpty())
         {
             ID3v1TagField field = new ID3v1TagField(ID3v1FieldKey.TRACK.name(), getFirst(FieldKey.TRACK));
             return returnFieldToList(field);
         }
         else
         {
-            return new ArrayList<TagField>();
+            return new ArrayList<>();
         }
     }
 
@@ -416,7 +416,7 @@ public class ID3v11Tag extends ID3v1Tag
             results = getTrack();
             if (results != null)
             {
-                if (results.size() > 0)
+                if (!results.isEmpty())
                 {
                     return results.get(0);
                 }

@@ -125,7 +125,7 @@ public enum ErrorMessage
     ;
 
 
-    String msg;
+    final String msg;
 
     ErrorMessage(String msg)
     {

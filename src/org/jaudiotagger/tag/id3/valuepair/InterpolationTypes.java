@@ -23,7 +23,7 @@ package org.jaudiotagger.tag.id3.valuepair;
 
 import org.jaudiotagger.tag.datatype.AbstractIntStringValuePair;
 
-public class InterpolationTypes extends AbstractIntStringValuePair
+public final class InterpolationTypes extends AbstractIntStringValuePair
 {
     private static InterpolationTypes interpolationTypes;
 

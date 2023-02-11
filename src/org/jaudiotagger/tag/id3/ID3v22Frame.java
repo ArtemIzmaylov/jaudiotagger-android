@@ -45,7 +45,7 @@ import java.util.regex.Pattern;
  */
 public class ID3v22Frame extends AbstractID3v2Frame
 {
-    private static Pattern validFrameIdentifier = Pattern.compile("[A-Z][0-9A-Z]{2}");
+    private static final Pattern validFrameIdentifier = Pattern.compile("[A-Z][\\dA-Z]{2}");
 
     protected static final int FRAME_ID_SIZE = 3;
     protected static final int FRAME_SIZE_SIZE = 3;
@@ -165,17 +165,13 @@ public class ID3v22Frame extends AbstractID3v2Frame
             frameBody = new FrameBodyUnsupported(identifier);
         }
         //Instantiate Interface/Abstract should not happen
-        catch (InstantiationException ie)
+        catch (InstantiationException | IllegalAccessException ie)
         {
             logger.log(Level.SEVERE, ie.getMessage(), ie);
             throw new RuntimeException(ie);
         }
         //Private Constructor shouild not happen
-        catch (IllegalAccessException iae)
-        {
-            logger.log(Level.SEVERE, iae.getMessage(), iae);
-            throw new RuntimeException(iae);
-        }
+
         frameBody.setHeader(this);
         logger.config("Created empty frame of type" + this.identifier + "with frame body of" + bodyIdentifier);
 
@@ -310,15 +306,9 @@ public class ID3v22Frame extends AbstractID3v2Frame
     @Override 
     protected boolean isPadding(byte[] buffer)
     {
-        if(
-                (buffer[0]=='\0')&&
-                (buffer[1]=='\0')&&
-                (buffer[2]=='\0')
-           )
-        {
-            return true;
-        }
-        return false;
+        return (buffer[0] == '\0') &&
+                (buffer[1] == '\0') &&
+                (buffer[2] == '\0');
     }
 
     /**
@@ -511,7 +501,7 @@ public class ID3v22Frame extends AbstractID3v2Frame
      *
       * @param encoding charset.
       */
-    public void setEncoding(final Charset encoding)
+    public void setEncoding(Charset encoding)
     {
         Integer encodingId = TextEncoding.getInstanceOf().getIdForCharset(encoding);
         if(encodingId!=null)

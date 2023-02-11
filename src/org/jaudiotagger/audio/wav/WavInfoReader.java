@@ -43,8 +43,8 @@ import java.util.logging.Logger;
  */
 public class WavInfoReader
 {
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.wav");
-    private String loggingName;
+    public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.wav");
+    private final String loggingName;
 
     //So if we encounter bad chunk we know if we have managed to find good audio chunks first
     private boolean isFoundAudio   = false;
@@ -133,7 +133,7 @@ public class WavInfoReader
 
         String id = chunkHeader.getID();
         logger.info(loggingName + " Reading Chunk:" + id + ":starting at:" + Hex.asDecAndHex(chunkHeader.getStartLocationInFile()) + ":sizeIncHeader:" + (chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
-        final WavChunkType chunkType = WavChunkType.get(id);
+        WavChunkType chunkType = WavChunkType.get(id);
 
         //If known chunkType
         if (chunkType != null)
@@ -219,7 +219,6 @@ public class WavInfoReader
             restOfFile.flip();
             while(restOfFile.hasRemaining() && restOfFile.get()==0)
             {
-                ;
             }
             logger.severe(loggingName + "Found Null Padding, starting at " + chunkHeader.getStartLocationInFile()+ ", size:" + restOfFile.position() + ChunkHeader.CHUNK_HEADER_SIZE);
             fc.position(chunkHeader.getStartLocationInFile() + restOfFile.position() + ChunkHeader.CHUNK_HEADER_SIZE - 1);

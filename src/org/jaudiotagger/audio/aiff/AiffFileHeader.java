@@ -29,9 +29,9 @@ import static org.jaudiotagger.audio.iff.IffHeaderChunk.FORM_HEADER_LENGTH;
 public class AiffFileHeader
 {
     private static final String FORM = "FORM";
-    private static Logger logger = Logger.getLogger("org.jaudiotagger.audio.aiff.AudioFileHeader");
+    private static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.aiff.AudioFileHeader");
 
-    private String loggingName;
+    private final String loggingName;
 
     public AiffFileHeader(String loggingName)
     {
@@ -46,11 +46,11 @@ public class AiffFileHeader
      * @throws IOException
      * @throws CannotReadException if the file is not a valid AIFF file
      */
-    public long readHeader(FileChannel fc, final AiffAudioHeader aiffAudioHeader) throws IOException, CannotReadException
+    public long readHeader(FileChannel fc, AiffAudioHeader aiffAudioHeader) throws IOException, CannotReadException
     {
-        final ByteBuffer headerData = ByteBuffer.allocateDirect(FORM_HEADER_LENGTH);
+        ByteBuffer headerData = ByteBuffer.allocateDirect(FORM_HEADER_LENGTH);
         headerData.order(BIG_ENDIAN);
-        final int bytesRead = fc.read(headerData);
+        int bytesRead = fc.read(headerData);
         headerData.position(0);
 
         if (bytesRead < FORM_HEADER_LENGTH)
@@ -58,11 +58,11 @@ public class AiffFileHeader
             throw new IOException(loggingName + ":AIFF:Unable to read required number of databytes read:" + bytesRead + ":required:" + FORM_HEADER_LENGTH);
         }
 
-        final String signature = Utils.readFourBytesAsChars(headerData);
+        String signature = Utils.readFourBytesAsChars(headerData);
         if(FORM.equals(signature))
         {
             // read chunk size
-            final long chunkSize  = headerData.getInt();
+            long chunkSize  = headerData.getInt();
             logger.config(loggingName + ":Reading AIFF header size:" + Hex.asDecAndHex(chunkSize)
                     +":File Size Should End At:"+ Hex.asDecAndHex(chunkSize + ChunkHeader.CHUNK_HEADER_SIZE));
 
@@ -80,8 +80,8 @@ public class AiffFileHeader
      *
      * @throws CannotReadException if the file type is not supported
      */
-    private void readFileType(final ByteBuffer bytes, final AiffAudioHeader aiffAudioHeader) throws IOException, CannotReadException {
-        final String type = Utils.readFourBytesAsChars(bytes);
+    private void readFileType(ByteBuffer bytes, AiffAudioHeader aiffAudioHeader) throws IOException, CannotReadException {
+        String type = Utils.readFourBytesAsChars(bytes);
         if (AIFF.getCode().equals(type))
         {
             aiffAudioHeader.setFileType(AIFF);

@@ -53,7 +53,7 @@ public abstract class AudioFileWriter {
     protected static final int MINIMUM_FILESIZE = 100;
 
     // Logger Object
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.generic");
+    public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.generic");
 
     //If filename too long try recreating it with length no longer than 50 that should be safe on all operating
     //systems
@@ -414,7 +414,7 @@ public abstract class AudioFileWriter {
      * @param reuseExistingOriginalFile {@code true} or {@code false}
      * @throws CannotWriteException If the file cannot be written
      */
-    private void transferNewFileToOriginalFile(final File newFile, final File originalFile, final boolean reuseExistingOriginalFile) throws CannotWriteException {
+    private void transferNewFileToOriginalFile(File newFile, File originalFile, boolean reuseExistingOriginalFile) throws CannotWriteException {
         if (reuseExistingOriginalFile) {
             transferNewFileContentToOriginalFile(newFile, originalFile);
         } else {
@@ -445,12 +445,12 @@ public abstract class AudioFileWriter {
      *                     After execution it denotes the name of the file with the modified content and new inode/fileIndex.
      * @throws CannotWriteException if the file cannot be written
      */
-    private void transferNewFileContentToOriginalFile(final File newFile, final File originalFile) throws CannotWriteException {
+    private void transferNewFileContentToOriginalFile(File newFile, File originalFile) throws CannotWriteException {
         // try to obtain exclusive lock on the file
         RandomAccessFile raf = null;
         try {
             raf = new RandomAccessFile(originalFile, "rw");
-            final FileChannel outChannel = raf.getChannel();
+            FileChannel outChannel = raf.getChannel();
             FileLock lock = null;
             try {
                 lock = outChannel.tryLock();
@@ -492,14 +492,14 @@ public abstract class AudioFileWriter {
         }
     }
 
-    private void transferNewFileContentToOriginalFile(final File newFile, final File originalFile, final RandomAccessFile raf, final FileChannel outChannel) throws CannotWriteException {
+    private void transferNewFileContentToOriginalFile(File newFile, File originalFile, RandomAccessFile raf, FileChannel outChannel) throws CannotWriteException {
         FileInputStream in = null;
         try {
             in = new FileInputStream(newFile);
             FileChannel inChannel = in.getChannel();
             // copy contents of newFile to originalFile,
             // overwriting the old content in that file
-            final long size = inChannel.size();
+            long size = inChannel.size();
             long position = 0;
             while (position < size) {
                 position += inChannel.transferTo(position, 1024L * 1024L, outChannel);
@@ -545,7 +545,7 @@ public abstract class AudioFileWriter {
      *                     After execution it denotes the name of the file with the modified content and new inode/fileIndex.
      * @throws CannotWriteException if the file cannot be written
      */
-    private void transferNewFileToNewOriginalFile(final File newFile, final File originalFile) throws CannotWriteException {
+    private void transferNewFileToNewOriginalFile(File newFile, File originalFile) throws CannotWriteException {
         // Rename Original File
         // Can fail on Vista if have Special Permission 'Delete' set Deny
         File originalFileBackup = new File(originalFile.getAbsoluteFile().getParentFile().getPath(), AudioFile.getBaseFilename(originalFile) + ".old");

@@ -40,7 +40,7 @@ public class XMLTagDisplayFormatter extends AbstractTagDisplayFormatter
     protected static final String xmlCDataTagClose = "]]>";
 
 
-    StringBuffer sb = new StringBuffer();
+    static final StringBuffer sb = new StringBuffer();
 
     public XMLTagDisplayFormatter()
     {
@@ -72,7 +72,7 @@ public class XMLTagDisplayFormatter extends AbstractTagDisplayFormatter
     public static String xmlCData(String xmlData)
     {
         char tempChar;
-        StringBuffer replacedString = new StringBuffer();
+        StringBuilder replacedString = new StringBuilder();
         for (int i = 0; i < xmlData.length(); i++)
         {
             tempChar = xmlData.charAt(i);
@@ -111,7 +111,7 @@ public class XMLTagDisplayFormatter extends AbstractTagDisplayFormatter
 
     public void openHeadingElement(String type, String value)
     {
-        if (value.length() == 0)
+        if (value.isEmpty())
         {
             sb.append(xmlOpen(type));
         }
@@ -165,7 +165,7 @@ public class XMLTagDisplayFormatter extends AbstractTagDisplayFormatter
      */
     public static String replaceXMLCharacters(String xmlData)
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         StringCharacterIterator sCI = new StringCharacterIterator(xmlData);
         for (char c = sCI.first(); c != CharacterIterator.DONE; c = sCI.next())
         {

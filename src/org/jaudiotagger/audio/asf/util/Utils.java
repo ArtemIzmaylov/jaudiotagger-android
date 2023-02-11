@@ -29,6 +29,7 @@ import java.io.OutputStream;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import org.jaudiotagger.StandardCharsets;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -40,7 +41,7 @@ import java.util.GregorianCalendar;
 public class Utils
 {
 
-    public static final long DIFF_BETWEEN_ASF_DATE_AND_JAVA_DATE = 11644470000000l;
+    public static final long DIFF_BETWEEN_ASF_DATE_AND_JAVA_DATE = 11644470000000L;
     /**
      * Stores the default line separator of the current underlying system.
      */
@@ -78,10 +79,7 @@ public class Utils
     {
         if (value != null)
         {
-            if (value.length() > MAXIMUM_STRING_LENGTH_ALLOWED)
-            {
-                return false;
-            }
+            return value.length() <= MAXIMUM_STRING_LENGTH_ALLOWED;
         }
         return true;
     }
@@ -125,9 +123,9 @@ public class Utils
      * @param dest   stream to write to
      * @throws IOException on I/O errors.
      */
-    public static void flush(final InputStream source, final OutputStream dest) throws IOException
+    public static void flush(InputStream source, OutputStream dest) throws IOException
     {
-        final byte[] buf = new byte[8192];
+        byte[] buf = new byte[8192];
         int read;
         while ((read = source.read(buf)) != -1)
         {
@@ -149,7 +147,7 @@ public class Utils
      * @return A byte[] with the size of <code>byteCount</code> containing the
      * lower byte values of <code>value</code>.
      */
-    public static byte[] getBytes(final long value, final int byteCount)
+    public static byte[] getBytes(long value, int byteCount)
     {
         byte[] result = new byte[byteCount];
         for (int i = 0; i < result.length; i++)
@@ -167,12 +165,12 @@ public class Utils
      * @param charset charset to apply
      * @return the source's binary representation according to the charset.
      */
-    public static byte[] getBytes(final String source, final Charset charset)
+    public static byte[] getBytes(String source, Charset charset)
     {
         assert charset != null;
         assert source != null;
-        final ByteBuffer encoded = charset.encode(source);
-        final byte[] result = new byte[encoded.limit()];
+        ByteBuffer encoded = charset.encode(source);
+        byte[] result = new byte[encoded.limit()];
         encoded.rewind();
         encoded.get(result);
         return result;
@@ -211,9 +209,9 @@ public class Utils
      * @param fileTime Time in 100ns since 1 jan 1601
      * @return Calendar holding the date representation.
      */
-    public static GregorianCalendar getDateOf(final BigInteger fileTime)
+    public static GregorianCalendar getDateOf(BigInteger fileTime)
     {
-        final GregorianCalendar result = new GregorianCalendar();
+        GregorianCalendar result = new GregorianCalendar();
 
         // Divide by 10 to convert from -4 to -3 (millisecs)
         BigInteger time = fileTime.divide(new BigInteger("10"));
@@ -351,7 +349,7 @@ public class Utils
                     strBytes = copy;
                 }
             }
-            return new String(strBytes, "UTF-16LE");
+            return new String(strBytes, StandardCharsets.UTF_16LE);
         }
         throw new IllegalStateException("Couldn't read the necessary amount of bytes.");
     }

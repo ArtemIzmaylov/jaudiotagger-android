@@ -1,7 +1,6 @@
 package org.jaudiotagger.audio.generic;
 
 import org.jaudiotagger.audio.AudioFile;
-import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.tag.Tag;
 
 import java.io.IOException;
@@ -12,7 +11,7 @@ import java.io.RandomAccessFile;
  */
 public interface TagWriter
 {
-    public void delete(Tag tag, RandomAccessFile raf, RandomAccessFile tempRaf) throws IOException, CannotWriteException;
+    void delete(Tag tag, RandomAccessFile raf, RandomAccessFile tempRaf) throws IOException;
 
 
     /**
@@ -21,8 +20,7 @@ public interface TagWriter
      * @param tag
      * @param raf
      * @param rafTemp
-     * @throws org.jaudiotagger.audio.exceptions.CannotWriteException
      * @throws java.io.IOException
      */
-    public void write(AudioFile af, Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotWriteException, IOException;
+    void write(AudioFile af, Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws IOException;
 }

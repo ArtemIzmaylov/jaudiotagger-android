@@ -6,7 +6,6 @@ import org.jaudiotagger.tag.TagOptionSingleton;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.nio.channels.SeekableByteChannel;
 
 /** Shift Data to allow metadata to be fitted inside existing file
  */

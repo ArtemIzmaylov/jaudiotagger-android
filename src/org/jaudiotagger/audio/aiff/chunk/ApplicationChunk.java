@@ -18,7 +18,7 @@ public class ApplicationChunk extends Chunk
     private static final String SIGNATURE_PDOS = "pdos";
     private static final String SIGNATURE_STOC = "stoc";
 
-    private AiffAudioHeader aiffHeader;
+    private final AiffAudioHeader aiffHeader;
 
     /**
      * Constructor.
@@ -27,7 +27,7 @@ public class ApplicationChunk extends Chunk
      * @param chunkData The file from which the AIFF data are being read
      * @param aiffAudioHeader audio header
      */
-    public ApplicationChunk(final ChunkHeader chunkHeader, final ByteBuffer chunkData, final AiffAudioHeader aiffAudioHeader)
+    public ApplicationChunk(ChunkHeader chunkHeader, ByteBuffer chunkData, AiffAudioHeader aiffAudioHeader)
     {
         super(chunkData, chunkHeader);
         this.aiffHeader = aiffAudioHeader;
@@ -42,7 +42,7 @@ public class ApplicationChunk extends Chunk
      */
     public boolean readChunk() throws IOException
     {
-        final String applicationSignature = Utils.readFourBytesAsChars(chunkData);
+        String applicationSignature = Utils.readFourBytesAsChars(chunkData);
         String applicationName = null;
 
         /* If the application signature is 'pdos' or 'stoc',

@@ -47,16 +47,16 @@ public class AsfFileWriter extends AudioFileWriter
      * {@inheritDoc}
      */
     @Override
-    protected void deleteTag(Tag tag, final RandomAccessFile raf, final RandomAccessFile tempRaf) throws CannotWriteException, IOException
+    protected void deleteTag(Tag tag, RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotWriteException, IOException
     {
         writeTag(null, new AsfTag(true), raf, tempRaf);
     }
 
-    private boolean[] searchExistence(final ChunkContainer container, final MetadataContainer[] metaContainers)
+    private boolean[] searchExistence(ChunkContainer container, MetadataContainer[] metaContainers)
     {
         assert container != null;
         assert metaContainers != null;
-        final boolean[] result = new boolean[metaContainers.length];
+        boolean[] result = new boolean[metaContainers.length];
         for (int i = 0; i < result.length; i++)
         {
             result[i] = container.hasChunkByGUID(metaContainers[i].getContainerType().getContainerGUID());
@@ -68,7 +68,7 @@ public class AsfFileWriter extends AudioFileWriter
      * {@inheritDoc}
      */
     @Override
-    protected void writeTag(AudioFile audioFile, final Tag tag, final RandomAccessFile raf, final RandomAccessFile rafTemp) throws CannotWriteException, IOException
+    protected void writeTag(AudioFile audioFile, Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws IOException
     {
         /*
          * Since this implementation should not change the structure of the ASF
@@ -87,24 +87,24 @@ public class AsfFileWriter extends AudioFileWriter
          * for each descriptor type, if an object is found, an updater will be
          * configured.
          */
-        final AsfHeader sourceHeader = AsfHeaderReader.readTagHeader(raf);
+        AsfHeader sourceHeader = AsfHeaderReader.readTagHeader(raf);
         raf.seek(0); // Reset for the streamer
         /*
          * Now createField modifiers for metadata descriptor and extended content
          * descriptor as implied by the given Tag.
          */
         // TODO not convinced that we need to copy fields here
-        final AsfTag copy = new AsfTag(tag, true);
-        final MetadataContainer[] distribution = TagConverter.distributeMetadata(copy);
-        final boolean[] existHeader = searchExistence(sourceHeader, distribution);
-        final boolean[] existExtHeader = searchExistence(sourceHeader.getExtendedHeader(), distribution);
+        AsfTag copy = new AsfTag(tag, true);
+        MetadataContainer[] distribution = TagConverter.distributeMetadata(copy);
+        boolean[] existHeader = searchExistence(sourceHeader, distribution);
+        boolean[] existExtHeader = searchExistence(sourceHeader.getExtendedHeader(), distribution);
         // Modifiers for the asf header object
-        final List<ChunkModifier> headerModifier = new ArrayList<ChunkModifier>();
+        List<ChunkModifier> headerModifier = new ArrayList<>();
         // Modifiers for the asf header extension object
-        final List<ChunkModifier> extHeaderModifier = new ArrayList<ChunkModifier>();
+        List<ChunkModifier> extHeaderModifier = new ArrayList<>();
         for (int i = 0; i < distribution.length; i++)
         {
-            final WriteableChunkModifer modifier = new WriteableChunkModifer(distribution[i]);
+            WriteableChunkModifer modifier = new WriteableChunkModifer(distribution[i]);
             if (existHeader[i])
             {
                 // Will remove or modify chunks in ASF header

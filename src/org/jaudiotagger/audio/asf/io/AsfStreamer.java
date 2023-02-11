@@ -29,9 +29,9 @@ public class AsfStreamer
      * @param destination the destination to copy the chunk to.
      * @throws IOException on I/O errors.
      */
-    private void copyChunk(final GUID guid, final InputStream source, final OutputStream destination) throws IOException
+    private void copyChunk(GUID guid, InputStream source, OutputStream destination) throws IOException
     {
-        final long chunkSize = Utils.readUINT64(source);
+        long chunkSize = Utils.readUINT64(source);
         destination.write(guid.getBytes());
         Utils.writeUINT64(chunkSize, destination);
         Utils.copy(source, destination, chunkSize - 24);
@@ -49,15 +49,15 @@ public class AsfStreamer
      * @param modifiers list of chunk modifiers to apply.
      * @throws IOException on I/O errors.
      */
-    public void createModifiedCopy(final InputStream source, final OutputStream dest, final List<ChunkModifier> modifiers) throws IOException
+    public void createModifiedCopy(InputStream source, OutputStream dest, List<ChunkModifier> modifiers) throws IOException
     {
-        final List<ChunkModifier> modders = new ArrayList<ChunkModifier>();
+        List<ChunkModifier> modders = new ArrayList<>();
         if (modifiers != null)
         {
             modders.addAll(modifiers);
         }
         // Read and check ASF GUID
-        final GUID readGUID = Utils.readGUID(source);
+        GUID readGUID = Utils.readGUID(source);
         if (GUID.GUID_HEADER.equals(readGUID))
         {
             // used to calculate differences
@@ -65,9 +65,9 @@ public class AsfStreamer
             long chunkDiff = 0;
 
             // read header information
-            final long headerSize = Utils.readUINT64(source);
-            final long chunkCount = Utils.readUINT32(source);
-            final byte[] reserved = new byte[2];
+            long headerSize = Utils.readUINT64(source);
+            long chunkCount = Utils.readUINT32(source);
+            byte[] reserved = new byte[2];
             reserved[0] = (byte) (source.read() & 0xFF);
             reserved[1] = (byte) (source.read() & 0xFF);
 
@@ -76,7 +76,7 @@ public class AsfStreamer
              * necessary, because the header chunk (and file properties chunk)
              * need to be adjusted but are written in front of the others.
              */
-            final ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
             // fileHeader will get the binary representation of the file
             // properties chunk, without GUID
             byte[] fileHeader = null;
@@ -85,12 +85,12 @@ public class AsfStreamer
             for (long i = 0; i < chunkCount; i++)
             {
                 // Read GUID
-                final GUID curr = Utils.readGUID(source);
+                GUID curr = Utils.readGUID(source);
                 // special case for file properties chunk
                 if (GUID.GUID_FILE.equals(curr))
                 {
-                    final ByteArrayOutputStream tmp = new ByteArrayOutputStream();
-                    final long size = Utils.readUINT64(source);
+                    ByteArrayOutputStream tmp = new ByteArrayOutputStream();
+                    long size = Utils.readUINT64(source);
                     Utils.writeUINT64(size, tmp);
                     Utils.copy(source, tmp, size - 24);
                     fileHeader = tmp.toByteArray();
@@ -107,7 +107,7 @@ public class AsfStreamer
                         if (modders.get(j).isApplicable(curr))
                         {
                             // alter current chunk
-                            final ModificationResult result = modders.get(j).modify(curr, source, bos);
+                            ModificationResult result = modders.get(j).modify(curr, source, bos);
                             // remember size differences.
                             chunkDiff += result.getChunkCountDifference();
                             totalDiff += result.getByteDifference();
@@ -124,11 +124,11 @@ public class AsfStreamer
                 }
             }
             // Now apply the left modifiers.
-            for (final ChunkModifier curr : modders)
+            for (ChunkModifier curr : modders)
             {
                 // chunks, which were not in the source file, will be added to
                 // the destination
-                final ModificationResult result = curr.modify(null, null, bos);
+                ModificationResult result = curr.modify(null, null, bos);
                 chunkDiff += result.getChunkCountDifference();
                 totalDiff += result.getByteDifference();
             }
@@ -171,13 +171,13 @@ public class AsfStreamer
      *                     subtract the stored file size)
      * @throws IOException on I/O errors.
      */
-    private void modifyFileHeader(final InputStream source, final OutputStream destination, final long fileSizeDiff) throws IOException
+    private void modifyFileHeader(InputStream source, OutputStream destination, long fileSizeDiff) throws IOException
     {
         destination.write(GUID.GUID_FILE.getBytes());
-        final long chunkSize = Utils.readUINT64(source);
+        long chunkSize = Utils.readUINT64(source);
         Utils.writeUINT64(chunkSize, destination);
         destination.write(Utils.readGUID(source).getBytes());
-        final long fileSize = Utils.readUINT64(source);
+        long fileSize = Utils.readUINT64(source);
         Utils.writeUINT64(fileSize + fileSizeDiff, destination);
         Utils.copy(source, destination, chunkSize - 48);
     }

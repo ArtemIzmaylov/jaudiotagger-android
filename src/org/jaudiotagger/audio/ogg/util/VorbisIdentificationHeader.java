@@ -27,7 +27,7 @@ import java.util.logging.Logger;
 /**
  * Vorbis Identification header
  *
- * From http://xiph.org/vorbis/doc/Vorbis_I_spec.html#id326710
+ * From <a href="http://xiph.org/vorbis/doc/Vorbis_I_spec.html#id326710">...</a>
  *
  * The identification header is a short header of only a few fields used to declare the stream definitively as Vorbis,
  * and provide a few externally relevant pieces of information about the audio stream. The identification header is
@@ -51,7 +51,7 @@ import java.util.logging.Logger;
 public class VorbisIdentificationHeader implements VorbisHeader
 {
     // Logger Object
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.ogg.atom");
+    public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.ogg.atom");
 
     private int audioChannels;
     private boolean isValid = false;

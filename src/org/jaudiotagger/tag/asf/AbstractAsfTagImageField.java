@@ -18,7 +18,7 @@ abstract class AbstractAsfTagImageField extends AsfTagField
      * @param field
      *            the ASF field that should be represented.
      */
-    public AbstractAsfTagImageField(final AsfFieldKey field) {
+    public AbstractAsfTagImageField(AsfFieldKey field) {
         super(field);
     }
 
@@ -29,7 +29,7 @@ abstract class AbstractAsfTagImageField extends AsfTagField
      *            The descriptor which should be represented as a
      *            {@link TagField}.
      */
-    public AbstractAsfTagImageField(final MetadataDescriptor source) {
+    public AbstractAsfTagImageField(MetadataDescriptor source) {
         super(source);
     }
 
@@ -39,7 +39,7 @@ abstract class AbstractAsfTagImageField extends AsfTagField
      * @param fieldKey
      *            The field identifier to use.
      */
-    public AbstractAsfTagImageField(final String fieldKey) {
+    public AbstractAsfTagImageField(String fieldKey) {
         super(fieldKey);
     }
 

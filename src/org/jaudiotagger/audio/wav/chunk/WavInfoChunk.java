@@ -18,10 +18,10 @@ import java.util.logging.Logger;
  */
 public class WavInfoChunk
 {
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.wav.WavInfoChunk");
+    public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.wav.WavInfoChunk");
 
-    private WavInfoTag wavInfoTag;
-    private String    loggingName;
+    private final WavInfoTag wavInfoTag;
+    private final String    loggingName;
 
     public WavInfoChunk(WavTag tag, String loggingName)
     {
@@ -57,7 +57,7 @@ public class WavInfoChunk
                 return false;
             }
 
-            String value =null;
+            String value;
             try
             {
                 value = Utils.getString(chunkData, 0, size, StandardCharsets.UTF_8);

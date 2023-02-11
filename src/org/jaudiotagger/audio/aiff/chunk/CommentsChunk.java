@@ -49,14 +49,14 @@ import java.util.Date;
  */
 public class CommentsChunk extends Chunk
 {
-    private AiffAudioHeader aiffHeader;
+    private final AiffAudioHeader aiffHeader;
 
     /**
      * @param chunkHeader The header for this chunk
      * @param chunkData The buffer from which the AIFF data are being read
      * @param aiffAudioHeader audio header
      */
-    public CommentsChunk(final ChunkHeader chunkHeader, final ByteBuffer chunkData, final AiffAudioHeader aiffAudioHeader)
+    public CommentsChunk(ChunkHeader chunkHeader, ByteBuffer chunkData, AiffAudioHeader aiffAudioHeader)
     {
         super(chunkData, chunkHeader);
         this.aiffHeader = aiffAudioHeader;
@@ -70,18 +70,17 @@ public class CommentsChunk extends Chunk
      */
     public boolean readChunk() throws IOException
     {
-        final int numComments = Utils.u(chunkData.getShort());
+        int numComments = Utils.u(chunkData.getShort());
 
         //For each comment
         for (int i = 0; i < numComments; i++)
         {
-            final long timestamp  = Utils.u(chunkData.getInt());
-            final Date jTimestamp = AiffUtil.timestampToDate(timestamp);
-            @SuppressWarnings("unused")
-			final int marker      = Utils.u(chunkData.getShort());
-            final int count       = Utils.u(chunkData.getShort());
+            long timestamp  = Utils.u(chunkData.getInt());
+            Date jTimestamp = AiffUtil.timestampToDate(timestamp);
+            @SuppressWarnings("unused") int marker      = Utils.u(chunkData.getShort());
+            int count       = Utils.u(chunkData.getShort());
             // Append a timestamp to the comment
-            final String text = Utils.getString(chunkData, 0, count, StandardCharsets.ISO_8859_1) + " " + AiffUtil.formatDate(jTimestamp);
+            String text = Utils.getString(chunkData, 0, count, StandardCharsets.ISO_8859_1) + " " + AiffUtil.formatDate(jTimestamp);
             if (count % 2 != 0)
             {
                 //#300

@@ -32,7 +32,7 @@ public enum AiffCompressionType
        ;
 
     // Reverse-lookup map for getting a compression type from code
-    private static final Map<String, AiffCompressionType> lookup = new HashMap<String, AiffCompressionType>();
+    private static final Map<String, AiffCompressionType> lookup = new HashMap<>();
 
     static
     {
@@ -49,7 +49,7 @@ public enum AiffCompressionType
     private final String provider;
     private final boolean isLossless;
 
-    AiffCompressionType(final String code, final String compression, final String dataType, final String provider, final boolean isLossless)
+    AiffCompressionType(String code, String compression, String dataType, String provider, boolean isLossless)
     {
         this.code = code;
         this.compression = compression;

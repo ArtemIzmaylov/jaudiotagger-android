@@ -4,7 +4,6 @@ import org.jaudiotagger.audio.aiff.chunk.AiffChunkSummary;
 import org.jaudiotagger.audio.aiff.chunk.AiffChunkType;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
-import org.jaudiotagger.audio.exceptions.NoWritePermissionsException;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.iff.Chunk;
 import org.jaudiotagger.audio.iff.ChunkHeader;
@@ -23,9 +22,6 @@ import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
-import java.nio.file.AccessDeniedException;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.util.logging.Logger;
 
 /**
@@ -34,7 +30,7 @@ import java.util.logging.Logger;
 public class AiffTagWriter
 {
     // Logger Object
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.aiff");
+    public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.aiff");
 
     /**
      * Read existing metadata
@@ -69,7 +65,7 @@ public class AiffTagWriter
     private ChunkHeader seekToStartOfMetadata(FileChannel fc, AiffTag existingTag, String fileName) throws IOException, CannotWriteException
     {
         fc.position(existingTag.getStartLocationInFileOfId3Chunk());
-        final ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.BIG_ENDIAN);
+        ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.BIG_ENDIAN);
         chunkHeader.readHeader(fc);
         fc.position(fc.position() - ChunkHeader.CHUNK_HEADER_SIZE);
         if(!AiffChunkType.TAG.getCode().equals(chunkHeader.getID()))
@@ -110,13 +106,13 @@ public class AiffTagWriter
      * @throws java.io.IOException
      * @throws org.jaudiotagger.audio.exceptions.CannotWriteException
      */
-    public void delete(final Tag tag, File file) throws CannotWriteException
+    public void delete(Tag tag, File file) throws CannotWriteException
     {
         try(RandomAccessFile raf = new RandomAccessFile(file, "rw"))
         {
             FileChannel fc = raf.getChannel();
             logger.severe(file +":Deleting tag from file");
-            final AiffTag existingTag = getExistingMetadata(file);
+            AiffTag existingTag = getExistingMetadata(file);
 
             if (existingTag.isExistingId3Tag() && existingTag.getID3Tag().getStartLocationInFile() != null)
             {
@@ -154,7 +150,7 @@ public class AiffTagWriter
      * @param tagChunkHeader existing chunk header for the tag
      * @throws IOException if something goes wrong
      */
-    private void deleteTagChunk(FileChannel fc, final AiffTag existingTag, final ChunkHeader tagChunkHeader, String fileName) throws IOException
+    private void deleteTagChunk(FileChannel fc, AiffTag existingTag, ChunkHeader tagChunkHeader, String fileName) throws IOException
     {
         int lengthTagChunk = (int) tagChunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE;
         if(Utils.isOddLength(lengthTagChunk))
@@ -164,7 +160,7 @@ public class AiffTagWriter
                 lengthTagChunk++;
             }
         }
-        final long newLength = fc.size() - lengthTagChunk;
+        long newLength = fc.size() - lengthTagChunk;
         logger.config(fileName
                 + ":Size of id3 chunk to delete is:"+Hex.asDecAndHex(lengthTagChunk)
                 +":Location:"+Hex.asDecAndHex(existingTag.getStartLocationInFileOfId3Chunk()));
@@ -186,7 +182,7 @@ public class AiffTagWriter
      * @param existingTag
      * @throws IOException
      */
-    private void deleteRemainderOfFile(FileChannel fc, final AiffTag existingTag, String fileName) throws IOException
+    private void deleteRemainderOfFile(FileChannel fc, AiffTag existingTag, String fileName) throws IOException
     {
         ChunkSummary precedingChunk = AiffChunkSummary.getChunkBeforeStartingMetadataTag(existingTag);
         if(!Utils.isOddLength(precedingChunk.getEndLocation()))
@@ -212,13 +208,13 @@ public class AiffTagWriter
      * @throws IOException if something goes wrong
      */
     // TODO: arguments are not used, position is implicit
-    private void deleteTagChunkUsingSmallByteBufferSegments(final AiffTag existingTag, final FileChannel channel, final long newLength, final long lengthTagChunk)
+    private void deleteTagChunkUsingSmallByteBufferSegments(AiffTag existingTag, FileChannel channel, long newLength, long lengthTagChunk)
             throws IOException
     {
-        final ByteBuffer buffer = ByteBuffer.allocateDirect((int)TagOptionSingleton.getInstance().getWriteChunkSize());
+        ByteBuffer buffer = ByteBuffer.allocateDirect((int)TagOptionSingleton.getInstance().getWriteChunkSize());
         while (channel.read(buffer) >= 0 || buffer.position() != 0) {
             buffer.flip();
-            final long readPosition = channel.position();
+            long readPosition = channel.position();
             channel.position(readPosition-lengthTagChunk-buffer.limit());
             channel.write(buffer);
             channel.position(readPosition);
@@ -233,11 +229,11 @@ public class AiffTagWriter
      * @throws CannotWriteException
      * @throws IOException
      */
-    public void write(final Tag tag, File file) throws CannotWriteException
+    public void write(Tag tag, File file) throws CannotWriteException
     {
         logger.severe(file + ":Writing Aiff tag to file");
 
-        AiffTag existingTag = null;
+        AiffTag existingTag;
         try
         {
             existingTag = getExistingMetadata(file);
@@ -260,8 +256,8 @@ public class AiffTagWriter
                 fc.truncate(formFileLength);
                 fc.position(currentPos);
             }
-            final AiffTag aiffTag = (AiffTag) tag;
-            final ByteBuffer bb = convert(aiffTag, existingTag);
+            AiffTag aiffTag = (AiffTag) tag;
+            ByteBuffer bb = convert(aiffTag, existingTag);
 
             //Replacing ID3 tag
             if (existingTag.isExistingId3Tag() && existingTag.getID3Tag().getStartLocationInFile() != null)
@@ -269,7 +265,7 @@ public class AiffTagWriter
                 //Usual case
                 if (!existingTag.isIncorrectlyAlignedTag())
                 {
-                    final ChunkHeader chunkHeader = seekToStartOfMetadata(fc, existingTag, file.toString());
+                    ChunkHeader chunkHeader = seekToStartOfMetadata(fc, existingTag, file.toString());
                     logger.config(file + ":Current Space allocated:" + existingTag.getSizeOfID3TagOnly() + ":NewTagRequires:" + bb.limit());
 
                     //Usual case ID3 is last chunk
@@ -343,10 +339,10 @@ public class AiffTagWriter
      * @param bb data to write
      * @throws IOException
      */
-    private void writeDataToFile(FileChannel fc, final ByteBuffer bb)
+    private void writeDataToFile(FileChannel fc, ByteBuffer bb)
             throws IOException
     {
-        final ChunkHeader ch = new ChunkHeader(ByteOrder.BIG_ENDIAN);
+        ChunkHeader ch = new ChunkHeader(ByteOrder.BIG_ENDIAN);
         ch.setID(AiffChunkType.TAG.getCode());
         ch.setSize(bb.limit());
         fc.write(ch.writeHeader());
@@ -381,7 +377,7 @@ public class AiffTagWriter
      * @return byte buffer containing the tag data
      * @throws UnsupportedEncodingException
      */
-    public ByteBuffer convert(final AiffTag tag, AiffTag existingTag) throws UnsupportedEncodingException
+    public ByteBuffer convert(AiffTag tag, AiffTag existingTag) throws UnsupportedEncodingException
     {
         try
         {
@@ -408,7 +404,7 @@ public class AiffTagWriter
                 baos = new ByteArrayOutputStream();
                 tag.getID3Tag().write(baos, newSize);
             }
-            final ByteBuffer buf = ByteBuffer.wrap(baos.toByteArray());
+            ByteBuffer buf = ByteBuffer.wrap(baos.toByteArray());
             buf.rewind();
             return buf;
         }

@@ -184,5 +184,4 @@ public enum FieldKey
     WORK_TYPE,
     YEAR,
     VERSION
-    ;
 }

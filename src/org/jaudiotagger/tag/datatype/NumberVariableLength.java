@@ -41,7 +41,7 @@ public class NumberVariableLength extends AbstractDataType
     private static final int MINIMUM_NO_OF_DIGITS = 1;
     private static final int MAXIMUM_NO_OF_DIGITS = 8;
 
-    int minLength = MINIMUM_NO_OF_DIGITS;
+    int minLength;
 
 
     /**
@@ -125,7 +125,7 @@ public class NumberVariableLength extends AbstractDataType
                 temp >>= MAXIMUM_NO_OF_DIGITS;
             }
 
-            return (minLength > size) ? minLength : size;
+            return Math.max(minLength, size);
         }
     }
 

@@ -15,7 +15,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
-import java.nio.file.Path;
 import java.util.logging.Level;
 
 public class DffFileReader extends AudioFileReader2
@@ -58,15 +57,15 @@ public class DffFileReader extends AudioFileReader2
                     throw new CannotReadException(file + " Not a valid dff file. Missing 'SND '  after 'PROP' ");
                 }
 
-                BaseChunk chunk = null;
+                BaseChunk chunk;
                 FsChunk fs = null;
                 ChnlChunk chnl = null;
-                CmprChunk cmpr = null;
-                DitiChunk diti = null;
-                EndChunk end = null;
+                CmprChunk cmpr;
+                DitiChunk diti;
+                EndChunk end;
                 DstChunk dst = null;
                 FrteChunk frte = null;
-                Id3Chunk id3 = null;
+                Id3Chunk id3;
 
                 for (; ; )
                 {
@@ -216,7 +215,7 @@ public class DffFileReader extends AudioFileReader2
     }
 
     @Override
-    protected Tag getTag(File path) throws CannotReadException, IOException
+    protected Tag getTag(File path) throws IOException
     {
         return null;
     }

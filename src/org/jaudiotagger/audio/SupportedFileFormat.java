@@ -27,12 +27,12 @@ public enum SupportedFileFormat
     /**
      * File Suffix
      */
-    private String filesuffix;
+    private final String filesuffix;
 
     /**
      * User Friendly Name
      */
-    private String displayName;
+    private final String displayName;
 
     /** Constructor for internal use by this enum.
      */

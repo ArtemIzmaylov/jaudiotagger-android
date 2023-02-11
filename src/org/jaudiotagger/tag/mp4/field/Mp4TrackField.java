@@ -34,10 +34,10 @@ public class Mp4TrackField extends Mp4TagTextNumberField
     {
         super(Mp4FieldKey.TRACK.getFieldName(), trackValue);
 
-        numbers = new ArrayList<Short>();
-        numbers.add(new Short("0"));
+        numbers = new ArrayList<>();
+        numbers.add(Short.valueOf("0"));
 
-        String values[] = trackValue.split("/");
+        String[] values = trackValue.split("/");
         switch (values.length)
         {
             case 1:
@@ -49,8 +49,8 @@ public class Mp4TrackField extends Mp4TagTextNumberField
                 {
                     throw new FieldDataInvalidException("Value of:" + values[0] + " is invalid for field:" + id);
                 }
-                numbers.add(new Short("0"));
-                numbers.add(new Short("0"));
+                numbers.add(Short.valueOf("0"));
+                numbers.add(Short.valueOf("0"));
                 break;
 
             case 2:
@@ -70,7 +70,7 @@ public class Mp4TrackField extends Mp4TagTextNumberField
                 {
                     throw new FieldDataInvalidException("Value of:" + values[1] + " is invalid for field:" + id);
                 }
-                numbers.add(new Short("0"));
+                numbers.add(Short.valueOf("0"));
                 break;
 
             default:
@@ -88,11 +88,11 @@ public class Mp4TrackField extends Mp4TagTextNumberField
     {
 
         super(Mp4FieldKey.TRACK.getFieldName(), String.valueOf(trackNo));
-        numbers = new ArrayList<Short>();
-        numbers.add(new Short("0"));
+        numbers = new ArrayList<>();
+        numbers.add(Short.valueOf("0"));
         numbers.add((short) trackNo);
-        numbers.add(new Short("0"));
-        numbers.add(new Short("0"));
+        numbers.add(Short.valueOf("0"));
+        numbers.add(Short.valueOf("0"));
     }
 
     /**
@@ -104,11 +104,11 @@ public class Mp4TrackField extends Mp4TagTextNumberField
     public Mp4TrackField(int trackNo, int total)
     {
         super(Mp4FieldKey.TRACK.getFieldName(), String.valueOf(trackNo));
-        numbers = new ArrayList<Short>();
-        numbers.add(new Short("0"));
+        numbers = new ArrayList<>();
+        numbers.add(Short.valueOf("0"));
         numbers.add((short) trackNo);
         numbers.add((short) total);
-        numbers.add(new Short("0"));
+        numbers.add(Short.valueOf("0"));
     }
 
     /**
@@ -133,7 +133,7 @@ public class Mp4TrackField extends Mp4TagTextNumberField
         numbers = databox.getNumbers();
         //Track number always hold three values, we can discard the first one, the second one is the track no
         //and the third is the total no of tracks so only use if not zero
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         if(numbers!=null)
         {
             if ((numbers.size() > TRACK_NO_INDEX) && (numbers.get(TRACK_NO_INDEX) > 0))

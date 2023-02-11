@@ -73,7 +73,7 @@ public class TextEncodedStringNullTerminated extends AbstractString
         int size;
 
         //Get the Specified Decoder
-        final Charset charset = getTextEncodingCharSet();
+        Charset charset = getTextEncodingCharSet();
 
 
         //We only want to load up to null terminator, data after this is part of different
@@ -84,7 +84,7 @@ public class TextEncodedStringNullTerminated extends AbstractString
 
         //Latin-1 and UTF-8 strings are terminated by a single-byte null,
         //while UTF-16 and its variants need two bytes for the null terminator.
-        final boolean nullIsOneByte = StandardCharsets.ISO_8859_1 == charset || StandardCharsets.UTF_8 == charset;
+        boolean nullIsOneByte = StandardCharsets.ISO_8859_1 == charset || StandardCharsets.UTF_8 == charset;
 
         boolean isNullTerminatorFound = false;
         while (buffer.hasRemaining())
@@ -176,11 +176,11 @@ public class TextEncodedStringNullTerminated extends AbstractString
             ByteBuffer inBuffer = ByteBuffer.wrap(arr, offset, bufferSize).slice();
             CharBuffer outBuffer = CharBuffer.allocate(bufferSize);
 
-            final CharsetDecoder decoder = getCorrectDecoder(inBuffer);
+            CharsetDecoder decoder = getCorrectDecoder(inBuffer);
             CoderResult coderResult = decoder.decode(inBuffer, outBuffer, true);
             if (coderResult.isError())
             {
-                logger.warning("Problem decoding text encoded null terminated string:" + coderResult.toString());
+                logger.warning("Problem decoding text encoded null terminated string:" + coderResult);
             }
             decoder.flush(outBuffer);
             outBuffer.flip();
@@ -204,41 +204,41 @@ public class TextEncodedStringNullTerminated extends AbstractString
         byte[] data;
         //Write to buffer using the CharSet defined by getTextEncodingCharSet()
         //Add a null terminator which will be encoded based on encoding.
-        final Charset charset = getTextEncodingCharSet();
+        Charset charset = getTextEncodingCharSet();
         try
         {
             if (StandardCharsets.UTF_16.equals(charset))
             {
                 if(TagOptionSingleton.getInstance().isEncodeUTF16BomAsLittleEndian())
                 {
-                    final CharsetEncoder encoder = StandardCharsets.UTF_16LE.newEncoder();
+                    CharsetEncoder encoder = StandardCharsets.UTF_16LE.newEncoder();
                     encoder.onMalformedInput(CodingErrorAction.IGNORE);
                     encoder.onUnmappableCharacter(CodingErrorAction.IGNORE);
 
                     //Note remember LE BOM is ff fe but this is handled by encoder Unicode char is fe ff
-                    final ByteBuffer bb = encoder.encode(CharBuffer.wrap('\ufeff' + (String) value + '\0'));
+                    ByteBuffer bb = encoder.encode(CharBuffer.wrap('\ufeff' + (String) value + '\0'));
                     data = new byte[bb.limit()];
                     bb.get(data, 0, bb.limit());
                 }
                 else
                 {
-                     final CharsetEncoder encoder = StandardCharsets.UTF_16BE.newEncoder();
+                     CharsetEncoder encoder = StandardCharsets.UTF_16BE.newEncoder();
                      encoder.onMalformedInput(CodingErrorAction.IGNORE);
                      encoder.onUnmappableCharacter(CodingErrorAction.IGNORE);
 
                      //Note  BE BOM will leave as fe ff
-                     final ByteBuffer bb = encoder.encode(CharBuffer.wrap('\ufeff' + (String) value + '\0'));
+                     ByteBuffer bb = encoder.encode(CharBuffer.wrap('\ufeff' + (String) value + '\0'));
                      data = new byte[bb.limit()];
                      bb.get(data, 0, bb.limit());
                 }
             }
             else
             {
-                final CharsetEncoder encoder = charset.newEncoder();
+                CharsetEncoder encoder = charset.newEncoder();
                 encoder.onMalformedInput(CodingErrorAction.IGNORE);
                 encoder.onUnmappableCharacter(CodingErrorAction.IGNORE);
 
-                final ByteBuffer bb = encoder.encode(CharBuffer.wrap((String) value + '\0'));
+                ByteBuffer bb = encoder.encode(CharBuffer.wrap((String) value + '\0'));
                 data = new byte[bb.limit()];
                 bb.get(data, 0, bb.limit());
             }
@@ -255,8 +255,8 @@ public class TextEncodedStringNullTerminated extends AbstractString
 
     protected Charset getTextEncodingCharSet()
     {
-        final byte textEncoding = this.getBody().getTextEncoding();
-        final Charset charset = TextEncoding.getInstanceOf().getCharsetForId(textEncoding);
+        byte textEncoding = this.getBody().getTextEncoding();
+        Charset charset = TextEncoding.getInstanceOf().getCharsetForId(textEncoding);
         logger.finest("text encoding:" + textEncoding + " charset:" + charset.name());
         return charset;
     }

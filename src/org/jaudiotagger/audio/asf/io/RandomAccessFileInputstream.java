@@ -23,7 +23,7 @@ public final class RandomAccessFileInputstream extends InputStream
      *
      * @param file The file to read.
      */
-    public RandomAccessFileInputstream(final RandomAccessFile file)
+    public RandomAccessFileInputstream(RandomAccessFile file)
     {
         super();
         if (file == null)
@@ -46,7 +46,7 @@ public final class RandomAccessFileInputstream extends InputStream
      * {@inheritDoc}
      */
     @Override
-    public int read(final byte[] buffer, final int off, final int len) throws IOException
+    public int read(byte[] buffer, int off, int len) throws IOException
     {
         return this.source.read(buffer, off, len);
     }
@@ -55,7 +55,7 @@ public final class RandomAccessFileInputstream extends InputStream
      * {@inheritDoc}
      */
     @Override
-    public long skip(final long amount) throws IOException
+    public long skip(long amount) throws IOException
     {
         if (amount < 0)
         {

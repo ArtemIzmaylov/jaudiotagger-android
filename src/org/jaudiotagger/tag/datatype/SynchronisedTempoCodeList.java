@@ -30,12 +30,12 @@ public class SynchronisedTempoCodeList extends AbstractDataTypeList<Synchronised
      *
      * @param copy instance to copy
      */
-    public SynchronisedTempoCodeList(final SynchronisedTempoCodeList copy)
+    public SynchronisedTempoCodeList(SynchronisedTempoCodeList copy)
     {
         super(copy);
     }
 
-    public SynchronisedTempoCodeList(final FrameBodySYTC body)
+    public SynchronisedTempoCodeList(FrameBodySYTC body)
     {
         super(DataTypes.OBJ_SYNCHRONISED_TEMPO_LIST, body);
     }

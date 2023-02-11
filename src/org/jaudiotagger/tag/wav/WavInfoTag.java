@@ -38,7 +38,7 @@ import java.util.List;
 public class WavInfoTag extends GenericTag
 {
     //We dont use these fields but we need to read them so they can be written back if user modifies
-    private List<TagTextField> unrecognisedFields = new ArrayList<>();
+    private final List<TagTextField> unrecognisedFields = new ArrayList<>();
 
     private Long startLocationInFile = null;
 
@@ -72,19 +72,19 @@ public class WavInfoTag extends GenericTag
         StringBuilder  output = new StringBuilder("Wav Info Tag:\n");
         if(getStartLocationInFile()!=null)
         {
-            output.append("\tstartLocation:" + Hex.asDecAndHex(getStartLocationInFile()) + "\n");
+            output.append("\tstartLocation:").append(Hex.asDecAndHex(getStartLocationInFile())).append("\n");
         }
         if(getEndLocationInFile()!=null)
         {
-            output.append("\tendLocation:" + Hex.asDecAndHex(getEndLocationInFile()) + "\n");
+            output.append("\tendLocation:").append(Hex.asDecAndHex(getEndLocationInFile())).append("\n");
         }
         output.append(super.toString().replace("\0",""));
-        if(unrecognisedFields.size()>0)
+        if(!unrecognisedFields.isEmpty())
         {
             output.append("\nUnrecognized Tags:\n");
             for(TagTextField next:unrecognisedFields)
             {
-                output.append("\t"+next.getId()+":"+next.getContent().replace("\0","")+"\n");
+                output.append("\t").append(next.getId()).append(":").append(next.getContent().replace("\0", "")).append("\n");
             }
         }
         return output.toString();
@@ -125,7 +125,7 @@ public class WavInfoTag extends GenericTag
     }
 
     public void addUnRecognizedField(String code, String contents)
-    {;
+    {
         unrecognisedFields.add(new GenericTagTextField(code, contents));
     }
 

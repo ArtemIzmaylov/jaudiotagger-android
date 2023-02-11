@@ -27,7 +27,7 @@ package org.jaudiotagger.tag.id3.reference;
  *
  * TODO Media Monkey includes half stars so essentially a 10 star scale but not used by anything else much
  */
-public class MediaMonkeyPlayerRating  extends ID3Rating
+public final class MediaMonkeyPlayerRating  extends ID3Rating
 {
     private static ID3Rating rating=null;
     private MediaMonkeyPlayerRating()
@@ -73,7 +73,7 @@ public class MediaMonkeyPlayerRating  extends ID3Rating
 
     public int convertRatingToFiveStarScale(int value)
     {
-        int newValue=0;
+        int newValue;
         if (value<=0)
         {
              newValue = 0;
@@ -87,18 +87,6 @@ public class MediaMonkeyPlayerRating  extends ID3Rating
              newValue = 0;
         }
         else if (value<=18)
-        {
-             newValue = 1;
-        }
-        else if (value<=28)
-        {
-             newValue = 1;
-        }
-        else if (value<=28)
-        {
-             newValue = 1;
-        }
-        else if (value<=28)
         {
              newValue = 1;
         }

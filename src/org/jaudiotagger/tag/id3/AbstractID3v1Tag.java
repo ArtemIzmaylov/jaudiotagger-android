@@ -42,7 +42,7 @@ abstract public class AbstractID3v1Tag extends AbstractID3Tag
 {
 
     //Logger
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.tag.id3");
+    public static final Logger logger = Logger.getLogger("org.jaudiotagger.tag.id3");
 
 
     public AbstractID3v1Tag()
@@ -58,7 +58,7 @@ abstract public class AbstractID3v1Tag extends AbstractID3Tag
     protected static final byte END_OF_FIELD = (byte) 0;
 
     //Used to detect end of field in String constructed from Data
-    protected static Pattern endofStringPattern = Pattern.compile("\\x00");
+    protected static final Pattern endofStringPattern = Pattern.compile("\\x00");
 
     //Tag ID as held in file
     public static final String TAG = "TAG";

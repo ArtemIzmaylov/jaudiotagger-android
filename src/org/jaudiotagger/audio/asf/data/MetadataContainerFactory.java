@@ -41,7 +41,7 @@ public final class MetadataContainerFactory
      * @param type the type of container to get a container instance for.
      * @return appropriate container implementation.
      */
-    public MetadataContainer createContainer(final ContainerType type)
+    public MetadataContainer createContainer(ContainerType type)
     {
         return createContainer(type, 0, BigInteger.ZERO);
     }
@@ -58,7 +58,7 @@ public final class MetadataContainerFactory
      * @return an appropriate container implementation with assigned size and
      * position.
      */
-    public MetadataContainer createContainer(final ContainerType type, final long pos, final BigInteger chunkSize)
+    public MetadataContainer createContainer(ContainerType type, long pos, BigInteger chunkSize)
     {
         MetadataContainer result;
         if (type == ContainerType.CONTENT_DESCRIPTION)
@@ -83,10 +83,10 @@ public final class MetadataContainerFactory
      * @param types types of the container which are to be created.
      * @return appropriate container implementations.
      */
-    public MetadataContainer[] createContainers(final ContainerType[] types)
+    public MetadataContainer[] createContainers(ContainerType[] types)
     {
         assert types != null;
-        final MetadataContainer[] result = new MetadataContainer[types.length];
+        MetadataContainer[] result = new MetadataContainer[types.length];
         for (int i = 0; i < result.length; i++)
         {
             result[i] = createContainer(types[i]);

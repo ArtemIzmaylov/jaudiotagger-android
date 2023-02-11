@@ -47,7 +47,7 @@ public abstract class AudioFileReader
 {
 
     // Logger Object
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.generic");
+    public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.generic");
     protected static final int MINIMUM_SIZE_FOR_VALID_AUDIO_FILE = 100;
 
     /*

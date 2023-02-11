@@ -23,7 +23,6 @@
  */
 package org.jaudiotagger.tag.datatype;
 
-import org.jaudiotagger.tag.InvalidDataTypeException;
 import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 
 public class BooleanString extends AbstractDataType
@@ -60,10 +59,8 @@ public class BooleanString extends AbstractDataType
 
     /**
      * @param offset
-     * @throws NullPointerException
-     * @throws IndexOutOfBoundsException
      */
-    public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
+    public void readByteArray(byte[] arr, int offset)
     {
         byte b = arr[offset];
         value = b != '0';
@@ -74,7 +71,7 @@ public class BooleanString extends AbstractDataType
      */
     public String toString()
     {
-        return "" + value;
+        return String.valueOf(value);
     }
 
     /**

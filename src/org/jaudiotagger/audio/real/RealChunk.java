@@ -23,8 +23,8 @@ public class RealChunk {
 
 	public static RealChunk readChunk(RandomAccessFile raf)
 			throws CannotReadException, IOException {
-		final String id = Utils.readString(raf, 4);
-		final int size = (int)Utils.readUint32(raf);
+		String id = Utils.readString(raf, 4);
+		int size = (int)Utils.readUint32(raf);
 		if (size < 8) {
 			throw new CannotReadException(
 					"Corrupt file: RealAudio chunk length at position "
@@ -37,7 +37,7 @@ public class RealChunk {
 							+ " at position " + (raf.getFilePointer() - 4)
 							+ " extends beyond the end of the file");
 		}
-		final byte[] bytes = new byte[size - 8];
+		byte[] bytes = new byte[size - 8];
 		raf.readFully(bytes);
 		return new RealChunk(id, size, bytes);
 	}

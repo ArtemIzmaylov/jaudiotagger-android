@@ -30,7 +30,7 @@ public class CountingOutputstream extends OutputStream
      *
      * @param outputStream stream to wrap.
      */
-    public CountingOutputstream(final OutputStream outputStream)
+    public CountingOutputstream(OutputStream outputStream)
     {
         super();
         assert outputStream != null;
@@ -67,7 +67,7 @@ public class CountingOutputstream extends OutputStream
      * {@inheritDoc}
      */
     @Override
-    public void write(final byte[] bytes) throws IOException
+    public void write(byte[] bytes) throws IOException
     {
         this.wrapped.write(bytes);
         this.count += bytes.length;
@@ -77,7 +77,7 @@ public class CountingOutputstream extends OutputStream
      * {@inheritDoc}
      */
     @Override
-    public void write(final byte[] bytes, final int off, final int len) throws IOException
+    public void write(byte[] bytes, int off, int len) throws IOException
     {
         this.wrapped.write(bytes, off, len);
         this.count += len;
@@ -87,7 +87,7 @@ public class CountingOutputstream extends OutputStream
      * {@inheritDoc}
      */
     @Override
-    public void write(final int toWrite) throws IOException
+    public void write(int toWrite) throws IOException
     {
         this.wrapped.write(toWrite);
         this.count++;

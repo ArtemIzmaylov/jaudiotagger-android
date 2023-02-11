@@ -60,7 +60,7 @@ public abstract class AbstractTagFrameBody extends AbstractTagItem
     /**
      * List of data types that make up this particular frame body.
      */
-    protected List<AbstractDataType> objectList = new ArrayList<>();
+    protected final List<AbstractDataType> objectList = new ArrayList<>();
 
     /**
      * Return the Text Encoding
@@ -137,15 +137,15 @@ public abstract class AbstractTagFrameBody extends AbstractTagItem
      */
     public String getBriefDescription()
     {
-        String str = "";
+        StringBuilder str = new StringBuilder();
         for (AbstractDataType object : objectList)
         {
-            if ((object.toString() != null) && (object.toString().length() > 0))
+            if ((object.toString() != null) && (!object.toString().isEmpty()))
             {
-                str += (object.getIdentifier() + "=\"" + object.toString() + "\"; ");
+                str.append(object.getIdentifier()).append("=\"").append(object).append("\"; ");
             }
         }
-        return str;
+        return str.toString();
     }
 
 
@@ -158,15 +158,15 @@ public abstract class AbstractTagFrameBody extends AbstractTagItem
      */
     public final String getLongDescription()
     {
-        String str = "";
+        StringBuilder str = new StringBuilder();
         for (AbstractDataType object : objectList)
         {
-            if ((object.toString() != null) && (object.toString().length() > 0))
+            if ((object.toString() != null) && (!object.toString().isEmpty()))
             {
-                str += (object.getIdentifier() + " = " + object.toString() + "\n");
+                str.append(object.getIdentifier()).append(" = ").append(object).append("\n");
             }
         }
-        return str;
+        return str.toString();
     }
 
     /**

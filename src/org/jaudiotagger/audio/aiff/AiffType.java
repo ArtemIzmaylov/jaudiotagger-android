@@ -9,7 +9,7 @@ public enum AiffType
     AIFC("AIFC"), //Originally Compressed AIFF but also used for Uncompressed in LE rather than BE order
     ;
 
-    String code;
+    final String code;
 
     AiffType(String code)
     {

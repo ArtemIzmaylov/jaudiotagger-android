@@ -60,9 +60,9 @@ public enum ContainerType
      * @param high
      * @return <code>true</code> if in correct order.
      */
-    public static boolean areInCorrectOrder(final ContainerType low, final ContainerType high)
+    public static boolean areInCorrectOrder(ContainerType low, ContainerType high)
     {
-        final List<ContainerType> asList = Arrays.asList(getOrdered());
+        List<ContainerType> asList = Arrays.asList(getOrdered());
         return asList.indexOf(low) <= asList.indexOf(high);
     }
 
@@ -132,7 +132,7 @@ public enum ContainerType
      * @param language       see {@link #languageEnabled}
      * @param multiValue     see {@link #multiValued}
      */
-    private ContainerType(final GUID guid, final int maxDataLenBits, final boolean guidAllowed, final boolean stream, final boolean language, final boolean multiValue)
+    ContainerType(GUID guid, int maxDataLenBits, boolean guidAllowed, boolean stream, boolean language, boolean multiValue)
     {
         this.containerGUID = guid;
         this.maximumDataLength = BigInteger.valueOf(2).pow(maxDataLenBits).subtract(BigInteger.ONE);
@@ -160,9 +160,9 @@ public enum ContainerType
      * @param stream   stream number
      * @param language language index
      */
-    public void assertConstraints(final String name, final byte[] data, final int type, final int stream, final int language)
+    public void assertConstraints(String name, byte[] data, int type, int stream, int language)
     {
-        final RuntimeException result = checkConstraints(name, data, type, stream, language);
+        RuntimeException result = checkConstraints(name, data, type, stream, language);
         if (result != null)
         {
             throw result;
@@ -181,7 +181,7 @@ public enum ContainerType
      * @param language language index
      * @return <code>null</code> if everything is fine.
      */
-    public RuntimeException checkConstraints(final String name, final byte[] data, final int type, final int stream, final int language)
+    public RuntimeException checkConstraints(String name, byte[] data, int type, int stream, int language)
     {
         RuntimeException result = null;
         // TODO generate tests
@@ -202,7 +202,7 @@ public enum ContainerType
         }
         if (result == null && (stream < 0 || stream > MetadataDescriptor.MAX_STREAM_NUMBER || (!isStreamNumberEnabled() && stream != 0)))
         {
-            final String streamAllowed = isStreamNumberEnabled() ? "0 to 127" : "0";
+            String streamAllowed = isStreamNumberEnabled() ? "0 to 127" : "0";
             result = new IllegalArgumentException(ErrorMessage.WMA_INVALID_STREAM_REFERNCE.getMsg(stream, streamAllowed, getContainerGUID().getDescription()));
         }
         if (result == null && type == MetadataDescriptor.TYPE_GUID && !isGuidEnabled())
@@ -211,7 +211,7 @@ public enum ContainerType
         }
         if (result == null && ((language != 0 && !isLanguageEnabled()) || (language < 0 || language >= MetadataDescriptor.MAX_LANG_INDEX)))
         {
-            final String langAllowed = isStreamNumberEnabled() ? "0 to 126" : "0";
+            String langAllowed = isStreamNumberEnabled() ? "0 to 126" : "0";
             result = new IllegalArgumentException(ErrorMessage.WMA_INVALID_LANGUAGE_USE.getMsg(language, getContainerGUID().getDescription(), langAllowed));
         }
         if (result == null && this == CONTENT_DESCRIPTION && type != MetadataDescriptor.TYPE_STRING)
@@ -261,7 +261,7 @@ public enum ContainerType
      * @return <code>true</code> if size restrictions for binary data are met
      * with this container type.
      */
-    public boolean isWithinValueRange(final long value)
+    public boolean isWithinValueRange(long value)
     {
         return (this.perfMaxDataLen == -1 || this.perfMaxDataLen >= value) && value >= 0;
     }

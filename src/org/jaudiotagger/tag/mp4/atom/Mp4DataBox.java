@@ -36,7 +36,7 @@ public class Mp4DataBox extends AbstractMp4Box
     //For use externally
     public static final int TYPE_POS_INCLUDING_HEADER = Mp4BoxHeader.HEADER_LENGTH + TYPE_POS;
 
-    private int type;
+    private final int type;
     private String content;
 
     public static final int NUMBER_LENGTH = 2;
@@ -72,7 +72,7 @@ public class Mp4DataBox extends AbstractMp4Box
         }
         else if (type == Mp4FieldType.IMPLICIT.getFileClassId() || type == Mp4FieldType.GENRES.getFileClassId()) 
         {
-            numbers = new ArrayList<Short>();
+            numbers = new ArrayList<>();
 
             for (int i = 0; i < ((header.getDataLength() - PRE_DATA_LENGTH) / NUMBER_LENGTH); i++)
             {
@@ -81,7 +81,7 @@ public class Mp4DataBox extends AbstractMp4Box
             }
 
             //Make String representation  (separate values with slash)
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             ListIterator<Short> iterator = numbers.listIterator();
             while (iterator.hasNext())
             {
@@ -97,7 +97,7 @@ public class Mp4DataBox extends AbstractMp4Box
         {
             //TODO byte data length seems to be 1 for pgap and cpil but 2 for tmpo ?
             //Create String representation for display
-            content = Utils.getIntBE(this.dataBuffer, PRE_DATA_LENGTH, header.getDataLength() - 1) + "";
+            content = String.valueOf(Utils.getIntBE(this.dataBuffer, PRE_DATA_LENGTH, header.getDataLength() - 1));
 
             //But store data for safer writing back to file
             bytedata = new byte[header.getDataLength() - PRE_DATA_LENGTH];
@@ -108,7 +108,7 @@ public class Mp4DataBox extends AbstractMp4Box
 
             //Songbird uses this type for trkn atom (normally implicit type) is used so just added this code so can be used
             //by the Mp4TrackField atom
-            numbers = new ArrayList<Short>();
+            numbers = new ArrayList<>();
             for (int i = 0; i < ((header.getDataLength() - PRE_DATA_LENGTH) / NUMBER_LENGTH); i++)
             {
                 short number = Utils.getShortBE(this.dataBuffer, PRE_DATA_LENGTH + (i * NUMBER_LENGTH), PRE_DATA_LENGTH + (i * NUMBER_LENGTH) + (NUMBER_LENGTH - 1));

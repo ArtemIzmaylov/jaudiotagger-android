@@ -27,7 +27,7 @@ public class ChunkContainer extends Chunk
 
     static
     {
-        MULTI_CHUNKS = new HashSet<GUID>();
+        MULTI_CHUNKS = new HashSet<>();
         MULTI_CHUNKS.add(GUID.GUID_STREAM);
     }
 
@@ -39,12 +39,12 @@ public class ChunkContainer extends Chunk
      * @return <code>true</code> if all chunks are located at an unique
      * position. However, no intersection is tested.
      */
-    protected static boolean chunkstartsUnique(final ChunkContainer container)
+    protected static boolean chunkstartsUnique(ChunkContainer container)
     {
         boolean result = true;
-        final Set<Long> chunkStarts = new HashSet<Long>();
-        final Collection<Chunk> chunks = container.getChunks();
-        for (final Chunk curr : chunks)
+        Set<Long> chunkStarts = new HashSet<>();
+        Collection<Chunk> chunks = container.getChunks();
+        for (Chunk curr : chunks)
         {
             result &= chunkStarts.add(curr.getPosition());
         }
@@ -63,10 +63,10 @@ public class ChunkContainer extends Chunk
      * @param pos       the position of the chunk within the stream.
      * @param length    the length of the chunk.
      */
-    public ChunkContainer(final GUID chunkGUID, final long pos, final BigInteger length)
+    public ChunkContainer(GUID chunkGUID, long pos, BigInteger length)
     {
         super(chunkGUID, pos, length);
-        this.chunkTable = new Hashtable<GUID, List<Chunk>>();
+        this.chunkTable = new Hashtable<>();
     }
 
     /**
@@ -76,9 +76,9 @@ public class ChunkContainer extends Chunk
      * @throws IllegalArgumentException If a chunk of same type is already added, except for
      *                                  {@link StreamChunk}.
      */
-    public void addChunk(final Chunk toAdd)
+    public void addChunk(Chunk toAdd)
     {
-        final List<Chunk> list = assertChunkList(toAdd.getGuid());
+        List<Chunk> list = assertChunkList(toAdd.getGuid());
         if (!list.isEmpty() && !MULTI_CHUNKS.contains(toAdd.getGuid()))
         {
             throw new IllegalArgumentException("The GUID of the given chunk indicates, that there is no more instance allowed."); //$NON-NLS-1$
@@ -94,12 +94,12 @@ public class ChunkContainer extends Chunk
      * @param lookFor The GUID to get list for.
      * @return an already existing, or newly created list.
      */
-    protected List<Chunk> assertChunkList(final GUID lookFor)
+    protected List<Chunk> assertChunkList(GUID lookFor)
     {
         List<Chunk> result = this.chunkTable.get(lookFor);
         if (result == null)
         {
-            result = new ArrayList<Chunk>();
+            result = new ArrayList<>();
             this.chunkTable.put(lookFor, result);
         }
         return result;
@@ -112,8 +112,8 @@ public class ChunkContainer extends Chunk
      */
     public Collection<Chunk> getChunks()
     {
-        final List<Chunk> result = new ArrayList<Chunk>();
-        for (final List<Chunk> curr : this.chunkTable.values())
+        List<Chunk> result = new ArrayList<>();
+        for (List<Chunk> curr : this.chunkTable.values())
         {
             result.addAll(curr);
         }
@@ -128,13 +128,13 @@ public class ChunkContainer extends Chunk
      * @return <code>null</code> if no chunk was found, or the stored instance
      * doesn't match.
      */
-    protected Chunk getFirst(final GUID lookFor, final Class<? extends Chunk> instanceOf)
+    protected Chunk getFirst(GUID lookFor, Class<? extends Chunk> instanceOf)
     {
         Chunk result = null;
-        final List<Chunk> list = this.chunkTable.get(lookFor);
+        List<Chunk> list = this.chunkTable.get(lookFor);
         if (list != null && !list.isEmpty())
         {
-            final Chunk chunk = list.get(0);
+            Chunk chunk = list.get(0);
             if (instanceOf.isAssignableFrom(chunk.getClass()))
             {
                 result = chunk;
@@ -150,7 +150,7 @@ public class ChunkContainer extends Chunk
      * @param lookFor GUID to look up.
      * @return <code>true</code> if chunk with specified GUID has been added.
      */
-    public boolean hasChunkByGUID(final GUID lookFor)
+    public boolean hasChunkByGUID(GUID lookFor)
     {
         return this.chunkTable.containsKey(lookFor);
     }
@@ -159,7 +159,7 @@ public class ChunkContainer extends Chunk
      * {@inheritDoc}
      */
     @Override
-    public String prettyPrint(final String prefix)
+    public String prettyPrint(String prefix)
     {
         return prettyPrint(prefix, "");
     }
@@ -173,12 +173,12 @@ public class ChunkContainer extends Chunk
      * @param containerInfo Information to inject.
      * @return Information of current Chunk Object.
      */
-    public String prettyPrint(final String prefix, final String containerInfo)
+    public String prettyPrint(String prefix, String containerInfo)
     {
-        final StringBuilder result = new StringBuilder(super.prettyPrint(prefix));
+        StringBuilder result = new StringBuilder(super.prettyPrint(prefix));
         result.append(containerInfo);
         result.append(prefix).append("  |").append(Utils.LINE_SEPARATOR);
-        final ArrayList<Chunk> list = new ArrayList<Chunk>(getChunks());
+        ArrayList<Chunk> list = new ArrayList<>(getChunks());
         Collections.sort(list, new ChunkPositionComparator());
 
         for (Chunk curr : list)

@@ -72,9 +72,9 @@ public class ContentDescriptionReader implements ChunkReader
      * @return 5 int values read from stream.
      * @throws IOException on I/O Errors.
      */
-    private int[] getStringSizes(final InputStream stream) throws IOException
+    private int[] getStringSizes(InputStream stream) throws IOException
     {
-        final int[] result = new int[5];
+        int[] result = new int[5];
         for (int i = 0; i < result.length; i++)
         {
             result[i] = Utils.readUINT16(stream);
@@ -85,19 +85,19 @@ public class ContentDescriptionReader implements ChunkReader
     /**
      * {@inheritDoc}
      */
-    public Chunk read(final GUID guid, final InputStream stream, final long chunkStart) throws IOException
+    public Chunk read(GUID guid, InputStream stream, long chunkStart) throws IOException
     {
-        final BigInteger chunkSize = Utils.readBig64(stream);
+        BigInteger chunkSize = Utils.readBig64(stream);
         /*
          * Now comes 16-Bit values representing the length of the Strings which
          * follows.
          */
-        final int[] stringSizes = getStringSizes(stream);
+        int[] stringSizes = getStringSizes(stream);
 
         /*
          * Now we know the String length of each occuring String.
          */
-        final String[] strings = new String[stringSizes.length];
+        String[] strings = new String[stringSizes.length];
         for (int i = 0; i < strings.length; i++)
         {
             if (stringSizes[i] > 0)
@@ -108,7 +108,7 @@ public class ContentDescriptionReader implements ChunkReader
         /*
          * Now create the result
          */
-        final ContentDescription result = new ContentDescription(chunkStart, chunkSize);
+        ContentDescription result = new ContentDescription(chunkStart, chunkSize);
         if (stringSizes[0] > 0)
         {
             result.setTitle(strings[0]);

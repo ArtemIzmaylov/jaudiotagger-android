@@ -24,7 +24,6 @@
 package org.jaudiotagger.tag.datatype;
 
 import org.jaudiotagger.StandardCharsets;
-import org.jaudiotagger.tag.InvalidDataTypeException;
 import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 
 public class Lyrics3TimeStamp extends AbstractDataType
@@ -225,7 +224,7 @@ public class Lyrics3TimeStamp extends AbstractDataType
         return str;
     }
 
-    public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
+    public void readByteArray(byte[] arr, int offset)
     {
         readString(arr.toString(), offset);
     }

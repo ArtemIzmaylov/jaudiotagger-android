@@ -212,7 +212,7 @@ public class EventListenerList implements Serializable {
 	// Is l on the list?
 	int index = -1;
 	for (int i = listenerList.length-2; i>=0; i-=2) {
-	    if ((listenerList[i]==t) && (listenerList[i+1].equals(l) == true)) {
+	    if ((listenerList[i]==t) && (listenerList[i + 1].equals(l))) {
 		index = i;
 		break;
 	    }
@@ -272,12 +272,12 @@ public class EventListenerList implements Serializable {
      */
     public String toString() {
 	Object[] lList = listenerList;
-	String s = "EventListenerList: ";
-	s += lList.length/2 + " listeners: ";
+	StringBuilder s = new StringBuilder("EventListenerList: ");
+	s.append(lList.length / 2).append(" listeners: ");
 	for (int i = 0 ; i <= lList.length-2 ; i+=2) {
-	    s += " type " + ((Class<?>)lList[i]).getName();
-	    s += " listener " + lList[i+1];
+	    s.append(" type ").append(((Class<?>) lList[i]).getName());
+	    s.append(" listener ").append(lList[i + 1]);
 	}
-	return s;
+	return s.toString();
     }
 }

@@ -44,12 +44,12 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
     /**
      *
      */
-    Map<String, String> keyToValue = null;
+    Map<String, String> keyToValue;
 
     /**
      *
      */
-    Map<String, String> valueToKey = null;
+    Map<String, String> valueToKey;
 
     /**
      *
@@ -190,7 +190,7 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
         else
         {
             // put them in a treeset first to sort them
-            TreeSet<String> treeSet = new TreeSet<String>(keyToValue.values());
+            TreeSet<String> treeSet = new TreeSet<>(keyToValue.values());
 
             if (hasEmptyValue)
             {

@@ -48,7 +48,7 @@ public class VideoStreamChunk extends StreamChunk
      *
      * @param chunkLen Length of the entire chunk (including guid and size)
      */
-    public VideoStreamChunk(final BigInteger chunkLen)
+    public VideoStreamChunk(BigInteger chunkLen)
     {
         super(GUID.GUID_VIDEOSTREAM, chunkLen);
     }
@@ -103,9 +103,9 @@ public class VideoStreamChunk extends StreamChunk
      * @see org.jaudiotagger.audio.asf.data.StreamChunk#prettyPrint(String)
      */
     @Override
-    public String prettyPrint(final String prefix)
+    public String prettyPrint(String prefix)
     {
-        final StringBuilder result = new StringBuilder(super.prettyPrint(prefix));
+        StringBuilder result = new StringBuilder(super.prettyPrint(prefix));
         result.insert(0, Utils.LINE_SEPARATOR + prefix + "|->VideoStream");
         result.append(prefix).append("Video info:").append(Utils.LINE_SEPARATOR);
         result.append(prefix).append("      |->Width  : ").append(getPictureWidth()).append(Utils.LINE_SEPARATOR);
@@ -117,7 +117,7 @@ public class VideoStreamChunk extends StreamChunk
     /**
      * @param codecIdentifier The codecId to set.
      */
-    public void setCodecId(final byte[] codecIdentifier)
+    public void setCodecId(byte[] codecIdentifier)
     {
         this.codecId = codecIdentifier.clone();
     }
@@ -125,7 +125,7 @@ public class VideoStreamChunk extends StreamChunk
     /**
      * @param picHeight
      */
-    public void setPictureHeight(final long picHeight)
+    public void setPictureHeight(long picHeight)
     {
         this.pictureHeight = picHeight;
     }
@@ -133,7 +133,7 @@ public class VideoStreamChunk extends StreamChunk
     /**
      * @param picWidth
      */
-    public void setPictureWidth(final long picWidth)
+    public void setPictureWidth(long picWidth)
     {
         this.pictureWidth = picWidth;
     }

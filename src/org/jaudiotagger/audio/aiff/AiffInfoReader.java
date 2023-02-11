@@ -32,9 +32,9 @@ import java.util.logging.Logger;
  */
 public class AiffInfoReader extends AiffChunkReader
 {
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.aiff");
+    public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.aiff");
 
-    private String loggingName;
+    private final String loggingName;
     public AiffInfoReader(String loggingName)
     {
         this.loggingName = loggingName;
@@ -47,7 +47,7 @@ public class AiffInfoReader extends AiffChunkReader
             FileChannel fc = raf.getChannel();
             logger.config(loggingName + ":Reading AIFF file size:" + Hex.asDecAndHex(fc.size()));
             AiffAudioHeader info = new AiffAudioHeader();
-            final AiffFileHeader fileHeader = new AiffFileHeader(loggingName);
+            AiffFileHeader fileHeader = new AiffFileHeader(loggingName);
             long noOfBytes = fileHeader.readHeader(fc, info);
             while ((fc.position() < (noOfBytes + ChunkHeader.CHUNK_HEADER_SIZE)) && (fc.position() < fc.size()))
             {
@@ -76,9 +76,8 @@ public class AiffInfoReader extends AiffChunkReader
      * Calculate bitrate, done it here because requires data from multiple chunks
      *
      * @param info
-     * @throws CannotReadException
      */
-    private void calculateBitRate(GenericAudioHeader info) throws CannotReadException
+    private void calculateBitRate(GenericAudioHeader info)
     {
         if(info.getAudioDataLength()!=null)
         {
@@ -94,8 +93,8 @@ public class AiffInfoReader extends AiffChunkReader
      */
     private boolean readChunk(FileChannel fc, AiffAudioHeader aiffAudioHeader) throws IOException, CannotReadException
     {
-        final Chunk chunk;
-        final ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.BIG_ENDIAN);
+        Chunk chunk;
+        ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.BIG_ENDIAN);
         if (!chunkHeader.readHeader(fc))
         {
             return false;
@@ -138,9 +137,9 @@ public class AiffInfoReader extends AiffChunkReader
      * @return
      * @throws IOException
      */
-    private Chunk createChunk(FileChannel fc, final ChunkHeader chunkHeader, AiffAudioHeader aiffAudioHeader)
+    private Chunk createChunk(FileChannel fc, ChunkHeader chunkHeader, AiffAudioHeader aiffAudioHeader)
     throws IOException {
-        final AiffChunkType chunkType = AiffChunkType.get(chunkHeader.getID());
+        AiffChunkType chunkType = AiffChunkType.get(chunkHeader.getID());
         Chunk chunk;
         if (chunkType != null)
         {

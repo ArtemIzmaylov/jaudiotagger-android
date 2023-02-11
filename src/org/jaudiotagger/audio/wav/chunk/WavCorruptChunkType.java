@@ -13,10 +13,10 @@ public enum WavCorruptChunkType
     CORRUPT_LIST_LATE("IST"),
     ;
 
-    private String code;
+    private final String code;
 
 
-    WavCorruptChunkType(final String code)
+    WavCorruptChunkType(String code)
     {
         this.code=code;
     }

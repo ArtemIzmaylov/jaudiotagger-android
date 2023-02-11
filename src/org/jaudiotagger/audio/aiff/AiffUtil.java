@@ -1,5 +1,7 @@
 package org.jaudiotagger.audio.aiff;
 
+import android.annotation.SuppressLint;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
@@ -12,6 +14,7 @@ import java.util.Date;
 public class AiffUtil
 {
 
+    @SuppressLint("SimpleDateFormat")
     private final static SimpleDateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
 

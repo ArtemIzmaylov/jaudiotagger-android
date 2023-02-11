@@ -7,10 +7,10 @@ import java.util.List;
 /**
  * Orders frame Ids so that the most important frames are writtne first
  */
-public class ID3v23PreferredFrameOrderComparator implements Comparator<String>
+public final class ID3v23PreferredFrameOrderComparator implements Comparator<String>
 {
     private static ID3v23PreferredFrameOrderComparator comparator;
-    private static List<String> frameIdsInPreferredOrder = new ArrayList<>();
+    private static final List<String> frameIdsInPreferredOrder = new ArrayList<>();
     static
     {
         //these are the key ones we want at the top
