@@ -20,6 +20,8 @@ package org.jaudiotagger.audio;
 
 import org.jaudiotagger.audio.aiff.AiffFileReader;
 import org.jaudiotagger.audio.aiff.AiffFileWriter;
+import org.jaudiotagger.audio.ape.ApeFileReader;
+import org.jaudiotagger.audio.ape.ApeFileWriter;
 import org.jaudiotagger.audio.asf.AsfFileReader;
 import org.jaudiotagger.audio.asf.AsfFileWriter;
 import org.jaudiotagger.audio.dff.DffFileReader;
@@ -288,6 +290,7 @@ public class AudioFileIO
     {
 
         // Tag Readers
+        readers.put(SupportedFileFormat.APE.getFilesuffix(), new ApeFileReader());
         readers.put(SupportedFileFormat.OGG.getFilesuffix(), new OggFileReader());
         readers.put(SupportedFileFormat.OGA.getFilesuffix(), new OggFileReader());
         readers.put(SupportedFileFormat.FLAC.getFilesuffix(),new FlacFileReader());
@@ -308,6 +311,7 @@ public class AudioFileIO
         readers.put(SupportedFileFormat.RM.getFilesuffix(), realReader);
 
         // Tag Writers
+        writers.put(SupportedFileFormat.APE.getFilesuffix(), new ApeFileWriter());
         writers.put(SupportedFileFormat.OGG.getFilesuffix(), new OggFileWriter());
         writers.put(SupportedFileFormat.OGA.getFilesuffix(), new OggFileWriter());
         writers.put(SupportedFileFormat.FLAC.getFilesuffix(), new FlacFileWriter());

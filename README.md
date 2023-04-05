@@ -19,6 +19,7 @@ For more information about Jaudiotagger, please refer to this link: http://www.j
 
 - New features
 
+  - Added support for Monkey's Audio file format (APE)
   - Added support for embedded CUE sheets (OGG/FLAC)
 
 - org.jaudiotagger.tag.TagOptionSingleton:

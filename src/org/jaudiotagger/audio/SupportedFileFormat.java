@@ -6,6 +6,7 @@ package org.jaudiotagger.audio;
  */
 public enum SupportedFileFormat
 {
+    APE("ape", "Ape"),
     OGG("ogg", "Ogg"),
     OGA("oga", "Oga"),
     MP3("mp3", "Mp3"),
