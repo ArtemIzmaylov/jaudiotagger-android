@@ -83,14 +83,10 @@ public class FlacTagWriter
         private final List<MetadataBlock> metadataBlockPadding        = new ArrayList<>(1);
         private final List<MetadataBlock> metadataBlockApplication    = new ArrayList<>(1);
         private final List<MetadataBlock> metadataBlockSeekTable      = new ArrayList<>(1);
-        private final List<MetadataBlock> metadataBlockCueSheet       = new ArrayList<>(1);
 
         public  List<MetadataBlock> getListOfNonMetadataBlocks()
         {
             blocks.addAll(metadataBlockSeekTable);
-
-            blocks.addAll(metadataBlockCueSheet);
-
             blocks.addAll(metadataBlockApplication);
             return blocks;
         }
@@ -107,7 +103,6 @@ public class FlacTagWriter
         {
             int count = blockInfo.metadataBlockApplication.size();
             count+=blockInfo.metadataBlockSeekTable.size();
-            count+=blockInfo.metadataBlockCueSheet.size();
             return count;
         }
 
@@ -126,11 +121,6 @@ public class FlacTagWriter
             for (MetadataBlock aMetadataBlockSeekTable : metadataBlockSeekTable)
             {
                 length += aMetadataBlockSeekTable.getLength();
-            }
-
-            for (MetadataBlock aMetadataBlockCueSheet : metadataBlockCueSheet)
-            {
-                length += aMetadataBlockCueSheet.getLength();
             }
 
             //Note when reading metadata has been put into padding as well for purposes of write
@@ -159,11 +149,6 @@ public class FlacTagWriter
             for (MetadataBlock aMetadataBlockSeekTable : metadataBlockSeekTable)
             {
                 length += aMetadataBlockSeekTable.getLength();
-            }
-
-            for (MetadataBlock aMetadataBlockCueSheet : metadataBlockCueSheet)
-            {
-                length += aMetadataBlockCueSheet.getLength();
             }
 
             return length;
@@ -211,6 +196,7 @@ public class FlacTagWriter
                                 break;
                             }
 
+                            case CUESHEET:
                             case VORBIS_COMMENT:
                             case PADDING:
                             case PICTURE:
@@ -223,13 +209,6 @@ public class FlacTagWriter
                                 break;
                             }
 
-                            case APPLICATION:
-                            {
-                                MetadataBlockData mbd = new MetadataBlockDataApplication(mbh, fc);
-                                blockInfo.metadataBlockApplication.add(new MetadataBlock(mbh, mbd));
-                                break;
-                            }
-
                             case SEEKTABLE:
                             {
                                 MetadataBlockData mbd = new MetadataBlockDataSeekTable(mbh, fc);
@@ -237,17 +216,11 @@ public class FlacTagWriter
                                 break;
                             }
 
-                            case CUESHEET:
-                            {
-                                MetadataBlockData mbd = new MetadataBlockDataCueSheet(mbh, fc);
-                                blockInfo.metadataBlockCueSheet.add(new MetadataBlock(mbh, mbd));
-                                break;
-                            }
-
                             default:
                             {
-                                //TODO What are the consequences of doing this ?
-                                fc.position(fc.position() + mbh.getDataLength());
+                                // AI: the MetadataBlockDataApplication stores original data "as is"
+                                MetadataBlockData mbd = new MetadataBlockDataApplication(mbh, fc);
+                                blockInfo.metadataBlockApplication.add(new MetadataBlock(mbh, mbd));
                                 break;
                             }
                         }

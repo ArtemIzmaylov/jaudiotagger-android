@@ -40,6 +40,7 @@ public enum FieldKey
     COPYRIGHT,
     COUNTRY,
     COVER_ART,
+    CUESHEET,
     CUSTOM1,
     CUSTOM2,
     CUSTOM3,

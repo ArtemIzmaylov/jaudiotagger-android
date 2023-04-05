@@ -54,6 +54,7 @@ public enum VorbisCommentFieldKey
     COUNTRY("COUNTRY",EnumSet.of(Tagger.PICARD)),
     COVERART("COVERART",EnumSet.of(Tagger.JAIKOZ)),
     COVERARTMIME("COVERARTMIME",EnumSet.of(Tagger.JAIKOZ)),
+    CUESHEET("CUESHEET",EnumSet.of(Tagger.XIPH)),
     CUSTOM1("CUSTOM1",EnumSet.of(Tagger.MEDIA_MONKEY)),
     CUSTOM2("CUSTOM2",EnumSet.of(Tagger.MEDIA_MONKEY)),
     CUSTOM3("CUSTOM3",EnumSet.of(Tagger.MEDIA_MONKEY)),

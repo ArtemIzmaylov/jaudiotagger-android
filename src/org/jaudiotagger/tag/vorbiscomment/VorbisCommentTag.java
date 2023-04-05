@@ -77,6 +77,7 @@ public class VorbisCommentTag extends AbstractTag
         tagFieldToOggField.put(FieldKey.CONDUCTOR_SORT, VorbisCommentFieldKey.CONDUCTOR_SORT);
         tagFieldToOggField.put(FieldKey.COUNTRY, VorbisCommentFieldKey.COUNTRY);
         tagFieldToOggField.put(FieldKey.COVER_ART, VorbisCommentFieldKey.METADATA_BLOCK_PICTURE);
+        tagFieldToOggField.put(FieldKey.CUESHEET, VorbisCommentFieldKey.CUESHEET);
         tagFieldToOggField.put(FieldKey.CUSTOM1, VorbisCommentFieldKey.CUSTOM1);
         tagFieldToOggField.put(FieldKey.CUSTOM2, VorbisCommentFieldKey.CUSTOM2);
         tagFieldToOggField.put(FieldKey.CUSTOM3, VorbisCommentFieldKey.CUSTOM3);
@@ -412,7 +413,7 @@ public class VorbisCommentTag extends AbstractTag
     public boolean hasField(FieldKey genericKey)
     {
         VorbisCommentFieldKey vorbisFieldKey = tagFieldToOggField.get(genericKey);
-        return !getFields(vorbisFieldKey.getFieldName()).isEmpty();
+        return vorbisFieldKey != null && !getFields(vorbisFieldKey.getFieldName()).isEmpty();
     }
 
     /**

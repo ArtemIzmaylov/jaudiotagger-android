@@ -9,15 +9,17 @@ The compiled JAR library works on Android platform, has been tested on API level
 
 <h2>Source</h2>
 
-The source code is based on Jaudiotagger library version 3.0.2.
+The source code is based on JAudiotagger library version 3.0.2.
 
-Jaudiotagger library version 2.2.6 is build on JDK 1.8 and uses lots of nio features, which are not compatible with Android version lower than API level 26.
-
-This Jaudiotagger library changes all incompatible parts with compatible API calls, which can compile and run on Android API level 14 and above.
+Since version 2.2.6 JAudiotagger library is build on JDK 1.8 and uses lots of nio features, which are not compatible with Android version lower than API level 26. This JAudiotagger library changes all incompatible parts with compatible API calls, which can compile and run on Android API level 14 and above.
 
 For more information about Jaudiotagger, please refer to this link: http://www.jthink.net/jaudiotagger/
 
 <h2>Main changes comparing to official library</h2>
+
+- New features
+
+  - Added support for embedded CUE sheets (OGG/FLAC)
 
 - org.jaudiotagger.tag.TagOptionSingleton:
 

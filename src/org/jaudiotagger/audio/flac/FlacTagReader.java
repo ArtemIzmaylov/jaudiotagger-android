@@ -18,14 +18,17 @@
  */
 package org.jaudiotagger.audio.flac;
 
+import org.jaudiotagger.StandardCharsets;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockHeader;
 import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.tag.InvalidFrameException;
 import org.jaudiotagger.tag.flac.FlacTag;
+import org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentReader;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
+import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTagField;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,6 +60,7 @@ public class FlacTagReader
             flacStream.findStream();
 
             //Hold the metadata
+            String cueSheet = null;
             VorbisCommentTag tag = null;
             List<MetadataBlockDataPicture> images = new ArrayList<>();
 
@@ -95,35 +99,30 @@ public class FlacTagReader
                             tag = vorbisCommentReader.read(commentHeaderRawPacket.array(), false);
                             break;
 
+                        case CUESHEET:
+                            try
+                            {
+                                ByteBuffer data = ByteBuffer.allocate(mbh.getDataLength());
+                                fc.read(data);
+                                cueSheet = new String(data.array(), StandardCharsets.UTF_8);
+                            }
+                            catch (Exception ioe)
+                            {
+                                logger.warning(path + "Unable to read cuesheet, ignoring: " + ioe.getMessage());
+                            }
+                            break;
+
                         case PICTURE:
                             try
                             {
-                                MetadataBlockDataPicture mbdp = new MetadataBlockDataPicture(mbh, fc);
-                                images.add(mbdp);
+                                images.add(new MetadataBlockDataPicture(mbh, fc));
                             }
-                            catch (IOException ioe)
+                            catch (Exception ioe)
                             {
-                                logger.warning(path + "Unable to read picture metablock, ignoring:" + ioe.getMessage());
+                                logger.warning(path + "Unable to read picture metablock, ignoring: " + ioe.getMessage());
                             }
-                            catch (InvalidFrameException ive)
-                            {
-                                logger.warning(path + "Unable to read picture metablock, ignoring" + ive.getMessage());
-                            }
-
                             break;
 
-
-                        case SEEKTABLE:
-                            try
-                            {
-                                long pos = fc.position();
-                                fc.position(pos + mbh.getDataLength());
-                            }
-                            catch (IOException ioe)
-                            {
-                                logger.warning(path + "Unable to readseek metablock, ignoring:" + ioe.getMessage());
-                            }
-                            break;
 
                         //This is not a metadata block we are interested in so we skip to next block
                         default:
@@ -142,11 +141,10 @@ public class FlacTagReader
             //Note there may not be either a tag or any images, no problem this is valid however to make it easier we
             //just initialize Flac with an empty VorbisTag
             if (tag == null)
-            {
                 tag = VorbisCommentTag.createNewTag();
-            }
-            FlacTag flacTag = new FlacTag(tag, images);
-            return flacTag;
+            if (cueSheet != null)
+                tag.addField(VorbisCommentFieldKey.CUESHEET.getFieldName(), cueSheet);
+            return new FlacTag(tag, images);
         }
     }
 }
