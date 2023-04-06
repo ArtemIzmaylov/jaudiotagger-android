@@ -16,6 +16,7 @@ public class ApeFileWriter extends AudioFileWriter
     {
         ((ApeFile)af).setID3v1Tag(null);
         ((ApeFile)af).setID3v2Tag(null);
+        ((ApeFile)af).setAPEv2Tag(null);
         af.commit();
     }
 

@@ -58,14 +58,9 @@ public class ApeFile extends AudioFile
 
     public ApeFile(File file, boolean readOnly) throws IOException, ReadOnlyFileException, CannotReadException, TagException
     {
-        RandomAccessFile newFile = null;
-        try
+        this.file = file;
+        try (RandomAccessFile newFile = checkFilePermissions(file, readOnly))
         {
-            this.file = file;
-
-            // Check File accessibility
-            newFile = checkFilePermissions(file, readOnly);
-
             // Read ID3v2 tag size (if tag exists) to allow audioHeader parsing to skip over tag
             long id3v2size = AbstractID3v2Tag.getV2TagSizeIfExists(file);
             logger.config("ID3v2.size:" + Hex.asHex(id3v2size));
@@ -84,11 +79,6 @@ public class ApeFile extends AudioFile
                 tag = id3v2tag;
             else
                 tag = id3v1tag;
-        }
-        finally
-        {
-            if (newFile != null)
-                newFile.close();
         }
     }
 
