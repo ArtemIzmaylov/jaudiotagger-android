@@ -26,18 +26,17 @@ public class MP3FileReader extends AudioFileReader
 
     protected Tag getTag(RandomAccessFile raf) throws IOException
     {
-        throw new RuntimeException("MP3FileReader.getEncodingInfo should be called");
+        throw new RuntimeException("MP3FileReader.getTag should be called");
     }
 
     /**
      * @param f
      * @return
      */
-    //Override because we read mp3s differently to the entagged code
+    @Override
     public AudioFile read(File f) throws IOException, TagException, ReadOnlyFileException, CannotReadException, InvalidAudioFrameException
     {
-        MP3File mp3File = new MP3File(f, MP3File.LOAD_IDV1TAG | MP3File.LOAD_IDV2TAG, true);
-        return mp3File;
+        return new MP3File(f, MP3File.LOAD_ALL, true);
     }
 
     /**
@@ -52,8 +51,6 @@ public class MP3FileReader extends AudioFileReader
      */
     public AudioFile readMustBeWritable(File f) throws IOException, TagException, ReadOnlyFileException, CannotReadException, InvalidAudioFrameException
     {
-        MP3File mp3File = new MP3File(f, MP3File.LOAD_IDV1TAG | MP3File.LOAD_IDV2TAG, false);
-        return mp3File;
+        return new MP3File(f, MP3File.LOAD_ALL, false);
     }
-
 }

@@ -23,6 +23,7 @@ public class ApeAudioHeader implements AudioHeader
     private static final int MAC_FLAG_8_BIT = 1;
     private static final int MAC_FLAG_24_BIT = 8;
 
+    private final long fAudioDataStartPosition;
     private final int bitsPerSample;
     private final int blocksPerFrame;
     private final int channels;
@@ -37,7 +38,7 @@ public class ApeAudioHeader implements AudioHeader
     {
         file.seek(id3v2size); // skip ID3v2
 
-        long position = file.getFilePointer();
+        fAudioDataStartPosition = file.getFilePointer();
 
         int signature = file.readInt();
         if (signature != APE_SIGNATURE)
@@ -52,7 +53,7 @@ public class ApeAudioHeader implements AudioHeader
             file.skipBytes(2); // padded
             int descriptorSize = readInt(file);
             int headerSize = readInt(file);
-            file.seek(position + descriptorSize);
+            file.seek(fAudioDataStartPosition + descriptorSize);
 
             this.compressionLevel = readUnsignedShort(file);
             this.flags = readUnsignedShort(file);
@@ -142,7 +143,7 @@ public class ApeAudioHeader implements AudioHeader
     @Override
     public Long getAudioDataStartPosition()
     {
-        return null;
+        return fAudioDataStartPosition;
     }
 
     @Override

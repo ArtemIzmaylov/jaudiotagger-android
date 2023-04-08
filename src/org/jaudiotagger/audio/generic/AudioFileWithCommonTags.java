@@ -59,11 +59,13 @@ public abstract class AudioFileWithCommonTags extends AudioFile
     public AudioFileWithCommonTags(File file, boolean readOnly, int options) throws IOException, ReadOnlyFileException, CannotReadException, TagException
     {
         this.file = file;
+
+        // Read ID3v2 tag size (if tag exists) to allow audioHeader parsing to skip over tag
+        long id3v2size = AbstractID3v2Tag.getV2TagSizeIfExists(file);
+        logger.config("ID3v2.size:" + Hex.asHex(id3v2size));
+
         try (RandomAccessFile raf = checkFilePermissions(file, readOnly))
         {
-            // Read ID3v2 tag size (if tag exists) to allow audioHeader parsing to skip over tag
-            long id3v2size = AbstractID3v2Tag.getV2TagSizeIfExists(file);
-            logger.config("ID3v2.size:" + Hex.asHex(id3v2size));
             audioHeader = readAudioHeader(raf, id3v2size);
 
             if ((options & LOAD_IDV2TAG) != 0)
@@ -117,14 +119,14 @@ public abstract class AudioFileWithCommonTags extends AudioFile
      */
     public void save(@NonNull File file) throws IOException
     {
-        try (RandomAccessFile raf = new RandomAccessFile(file, "rw"))
+        // write or remove ID3v2
+        if (TagOptionSingleton.getInstance().isId3v2Save())
         {
-            // write or remove ID3v2
-            if (TagOptionSingleton.getInstance().isId3v2Save())
+            if (id3v2tag != null)
+                id3v2tag.write(file, audioHeader.getAudioDataStartPosition());
+            else
             {
-                if (id3v2tag != null)
-                    id3v2tag.write(raf);
-                else
+                try (RandomAccessFile raf = new RandomAccessFile(file, "rw"))
                 {
                     logger.config("Deleting ID3v2 tag:"+file.getName());
                     (new ID3v24Tag()).delete(raf);
@@ -132,7 +134,10 @@ public abstract class AudioFileWithCommonTags extends AudioFile
                     (new ID3v22Tag()).delete(raf);
                 }
             }
+        }
 
+        try (RandomAccessFile raf = new RandomAccessFile(file, "rw"))
+        {
             // write or remove APEv2
             if (apev2Tag != null)
                 apev2Tag.write(raf);

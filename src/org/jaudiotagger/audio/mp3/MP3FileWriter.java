@@ -43,12 +43,12 @@ public class MP3FileWriter extends AudioFileWriter
 
     protected void writeTag(AudioFile audioFile, Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws IOException
     {
-        throw new RuntimeException("MP3FileReaderwriteTag should not be called");
+        throw new RuntimeException("MP3FileReader.writeTag should not be called");
     }
 
     protected void deleteTag(Tag tag, RandomAccessFile raf, RandomAccessFile tempRaf) throws IOException
     {
-        throw new RuntimeException("MP3FileReader.getEncodingInfo should be called");
+        throw new RuntimeException("MP3FileReader.deleteTag should be called");
     }
 }
 

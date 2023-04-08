@@ -71,7 +71,6 @@ public class MP3AudioHeader implements AudioHeader
     private Long audioDataEndPosition;
 
     private long    fileSize;
-    private long    startByte;
     private double  timePerFrame;
     private double  trackLength;
     private long    numberOfFrames;
@@ -396,7 +395,7 @@ public class MP3AudioHeader implements AudioHeader
      */
     protected void setMp3StartByte(long startByte)
     {
-        this.startByte = startByte;
+        setAudioDataStartPosition(startByte);
     }
 
 
@@ -409,7 +408,7 @@ public class MP3AudioHeader implements AudioHeader
      */
     public long getMp3StartByte()
     {
-        return startByte;
+        return getAudioDataStartPosition();
     }
 
 
@@ -418,7 +417,7 @@ public class MP3AudioHeader implements AudioHeader
      */
     protected void setNumberOfFrames()
     {
-        numberOfFramesEstimate = (fileSize - startByte) / mp3FrameHeader.getFrameLength();
+        numberOfFramesEstimate = (fileSize - getMp3StartByte()) / mp3FrameHeader.getFrameLength();
 
         if (mp3XingFrame != null && mp3XingFrame.isFrameCountEnabled())
         {
@@ -574,7 +573,7 @@ public class MP3AudioHeader implements AudioHeader
             }
             else
             {
-                bitrate = (long) (((fileSize - startByte) * BITS_IN_BYTE_MULTIPLIER) / (timePerFrame * getNumberOfFrames() * Utils.KILOBYTE_MULTIPLIER));
+                bitrate = (long) (((fileSize - getMp3StartByte()) * BITS_IN_BYTE_MULTIPLIER) / (timePerFrame * getNumberOfFrames() * Utils.KILOBYTE_MULTIPLIER));
             }
         }
         else if (mp3VbriFrame != null)
@@ -585,7 +584,7 @@ public class MP3AudioHeader implements AudioHeader
             }
             else
             {
-                bitrate = (long) (((fileSize - startByte) * BITS_IN_BYTE_MULTIPLIER) / (timePerFrame * getNumberOfFrames() *  Utils.KILOBYTE_MULTIPLIER));
+                bitrate = (long) (((fileSize - getMp3StartByte()) * BITS_IN_BYTE_MULTIPLIER) / (timePerFrame * getNumberOfFrames() *  Utils.KILOBYTE_MULTIPLIER));
             }
         }
         else
@@ -778,7 +777,7 @@ public class MP3AudioHeader implements AudioHeader
     {
         StringBuilder out = new StringBuilder();
         out.append("Audio Header content:\n");
-        out.append("\tfileSize:").append(fileSize).append("\n").append("\tencoder:").append(encoder).append("\n").append("\tencoderType:").append(getEncodingType()).append("\n").append("\tformat:").append(getFormat()).append("\n").append("\tstartByte:").append(Hex.asHex(startByte)).append("\n").append("\tnumberOfFrames:").append(numberOfFrames).append("\n").append("\tnumberOfFramesEst:").append(numberOfFramesEstimate).append("\n").append("\ttimePerFrame:").append(timePerFrame).append("\n").append("\tbitrate:").append(bitrate).append("\n").append("\ttrackLength:").append(getTrackLengthAsString()).append("\n");
+        out.append("\tfileSize:").append(fileSize).append("\n").append("\tencoder:").append(encoder).append("\n").append("\tencoderType:").append(getEncodingType()).append("\n").append("\tformat:").append(getFormat()).append("\n").append("\tstartByte:").append(Hex.asHex(getMp3StartByte())).append("\n").append("\tnumberOfFrames:").append(numberOfFrames).append("\n").append("\tnumberOfFramesEst:").append(numberOfFramesEstimate).append("\n").append("\ttimePerFrame:").append(timePerFrame).append("\n").append("\tbitrate:").append(bitrate).append("\n").append("\ttrackLength:").append(getTrackLengthAsString()).append("\n");
 
         if (this.mp3FrameHeader != null)
         {
