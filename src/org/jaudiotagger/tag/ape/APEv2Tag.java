@@ -229,8 +229,9 @@ public class APEv2Tag extends AbstractTag
     {
     }
 
-    public APEv2Tag(@NonNull RandomAccessFile file, int id3v1size) throws IOException, TagException
+    public APEv2Tag(@NonNull RandomAccessFile file) throws IOException, TagException
     {
+        long id3v1size = getID3v1Size(file);
         long length = file.length();
         if (length <= id3v1size + FOOTER_SIZE)
             throw new TagNotFoundException("APEv2: no enough space for valid tag");
@@ -290,12 +291,10 @@ public class APEv2Tag extends AbstractTag
 
     public static void delete(@NonNull RandomAccessFile file) throws IOException
     {
-        // remove ID3v1 before manipulating with APEv2
-        // TODO: keep ID3v1 tag
-        (new ID3v1Tag()).delete(file);
-
+        // TODO: keep ID3v1 tag data
+        long id3v1Size = getID3v1Size(file);
         long length = file.length();
-        file.seek(length - FOOTER_SIZE);
+        file.seek(length - id3v1Size - FOOTER_SIZE);
         if (file.readLong() != SIGNATURE)
         {
             logger.config("Unable to find APEv2 tag to delete");
@@ -307,6 +306,21 @@ public class APEv2Tag extends AbstractTag
         if (size < 0 || size > file.length())
             throw new IOException("APEv2: invalid tag size");
         file.setLength(length - size);
+    }
+
+    private static long getID3v1Size(@NonNull RandomAccessFile file) throws IOException
+    {
+        long length = file.length();
+        if (length >= ID3v1Tag.TAG_LENGTH)
+        {
+            byte[] id = new byte[3];
+            file.seek(length - ID3v1Tag.TAG_LENGTH);
+            file.readFully(id, 0, id.length);
+            if (Arrays.equals(id, ID3v1Tag.TAG_ID))
+                return ID3v1Tag.TAG_LENGTH;
+            // TODO: add ID3v1 Lyrics support
+        }
+        return 0;
     }
 
     public void write(@NonNull RandomAccessFile file) throws IOException

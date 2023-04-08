@@ -62,10 +62,10 @@ abstract public class AbstractID3v1Tag extends AbstractID3Tag
 
     //Tag ID as held in file
     public static final String TAG = "TAG";
-    protected static final byte[] TAG_ID = {(byte) 'T', (byte) 'A', (byte) 'G'};
+    public static final byte[] TAG_ID = {(byte) 'T', (byte) 'A', (byte) 'G'};
 
     //Fields Lengths common to v1 and v1.1 tags
-    protected static final int TAG_LENGTH = 128;
+    public static final int TAG_LENGTH = 128;
     protected static final int TAG_DATA_LENGTH = 125;
     protected static final int FIELD_TAGID_LENGTH = 3;
     protected static final int FIELD_TITLE_LENGTH = 30;

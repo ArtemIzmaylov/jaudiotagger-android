@@ -18,7 +18,7 @@ public class ApeFileReader extends AudioFileReader
     @Override
     public AudioFile read(File f) throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException
     {
-        return new ApeFile(f);
+        return new ApeFile(f, false);
     }
 
     @Override
