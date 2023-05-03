@@ -484,6 +484,12 @@ public class MP3File extends AudioFileWithCommonTags
             //If the audio header is not straight after the end of the tag then search from start of file
             if (id3v2size != header.getMp3StartByte())
             {
+                // AI: probable, the file is MP4 with audio stream encoded by MP3 codec. Checking it.
+                file.seek(0);
+                file.readInt(); // atom size
+                if (file.readInt() == 0x66747970) // "ftyp" atom
+                    throw new CannotReadException("The file is not valid MP3!");
+
                 logger.config("First header found after tag:" + header);
                 header = checkAudioStart(id3v2size, header);
             }
